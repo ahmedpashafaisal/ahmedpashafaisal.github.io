@@ -80,3 +80,17 @@ hr.item-separator {
         color: #CAFF00;
         text-decoration: none;
     }
+
+.hover-zoom {
+    overflow: hidden;
+    border-radius: 1.25rem;
+}
+
+
+.hover-zoom img {
+    transition: transform 0.3s ease-in-out; /* Add a smooth transition effect */
+}
+
+.hover-zoom:hover img {
+    transform: scale(1.01); /* Adjust the scale factor for the desired zoom level */
+}
