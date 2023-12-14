@@ -12,13 +12,13 @@ Section{
 }
 
 hr.section-separator {
-    border: .1rem solid #F6F3ED;
-    margin: 1rem 0;
+    border: .01rem solid #F6F3ED;
+
 }
 
 hr.item-separator {
     border: .01rem solid #CAFF00;
-    margin: 2rem 0;
+
 }
 
 .portfolio-image {
@@ -68,6 +68,15 @@ hr.item-separator {
         border-color: #CAFF00;
     }
 
-    .view-all-games {
-        max-height: 2rem;
+.custom-link {
+    font-size: 2em;
+    font-style: italic;
+    font-weight:900;
+    color: #F6F3ED;
+    transition: color 0.3s; /* Smooth transition for color change */
+}
+
+    .custom-link:hover {
+        color: #CAFF00;
+        text-decoration: none;
     }
