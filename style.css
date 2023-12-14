@@ -1,0 +1,63 @@
+body {
+}
+
+.about-me{
+    margin-left:15%;
+    margin-right:15%;
+}
+
+Section{
+    width:100%;
+    margin: 3rem 0;
+}
+
+hr.section-separator {
+    border: .1rem solid #F6F3ED;
+    margin: 1rem 0;
+}
+
+hr.item-separator {
+    border: .1rem dotted #CAFF00;
+    margin: 2rem 0;
+}
+
+.portfolio-image {
+    background-color: transparent;
+}
+
+.portfolio-name{
+    background-color:transparent;
+}
+
+.portfolio-item{
+    width:100%;
+}
+
+.item-number{
+    font-size: 5rem;
+    font-style:italic;
+    font-weight:bold;
+    margin: 2rem;
+}
+.item-text {
+    margin: 2rem;
+}
+.portfolio-title{
+    padding-top :1rem;
+    padding-left :2rem;
+    padding-bottom :.1rem;
+}
+.portfolio-role {
+    padding: .1rem 2rem;
+}
+
+.view-game-btn {
+    color: #F6F3ED;
+    background-color: transparent;
+    border-color: #F6F3ED;
+}
+    .view-game-btn:hover {
+        color: #020217;
+        background-color: #F6F3ED;
+        border-color: #dae0e5;
+    }
