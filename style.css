@@ -54,14 +54,20 @@ hr.item-separator {
 .view-game-btn {
     color: #F6F3ED;
     background-color: transparent;
-    border-color: #F6F3ED;
+    border-color: #CAFF00;
 }
     .view-game-btn:hover {
         color: #020217;
-        background-color: #F6F3ED;
-        border-color: #dae0e5;
+        background-color: #CAFF00;
+        border-color: #CAFF00;
     }
 
-.view-all-games{
-    max-height:2rem;
-}
+    .view-game-btn:focus {
+        color: #020217;
+        background-color: #CAFF00;
+        border-color: #CAFF00;
+    }
+
+    .view-all-games {
+        max-height: 2rem;
+    }

@@ -2735,12 +2735,11 @@ a.btn.disabled, fieldset:disabled a.btn {
 
     .btn-light:hover {
         color: #020217;
-        background-color: #F6F3ED;
-        border-color: #dae0e5;
+        background-color: #CAFF00;
     }
 
     .btn-light.focus, .btn-light:focus {
-        box-shadow: 0 0 0 .2rem rgba(248,249,250,.5)
+        box-shadow: 0 0 0 .2rem #CAFF00
     }
 
     .btn-light.disabled, .btn-light:disabled {
