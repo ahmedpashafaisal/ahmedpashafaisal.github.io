@@ -17,7 +17,7 @@ hr.section-separator {
 }
 
 hr.item-separator {
-    border: .1rem dotted #CAFF00;
+    border: .01rem solid #CAFF00;
     margin: 2rem 0;
 }
 
