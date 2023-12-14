@@ -61,3 +61,7 @@ hr.item-separator {
         background-color: #F6F3ED;
         border-color: #dae0e5;
     }
+
+.view-all-games{
+    max-height:2rem;
+}
