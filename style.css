@@ -68,6 +68,23 @@ hr.item-separator {
         border-color: #CAFF00;
     }
 
+.email-me-btn {
+    color: #F6F3ED;
+    background-color: transparent;
+    border-color: #CAFF00;
+}
+
+    .email-me-btn:hover {
+        color: #020217;
+        background-color: #CAFF00;
+        border-color: #CAFF00;
+    }
+    .email-me-btn:focus {
+        color: #020217;
+        background-color: #CAFF00;
+        border-color: #CAFF00;
+    }
+
 .custom-link {
     font-size: 2em;
     font-style: italic;
@@ -97,4 +114,10 @@ hr.item-separator {
 
 .current-page {
     color: #CAFF00 !important;
+}
+
+.contact-box {
+    border: .1em solid #CAFF00;
+    color: #F6F3ED;
+    border-radius: 1.25rem;
 }

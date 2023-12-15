@@ -8907,8 +8907,11 @@ a.bg-dark:focus, a.bg-dark:hover, button.bg-dark:focus, button.bg-dark:hover {
 }
 
 .text-white {
-    color: #fff !important
+    color: #F6F3ED !important
 }
+    .text-white:hover {
+        color: #CAFF00 !important;
+    }
 
 .text-primary {
     color: #007bff !important
