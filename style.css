@@ -94,3 +94,7 @@ hr.item-separator {
 .hover-zoom:hover img {
     transform: scale(1.01); /* Adjust the scale factor for the desired zoom level */
 }
+
+.current-page {
+    color: #CAFF00 !important;
+}
