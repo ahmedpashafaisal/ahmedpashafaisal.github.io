@@ -252,41 +252,45 @@
 
     <hr class="section-separator my-0">
 
-    <section id="contact" class="mb-5">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-sm-12 text-center">
-                    <h3>
-                        Feel free to get in touch for any inquiry or service.
-                    </h3>
+    <!-- Section Title-->
+    <section  id="contact" class="section-title">
+        <div class="container my-3">
+            <div class="row text-left">
+                <div class="col-12">
+                    <h1 class="font-weight-bold" style="font-size: 3em; font-style:italic;">Contact</h1>
                 </div>
             </div>
-
-
         </div>
+    </section>
 
-        <div class="container-fluid">
+    <hr class="section-separator my-0">
+
+    <section class="mb-5">
+        <div class="container">
             <div class="row">
                 <div class="col-md-4 col-sm-12 p-3">
-                    <div class="text-center contact-box py-5">
+                    <div class="text-center contact-box py-5" onclick="copyToClipboard('ahmedpashafaial@gmail.com')" data-toggle="tooltip" data-placement="top" title="Click to Copy">
                         <i class="fas fa-envelope fa-2x d-block mb-3"></i>
                         ahmedpashafaial@gmail.com
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-12 p-3">
-                    <div class="text-center contact-box py-5">
+                    <div class="text-center contact-box py-5" onclick="copyToClipboard('+372 53638981')" data-toggle="tooltip" data-placement="top" title="Click to Copy">
                         <i class="fas fa-phone fa-2x d-block mb-3"></i>
                         +372 53638981
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-12 p-3">
-                    <div class="text-center contact-box py-5">
+                    <div class="text-center contact-box py-5" onclick="copyToClipboard('F. Kuhlbarsi 1, Tallinn, Estonia')" data-toggle="tooltip" data-placement="top" title="Click to Copy">
                         <i class="fas fa-location-dot fa-2x d-block mb-3"></i>
                         F. Kuhlbarsi 1, Tallinn, Estonia
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Custom Notification Element -->
+        <div class="custom-notification" id="notification"></div>
 
     </section>
 
@@ -358,6 +362,52 @@
         <!-- Copyright -->
     </footer>
     <!-- Footer -->
+
+    <script>
+        function copyToClipboard(text) {
+            // Create a temporary input element
+            var tempInput = document.createElement('input');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+
+            // Select the text in the input
+            tempInput.select();
+            tempInput.setSelectionRange(0, 99999); // For mobile devices
+
+            // Copy the selected text to the clipboard
+            document.execCommand('copy');
+
+            // Remove the temporary input
+            document.body.removeChild(tempInput);
+
+            // Show custom notification
+            showNotification('Text copied to clipboard: ' + text);
+        }
+
+        function showNotification(message) {
+            var notificationElement = document.getElementById('notification');
+            notificationElement.textContent = message;
+            notificationElement.style.display = 'block';
+
+            // Fade out the notification after 2 seconds (adjust the delay as needed)
+            setTimeout(function () {
+                notificationElement.style.opacity = 0;
+            }, 2000); // 2000 milliseconds (2 seconds)
+
+            // Hide the notification after the fade-out animation completes
+            setTimeout(function () {
+                notificationElement.style.display = 'none';
+                notificationElement.style.opacity = 1; // Reset opacity for the next display
+            }, 2500); // 2500 milliseconds (2.5 seconds)
+        }
+    </script>
+
+    <script>
+        // Initialize Bootstrap tooltips
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
 
 </body>
 </html>

@@ -121,3 +121,22 @@ hr.item-separator {
     color: #F6F3ED;
     border-radius: 1.25rem;
 }
+    .contact-box:hover {
+        background-color: #CAFF00;
+        color: #020217; /* Change the background color on hover if needed */
+    }
+
+.custom-notification {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    padding: 10px;
+    background-color: #CAFF00;
+    color: #020217;
+    text-align: center;
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+}
