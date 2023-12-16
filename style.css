@@ -17,6 +17,10 @@ hr.section-separator {
 
 }
 
+hr.nav-border {
+    border: .1rem solid #F6F3ED;
+}
+
 hr.item-separator {
     border: .01rem solid #CAFF00;
 
@@ -142,6 +146,27 @@ hr.item-separator {
     transition: opacity 0.5s ease-in-out;
 }
 
-.fas:hover {
-    color: #CAFF00;
+
+
+/* Style for the social media contact bar */
+.social-bar {
+    position: fixed;
+    top: 50%; /* Adjust this value to change the vertical position */
+    left: 0;
+    transform: translateY(-50%);
+    background-color: rgba(246, 243, 237, 0.1);
+    z-index: 1000;
+    border-radius : .5rem;
 }
+
+
+.social-icon {
+    color: #F6F3ED;
+    font-size: 24px;
+    display: block;
+    text-align: center;
+}
+
+    .social-icon:hover {
+        color: #CAFF00;
+    }
