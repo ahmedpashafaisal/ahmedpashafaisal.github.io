@@ -3903,13 +3903,13 @@ tbody.collapse.show {
     padding-top: .3125rem;
     padding-bottom: .3125rem;
     margin-right: 1rem;
-    font-size: 2rem;
+    font-size: 1rem;
     line-height: inherit;
     white-space: nowrap
 }
 
     .navbar-brand:focus, .navbar-brand:hover {
-        text-decoration: none
+        color: #CAFF00;
     }
 
 .navbar-nav {

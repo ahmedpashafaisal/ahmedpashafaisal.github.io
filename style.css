@@ -1,4 +1,5 @@
 body {
+    padding-top: 65px;
 }
 
 .about-me{
@@ -139,4 +140,8 @@ hr.item-separator {
     text-align: center;
     opacity: 1;
     transition: opacity 0.5s ease-in-out;
+}
+
+.fas:hover {
+    color: #CAFF00;
 }
