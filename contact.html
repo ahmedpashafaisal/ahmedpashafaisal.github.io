@@ -12,27 +12,9 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="script.js"></script>
 </head>
-<body class="portfolio-page">
+<body class="contact-page">
 
-    <section class="text-center mb-5">
-        <a href="https://telegram.me/ahmedpashafaisal" target="_blank" class="text-white mx-4">
-            <i class="fa-brands fa-telegram fa-2x"></i>
-        </a>
-        <a href="https://discord.com/users/749660702192697385" target="_blank" class="text-white mx-4">
-            <i class="fa-brands fa-discord fa-2x"></i>
-        </a>
-        <a href="https://github.com/ahmedpashafaisal" target="_blank" class="text-white mx-4">
-            <i class="fa-brands fa-github fa-2x"></i>
-        </a>
-        <a href="https://www.linkedin.com/in/ahmed-pasha-faisal/" target="_blank" class="text-white mx-4">
-            <i class="fab fa-linkedin fa-2x"></i>
-        </a>
-        <a href="https://pashafaisal.itch.io/" target="_blank" class="text-white mx-4">
-            <i class="fa-brands fa-itch-io fa-2x"></i>
-        </a>
-
-
-    </section>
+    
     <!-- Social Media Contact Bar -->
     <div class="social-bar px-1">
         <a href="https://telegram.me/ahmedpashafaisal" target="_blank" class="text-white my-3 social-icon">
@@ -67,29 +49,28 @@
             <div class="collapse navbar-collapse justify-content-end m-2" id="navbarNav">
                 <ul class="navbar-nav mx-5">
                     <li class="nav-item">
-                        <a class="nav-link current-page" href="https://ahmedpashafaisal.github.io/portfolio.html">PORTFOLIO</a>
+                        <a class="nav-link" href="https://ahmedpashafaisal.github.io/portfolio.html">PORTFOLIO</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="https://ahmedpashafaisal.github.io/about.html">ABOUT</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="https://ahmedpashafaisal.github.io/contact.html">CONTACT</a>
+                        <a class="nav-link  current-page" href="https://ahmedpashafaisal.github.io/contact.html">CONTACT</a>
                     </li>
                 </ul>
             </div>
         </div>
-
-
     </nav>
+    
 
     <hr class="section-separator my-0">
 
-    <!-- portfolio Title-->
-    <section class="section-title">
-        <div class="container my-3 mx-5">
+    <!-- Section Title-->
+    <section id="contact" class="section-title">
+        <div class="container my-3">
             <div class="row text-left">
                 <div class="col-12">
-                    <h1 class="font-weight-bold" style="font-size: 3em; font-style:italic;">PORTFOLIO</h1>
+                    <h1 class="font-weight-bold" style="font-size: 3em; font-style:italic;">Contact</h1>
                 </div>
             </div>
         </div>
@@ -97,83 +78,34 @@
 
     <hr class="section-separator my-0">
 
-    <!-- portfolio Gallery-->
-    <section class="portfolio-gallery">
-        <div class="container-fluid">
-            <div class="row mx-2">
-                <!-- item-1-->
-                <div class="col-md-6 col-sm-12 my-2">
-                    <a href="https://ahmedpashafaisal.github.io/magic-mineral.html" class="gallery-link">
-                        <div class="bg-image hover-zoom my-2">
-                            <img src="Images/Portfolio/magic-mineral.png" class="img-fluid rounded p-2  my-2" alt="Magic Mineral" />
-                        </div>
-                    </a>
-                    <h1 class="gallery-title text-uppercase font-italic font-weight-bold px-2">Magic Mineral</h1>
-                    <p class="gallery-role px-2">Concept, Creative Direction, Art Direction, Development</p>
+    <section class="mb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 col-sm-12 p-3">
+                    <div class="text-center contact-box py-5" onclick="copyToClipboard('ahmedpashafaial@gmail.com')" data-toggle="tooltip" data-placement="top" title="Click to Copy">
+                        <i class="fas fa-envelope fa-2x d-block mb-3"></i>
+                        ahmedpashafaial@gmail.com
+                    </div>
                 </div>
-
-                <!-- item-2-->
-                <div class="col-md-6 col-sm-12 my-2">
-                    <a href="https://ahmedpashafaisal.github.io/the-unwanted.html" class="gallery-link">
-                        <div class="bg-image hover-zoom my-2">
-                            <img src="Images/Portfolio/the-unwanted.png" class="img-fluid rounded p-2  my-2" alt="The Unwanted" />
-                        </div>
-                    </a>
-                    <h1 class="gallery-title text-uppercase font-italic font-weight-bold px-2">The Unwanted</h1>
-                    <p class="gallery-role px-2">Concept, Art Direction, Development</p>
+                <div class="col-md-4 col-sm-12 p-3">
+                    <div class="text-center contact-box py-5" onclick="copyToClipboard('+372 53638981')" data-toggle="tooltip" data-placement="top" title="Click to Copy">
+                        <i class="fas fa-phone fa-2x d-block mb-3"></i>
+                        +372 53638981
+                    </div>
                 </div>
-
-                <!-- item-3-->
-                <div class="col-md-6 col-sm-12 my-2">
-                    <a href="https://ahmedpashafaisal.github.io/the-return.html" class="gallery-link">
-                        <div class="bg-image hover-zoom my-2">
-                            <img src="Images/Portfolio/the-return.png" class="img-fluid rounded p-2  my-2" alt="The Return" />
-                        </div>
-                    </a>
-                    <h1 class="gallery-title text-uppercase font-italic font-weight-bold px-2">The Return</h1>
-                    <p class="gallery-role px-2">Concept, Design</p>
+                <div class="col-md-4 col-sm-12 p-3">
+                    <div class="text-center contact-box py-5" onclick="copyToClipboard('F. Kuhlbarsi 1, Tallinn, Estonia')" data-toggle="tooltip" data-placement="top" title="Click to Copy">
+                        <i class="fas fa-location-dot fa-2x d-block mb-3"></i>
+                        F. Kuhlbarsi 1, Tallinn, Estonia
+                    </div>
                 </div>
-
-                <!-- item-4-->
-                <div class="col-md-6 col-sm-12 my-2">
-                    <a href="https://ahmedpashafaisal.github.io/after-the-end.html" class="gallery-link">
-                        <div class="bg-image hover-zoom my-2">
-                            <img src="Images/Portfolio/after-the-end.png" class="img-fluid rounded p-2  my-2" alt="After The End" />
-                        </div>
-                    </a>
-                    <h1 class="gallery-title text-uppercase font-italic font-weight-bold px-2">After The End</h1>
-                    <p class="gallery-role px-2">Concept, Art & Design</p>
-                </div>
-
-                <!-- item-5-->
-                <div class="col-md-6 col-sm-12 my-2">
-                    <a href="https://ahmedpashafaisal.github.io/space-cricket.html" class="gallery-link">
-                        <div class="bg-image hover-zoom my-2">
-                            <img src="Images/Portfolio/space-cricket.png" class="img-fluid rounded p-2  my-2" alt="Space Cricket" />
-                        </div>
-                    </a>
-                    <h1 class="gallery-title text-uppercase font-italic font-weight-bold px-2">Space Cricket</h1>
-                    <p class="gallery-role px-2">Concept, UI/UX, Art & Design</p>
-                </div>
-
-                <!-- item-5-->
-                <div class="col-md-6 col-sm-12 my-2">
-                    <a href="https://ahmedpashafaisal.github.io/toony-car.html" class="gallery-link">
-                        <div class="bg-image hover-zoom my-2">
-                            <img src="Images/Portfolio/toony-car.png" class="img-fluid rounded p-2  my-2" alt="Toony Car" />
-                        </div>
-                    </a>
-                    <h1 class="gallery-title text-uppercase font-italic font-weight-bold px-2">Toony Car</h1>
-                    <p class="gallery-role px-2">UI/UX, 3D-Art & Design</p>
-                </div>
-
-
-
             </div>
         </div>
-    </section>
 
-    <hr class="section-separator my-0">
+        <!-- Custom Notification Element -->
+        <div class="custom-notification" id="notification"></div>
+
+    </section>
 
     <!-- Section: Social -->
     <section class="text-center mb-5">
@@ -243,6 +175,52 @@
         <!-- Copyright -->
     </footer>
     <!-- Footer -->
+
+    <script>
+        function copyToClipboard(text) {
+            // Create a temporary input element
+            var tempInput = document.createElement('input');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+
+            // Select the text in the input
+            tempInput.select();
+            tempInput.setSelectionRange(0, 99999); // For mobile devices
+
+            // Copy the selected text to the clipboard
+            document.execCommand('copy');
+
+            // Remove the temporary input
+            document.body.removeChild(tempInput);
+
+            // Show custom notification
+            showNotification('Text copied to clipboard: ' + text);
+        }
+
+        function showNotification(message) {
+            var notificationElement = document.getElementById('notification');
+            notificationElement.textContent = message;
+            notificationElement.style.display = 'block';
+
+            // Fade out the notification after 2 seconds (adjust the delay as needed)
+            setTimeout(function () {
+                notificationElement.style.opacity = 0;
+            }, 2000); // 2000 milliseconds (2 seconds)
+
+            // Hide the notification after the fade-out animation completes
+            setTimeout(function () {
+                notificationElement.style.display = 'none';
+                notificationElement.style.opacity = 1; // Reset opacity for the next display
+            }, 2500); // 2500 milliseconds (2.5 seconds)
+        }
+    </script>
+
+    <script>
+        // Initialize Bootstrap tooltips
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
 
 </body>
 </html>
