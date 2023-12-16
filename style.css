@@ -170,3 +170,22 @@ hr.item-separator {
     .social-icon:hover {
         color: #CAFF00;
     }
+
+.vr{
+    border-right : 1px solid #F6F3ED;
+}
+
+
+/* Customize the button */
+.custom-button {
+    color: #F6F3ED; /* Text color */
+    background-color: transparent; /* Background color */
+    border: 2px solid #CAFF00; /* Border color */
+    padding: 15px 30px; /* Increase padding for larger size */
+    font-size: 1.2em; /* Increase font size */
+}
+
+    .custom-button:hover {
+        background-color: #CAFF00; /* Hover background color */
+        color: #020217; /* Hover text color */
+    }
