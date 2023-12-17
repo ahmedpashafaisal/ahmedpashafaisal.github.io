@@ -25,7 +25,7 @@ body {
     }
 
     .big-title{
-        text-align: left;
+        text-align: center;
     }
 
 .portfolio-role {
@@ -49,7 +49,7 @@ body {
         text-decoration: none;
     }
 
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 700px) {
     p {
         font-size: 15px;
     }
@@ -81,6 +81,7 @@ body {
         color: #F6F3ED;
         transition: color 0.3s;
     }
+    
 }
 
 Section{
