@@ -11,7 +11,11 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="script.js"></script>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>$(function () {
+            $("#navigation-bar").load("https://ahmedpashafaisal.github.io/navigation-bar.html");
+        });</script>
 </head>
 <body>
     <section class="text-center mb-5">
@@ -59,34 +63,9 @@
     </div>
 
     <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top py-3">
-        <div class="container-fluid p-0">
+    <div id="navigation-bar">
 
-            <a class="navbar-brand mx-5 text-nowrap" href="https://ahmedpashafaisal.github.io/">
-                <i class="fas fa-home fa-3x"></i> <!-- Font Awesome home icon -->
-            </a>
-
-            <button class="navbar-toggler mx-5" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-dark navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse justify-content-end m-2" id="navbarNav">
-                <ul class="navbar-nav mx-5">
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://ahmedpashafaisal.github.io/portfolio.html">PORTFOLIO</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://ahmedpashafaisal.github.io/about.html">ABOUT</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://ahmedpashafaisal.github.io/contact.html">CONTACT</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-
-    </nav>
+    </div>
 
 
     <hr class="section-separator mb-3 mt-0">
