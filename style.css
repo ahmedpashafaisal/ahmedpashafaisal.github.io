@@ -2,8 +2,43 @@ body {
     padding-top: 10vh;
 }
 
-.about-me{
+/*.about-me{
     font-size: clamp(30px, 2vw, 50px);
+}
+*/
+
+.social {
+    margin: 0 1.5rem;
+}
+
+.social-icon {
+    color: #F6F3ED;
+    font-size: 2rem;
+    display: block;
+    text-align: center;
+}
+
+    .social-icon:hover {
+        color: #CAFF00;
+    }
+
+    .big-title{
+        text-align: left;
+    }
+
+@media only screen and (max-width: 480px){
+    p {
+        font-size: 20px;
+    }
+    .social{
+        margin: 0 .5rem;
+    }
+    .social-icon{
+        font-size: 1rem;
+    }
+    .big-title{
+        text-align: center;
+    }
 }
 
 Section{
@@ -164,16 +199,7 @@ hr.item-separator {
 }
 
 
-.social-icon {
-    color: #F6F3ED;
-    font-size: 2rem;
-    display: block;
-    text-align: center;
-}
 
-    .social-icon:hover {
-        color: #CAFF00;
-    }
 
 .vr{
     border-right : 1px solid #F6F3ED;

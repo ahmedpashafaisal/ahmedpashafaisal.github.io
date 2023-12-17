@@ -3934,7 +3934,7 @@ tbody.collapse.show {
     padding-left: 0;
     margin-bottom: 0;
     list-style: none;
-    font-size: clamp(30px, 1.5rem, 35px);
+    font-size: 1rem;
 }
 
     .navbar-nav .nav-link {
