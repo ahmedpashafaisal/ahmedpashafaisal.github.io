@@ -32,9 +32,6 @@ body {
     font-size: 1vw;
 }
 
-.portfolio-gallery{
-    padding: 0 3rem;
-}
 
 @media only screen and (max-width: 480px) {
     p {
@@ -52,8 +49,10 @@ body {
     .portfolio-role {
         font-size: 3vw;
     }
-    .portfolio-gallery {
-        padding: 0;
+    
+    body {
+        padding-top: 14vh;
+        width: 100%;
     }
 }
 
