@@ -248,3 +248,7 @@ hr.item-separator {
         background-color: #CAFF00; /* Hover background color */
         color: #020217; /* Hover text color */
     }
+
+button {
+    border-color: #CAFF00;
+}
