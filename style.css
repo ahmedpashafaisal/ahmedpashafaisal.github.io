@@ -26,6 +26,9 @@ body {
         text-align: left;
     }
 
+.portfolio-role {
+    font-size: 1vw;
+}
 @media only screen and (max-width: 480px){
     p {
         font-size: 20px;
@@ -38,6 +41,9 @@ body {
     }
     .big-title{
         text-align: center;
+    }
+    .portfolio-role {
+        font-size: 3vw;
     }
 }
 
@@ -88,9 +94,7 @@ hr.item-separator {
     padding-left :2rem;
     padding-bottom :.1rem;
 }
-.portfolio-role {
-    font-size: clamp(20px, 1vw, 30px);
-}
+
 .portfolio-type {
     font-size: clamp(20px, 1vw, 30px);
 }
