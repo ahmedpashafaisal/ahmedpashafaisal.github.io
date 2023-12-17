@@ -32,6 +32,22 @@ body {
     font-size: 1vw;
 }
 
+.carousel{
+    width:75vw;
+}
+
+.custom-link {
+    font-size: 2em;
+    font-style: italic;
+    font-weight: 900;
+    color: #F6F3ED;
+    transition: color 0.3s; /* Smooth transition for color change */
+}
+
+    .custom-link:hover {
+        color: #CAFF00;
+        text-decoration: none;
+    }
 
 @media only screen and (max-width: 480px) {
     p {
@@ -53,6 +69,17 @@ body {
     body {
         padding-top: 14vh;
         width: 100%;
+    }
+    .carousel {
+        width: 100%;
+    }
+
+    .custom-link {
+        font-size: 1em;
+        font-style: italic;
+        font-weight: 900;
+        color: #F6F3ED;
+        transition: color 0.3s;
     }
 }
 
@@ -142,18 +169,7 @@ hr.item-separator {
         border-color: #CAFF00;
     }
 
-.custom-link {
-    font-size: 2em;
-    font-style: italic;
-    font-weight:900;
-    color: #F6F3ED;
-    transition: color 0.3s; /* Smooth transition for color change */
-}
 
-    .custom-link:hover {
-        color: #CAFF00;
-        text-decoration: none;
-    }
 
 .hover-zoom {
     overflow: hidden;
