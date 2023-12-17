@@ -148,7 +148,7 @@ hr.item-separator {
 .social-bar {
     position: fixed;
     top: 50%; /* Adjust this value to change the vertical position */
-    left: 0;
+    right: 0;
     transform: translateY(-50%);
     background-color: rgba(246, 243, 237, 0.1);
     z-index: 1000;
