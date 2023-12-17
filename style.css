@@ -1,5 +1,7 @@
 body {
     padding-top: 10vh;
+    overflow-x: hidden;
+    width: 100%;
 }
 
 /*.about-me{
@@ -29,7 +31,12 @@ body {
 .portfolio-role {
     font-size: 1vw;
 }
-@media only screen and (max-width: 480px){
+
+.portfolio-gallery{
+    padding: 0 3rem;
+}
+
+@media only screen and (max-width: 480px) {
     p {
         font-size: 20px;
     }
@@ -44,6 +51,9 @@ body {
     }
     .portfolio-role {
         font-size: 3vw;
+    }
+    .portfolio-gallery {
+        padding: 0;
     }
 }
 
