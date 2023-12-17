@@ -3106,21 +3106,12 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
     }
 
 .collapse {
-    display: none;
-    text-align: center;
+    display: none
 }
 
     .collapse.show {
-        text-align: center;
         display: block;
-        position: fixed;
-        z-index: 9999;
-        top: 100px;
-        right: 15px;
-        left: 15px;
-        bottom: 15px;
-        background-color: #020217e3;
-        border: white 1px solid;
+        height: 20vh;
     }
 
 tr.collapse.show {
@@ -3132,7 +3123,6 @@ tbody.collapse.show {
 }
 
 .collapsing {
-    text-align: center;
     position: relative;
     height: 0;
     overflow: hidden;
