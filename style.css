@@ -2,6 +2,7 @@ body {
     padding-top: 10vh;
     overflow-x: hidden;
     width: 100%;
+    margin: 0;
 }
 
 /*.about-me{
@@ -9,6 +10,9 @@ body {
 }
 */
 
+footer{
+    margin-bottom: 3rem;
+}
 .social {
     margin: 0 1.5rem;
 }
