@@ -19,6 +19,32 @@
     $("footer").load("https://ahmedpashafaisal.github.io/footer.html");
 
         });</script>
+    <script>
+        $(document).ready(function () {
+
+            $(".filter-button").click(function () {
+                var value = $(this).attr('data-filter');
+
+                if (value == "all") {
+                    //$('.filter').removeClass('hidden');
+                    $('.filter').show('1000');
+                }
+                else {
+                    //            $('.filter[filter-item="'+value+'"]').removeClass('hidden');
+                    //            $(".filter").not('.filter[filter-item="'+value+'"]').addClass('hidden');
+                    $(".filter").not('.' + value).hide('3000');
+                    $('.filter').filter('.' + value).show('3000');
+
+                }
+            });
+
+            if ($(".filter-button").removeClass("active")) {
+                $(this).removeClass("active");
+            }
+            $(this).addClass("active");
+
+        });
+    </script>
 
 </head>
 <body>
@@ -50,7 +76,7 @@
                         AHMED PASHA FAISAL
                     </h3>
                     <h5 class="title text-center">
-                        Indie Game Developer
+                        Game Designer and Developer
                     </h5>
                     <hr class="section-separator mb-3 mt-0">
                     <div class="mx-5">
@@ -64,7 +90,7 @@
                     <a href="https://ahmedpashafaisal.github.io/about.html">
                         <button type="button" class="btn-lg btn-light">Read More</button>
                     </a>
-                    
+
                 </div>
             </div>
         </div>
@@ -78,7 +104,7 @@
         <div class="container my-3 text-center">
             <div class="row big-title">
                 <div class="col-12">
-                    <h1 class="font-weight-bold" style="font-style:italic;">MY PORTFOLIO</h1>
+                    <h1 class="font-weight-bold" style="font-style:italic;">PORTFOLIO</h1>
                 </div>
             </div>
         </div>
@@ -86,121 +112,65 @@
 
     <hr class="section-separator mb-3 mt-0">
 
+
+    <div align="center">
+        <button class="btn-lg btn-light filter-button" data-filter="all">All</button>
+        <button class="btn-lg btn-light filter-button" data-filter="pg">Published Games</button>
+        <button class="btn-lg btn-light filter-button" data-filter="pp">Personal Project</button>
+        <button class="btn-lg btn-light filter-button" data-filter="gj">Game Jams</button>
+    </div>
+
     <!-- portfolio-->
-    <section id="portfolio" class="portfolio">
+    <div class="container">
+        <div class="row">
 
-        <div class="container-fluid">
-
-            <!-- Item - 1-->
-
-            <div class="portfolio-item">
-                <div class="row">
-                    <div class="portfolio-name col-lg-3 col-12">
-                        <div class="item-number text-center">
-                            1
-                        </div>
-                        <div class="item-text text-center  portfolio-type">
-                            2D Top-down Survival
-                        </div>
-                    </div>
-                    <div class="portfolio-image col-lg-9 col-12">
-                        <img src="Images/Portfolio/magic-mineral.png" class="img-fluid" />
-                        <div class="span2 portfolio-title col-12">
-                            <h1 style="font-style:italic; font-weight:bolder;">Magic Mineral</h1>
-                            <p class="portfolio-role">Concept, Creative Director, Art Director, Lead Unity Developer, Technical Artist</p>
-                            <a href="https://ahmedpashafaisal.github.io/magic-mineral.html">
-                                <button type="button" class="btn-lg view-game-btn">View Game</button>
-                            </a>
-
-                        </div>
-
-                    </div>
-                </div>
-
+            <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 my-3 filter pp">
+                <a href="https://ahmedpashafaisal.github.io/magic-mineral.html">
+                    <img src="Images/Portfolio/magic-mineral.png" class="img-responsive img-fluid">
+                </a>
             </div>
 
-            <hr class="item-separator my-5">
-            <!-- Item - 2-->
-
-            <div class="portfolio-item">
-                <div class="row">
-                    <div class="portfolio-name col-lg-3 col-12">
-                        <div class="item-number text-center">
-                            2
-                        </div>
-                        <div class="item-text text-center portfolio-type">
-                            Point & Click Adventure
-                        </div>
-                    </div>
-                    <div class="portfolio-image col-lg-9 col-12">
-                        <img src="Images/Portfolio/the-unwanted.png" class="img-fluid" />
-                        <div class="span2 portfolio-title ol-12">
-                            <h1 style="font-style:italic; font-weight:bolder;">The Unwanted</h1>
-                            <p class="portfolio-role">Concept, Art Director, Unity Developer</p>
-                            <a href="https://ahmedpashafaisal.github.io/the-unwanted.html">
-                                <button type="button" class="btn-lg view-game-btn">View Game</button>
-                            </a>
-                        </div>
-
-                    </div>
-                </div>
-
+            <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 my-3 filter pg">
+                <a href="https://ahmedpashafaisal.github.io/space-cricket.html">
+                    <img src="Images/Portfolio/space-cricket.png" class="img-responsive img-fluid">
+                </a>
             </div>
 
-            <hr class="item-separator my-5">
-            <!-- Item - 3-->
-
-            <div class="portfolio-item">
-                <div class="row">
-                    <div class="portfolio-name col-lg-3 col-12">
-                        <div class="item-number text-center">
-                            3
-                        </div>
-                        <div class="item-text text-center portfolio-type">
-                            Game Jam Submission
-                        </div>
-                    </div>
-                    <div class="portfolio-image col-lg-9 col-12">
-                        <img src="Images/Portfolio/the-return.png" class="img-fluid" />
-                        <div class="span2 portfolio-title col-12">
-                            <h1 style="font-style:italic; font-weight:bolder;">The Return</h1>
-                            <p class="portfolio-role">Concept & Game Design</p>
-                            <a href="https://ahmedpashafaisal.github.io/the-return.html">
-                                <button type="button" class="btn-lg view-game-btn">View Game</button>
-                            </a>
-                        </div>
-
-                    </div>
-                </div>
-
+            <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 my-3 filter pg">
+                <a href="https://ahmedpashafaisal.github.io/toony-car.html">
+                    <img src="Images/Portfolio/toony-car.png" class="img-responsive img-fluid">
+                </a>
             </div>
 
-            <hr class="item-separator my-5">
-
-            <!-- View ALl Games -->
-
-            <div class="container-fluid mx-0">
-                <div class="row">
-                    <div class="col-12 text-right">
-                        <a href="https://ahmedpashafaisal.github.io/portfolio.html" class="custom-link">
-                            VIEW ALL GAMES
-                            <i class="fa-regular fa-circle-right ml-3"></i>
-                        </a>
-                    </div>
-
-                </div>
+            <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 my-3 filter pp">
+                <a href="https://ahmedpashafaisal.github.io/the-unwanted.html">
+                    <img src="Images/Portfolio/the-unwanted.png" class="img-responsive img-fluid">
+                </a>
             </div>
 
+            <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 my-3 filter gj">
+                <a href="https://ahmedpashafaisal.github.io/the-return.html">
+                    <img src="Images/Portfolio/the-return.png" class="img-responsive img-fluid">
+                </a>
+            </div>
 
-
+            <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 my-3 filter gj">
+                <a href="https://ahmedpashafaisal.github.io/after-the-end.html">
+                    <img src="Images/Portfolio/after-the-end.png" class="img-responsive img-fluid">
+                </a>
+            </div>
         </div>
+    </div>
+
+
+
+    </div>
     </section>
 
     <hr class="section-separator mb-3 mt-0">
 
     <!-- Footer -->
     <footer class="text-center text-white" style="background-color: #020217">
-        
     </footer>
     <!-- Footer -->
 
