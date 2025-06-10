@@ -259,3 +259,31 @@ hr.item-separator {
 button {
     border-color: #CAFF00;
 }
+
+.gallery_product .portfolio-title h1 {
+    /* make sure the title area always takes up two lines */
+    line-height: 1.2; /* or whatever your line-height is */
+    min-height: 2.4em; /* 2 × 1.2em = two lines */
+    /* if you're using rems for your font-size, you can do: */
+    /* min-height: 6rem;     2 × (2.5rem × 1.2) */
+}
+
+.portfolio-role {
+    line-height: 1.5; /* or whatever your site uses */
+    min-height: 3rem; /* 2 × (1rem × 1.5) */
+    /* you can also use em-based math: */
+    /* min-height: 3em;  if your font-size is 1rem */
+}
+
+/* limit the carousel itself to no more than 80% of the viewport height */
+#carouselZen .carousel-inner {
+    max-height: 80vh;
+}
+
+#carouselZen .carousel-item img {
+    width: 100%;
+    height: auto;
+    max-height: 80vh;
+    object-fit: contain;
+}
+
