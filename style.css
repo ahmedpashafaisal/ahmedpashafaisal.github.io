@@ -287,3 +287,32 @@ button {
     object-fit: contain;
 }
 
+/* Apply the same carousel constraints to all carousels */
+#carouselExampleIndicators .carousel-inner {
+    max-height: 80vh;
+}
+
+#carouselExampleIndicators .carousel-item img {
+    width: 100%;
+    height: auto;
+    max-height: 80vh;
+    object-fit: contain;
+}
+
+/* See All Projects Button */
+.see-all-btn {
+    background-color: #CAFF00;
+    border-color: #CAFF00;
+    color: #020217;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.see-all-btn:hover {
+    background-color: #F6F3ED;
+    border-color: #F6F3ED;
+    color: #020217;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(202, 255, 0, 0.3);
+}
+

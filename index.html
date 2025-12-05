@@ -22,6 +22,20 @@
         });</script>
     <script>$(document).ready(function () {
 
+            // Hide filter buttons for categories with no items
+            if ($('.filter.pg').length === 0) {
+                $('#filter-pg').hide();
+            }
+            if ($('.filter.pp').length === 0) {
+                $('#filter-pp').hide();
+            }
+            if ($('.filter.ug').length === 0) {
+                $('#filter-ug').hide();
+            }
+            if ($('.filter.gj').length === 0) {
+                $('#filter-gj').hide();
+            }
+
             $(".filter-button").click(function () {
                 var value = $(this).attr('data-filter');
 
@@ -112,11 +126,12 @@
     <hr class="section-separator mb-3 mt-0">
 
 
-    <div align="center">
+    <div align="center" id="filter-buttons">
         <button class="btn-lg btn-light filter-button" data-filter="all">All</button>
-        <button class="btn-lg btn-light filter-button" data-filter="pg">Published Games</button>
-        <button class="btn-lg btn-light filter-button" data-filter="pp">Personal Project</button>
-        <button class="btn-lg btn-light filter-button" data-filter="gj">Game Jams</button>
+        <button class="btn-lg btn-light filter-button" data-filter="pg" id="filter-pg">Published Games</button>
+        <button class="btn-lg btn-light filter-button" data-filter="pp" id="filter-pp">Personal Project</button>
+        <button class="btn-lg btn-light filter-button" data-filter="ug" id="filter-ug">Upcoming Games</button>
+        <button class="btn-lg btn-light filter-button" data-filter="gj" id="filter-gj">Game Jams</button>
     </div>
 
     <!-- portfolio-->
@@ -137,14 +152,28 @@
                 </div>
             </div>
 
-            <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 my-3 filter pg">
-                <a href="https://ahmedpashafaisal.github.io/leaping-liliy.html">
-                    <img src="Images/Portfolio/leaping-frog.png" class="img-responsive img-fluid">
+            <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 my-3 filter ug">
+                <a href="https://ahmedpashafaisal.github.io/wildling.html">
+                    <img src="Images/Portfolio/wildling.png" class="img-responsive img-fluid">
                 </a>
                 <div class="span2 portfolio-title col-12 text-center">
-                    <h1 style="font-style:italic; font-weight:bolder;">Leaping Liliy</h1>
-                    <p class="portfolio-role">Project lead, Concept, UI/UX, Art & Design</p>
-                    <a href="https://ahmedpashafaisal.github.io/leaping-liliy.html">
+                    <h1 style="font-style:italic; font-weight:bolder;">Wildling</h1>
+                    <p class="portfolio-role">Concept, UI Design, Game Design, Level Design, Development</p>
+                    <a href="https://ahmedpashafaisal.github.io/wildling.html">
+                        <button type="button" class="btn-lg view-game-btn">View Game</button>
+                    </a>
+
+                </div>
+            </div>
+
+            <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 my-3 filter pg">
+                <a href="https://ahmedpashafaisal.github.io/ant-march-adventure.html">
+                    <img src="Images/Portfolio/ant-march-adventure.png" class="img-responsive img-fluid">
+                </a>
+                <div class="span2 portfolio-title col-12 text-center">
+                    <h1 style="font-style:italic; font-weight:bolder;">Ant March Adventure</h1>
+                    <p class="portfolio-role">Concept, Design, Lead Development, UI/UX</p>
+                    <a href="https://ahmedpashafaisal.github.io/ant-march-adventure.html">
                         <button type="button" class="btn-lg view-game-btn">View Game</button>
                     </a>
 
@@ -166,42 +195,11 @@
             </div>
 
             <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 my-3 filter pg">
-                <a href="https://ahmedpashafaisal.github.io/toony-car.html">
-                    <img src="Images/Portfolio/toony-car.png" class="img-responsive img-fluid">
-                </a>
-                <div class="span2 portfolio-title col-12 text-center">
-                    <h1 style="font-style:italic; font-weight:bolder;">Toony Car</h1>
-                    <p class="portfolio-role">UI/UX, 3D-Art & Design</p>
-                    <a href="https://ahmedpashafaisal.github.io/toony-car.html">
-                        <button type="button" class="btn-lg view-game-btn">View Game</button>
-                    </a>
-
-                </div>
-            </div>
-
-
-
-            <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 my-3 filter pp">
-                <a href="https://ahmedpashafaisal.github.io/the-unwanted.html">
-                    <img src="Images/Portfolio/the-unwanted.png" class="img-responsive img-fluid">
-                </a>
-                <div class="span2 portfolio-title col-12 text-center">
-                    <h1 style="font-style:italic; font-weight:bolder;">The Unwanted</h1>
-                    <p class="portfolio-role">Concept, Art Direction, Development</p>
-                    <a href="https://ahmedpashafaisal.github.io/the-unwanted.html">
-                        <button type="button" class="btn-lg view-game-btn">View Game</button>
-                    </a>
-
-                </div>
-            </div>
-
-
-            <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 my-3 filter gj">
                 <a href="https://ahmedpashafaisal.github.io/zen-merge-puzzle.html">
                     <img src="Images/Portfolio/zen-merge-puzzle.png" class="img-responsive img-fluid">
                 </a>
                 <div class="span2 portfolio-title col-12 text-center">
-                    <h1 style="font-style:italic; font-weight:bolder;">Zen Puzzle Sage</h1>
+                    <h1 style="font-style:italic; font-weight:bolder;">Zen Puzzle Saga</h1>
                     <p class="portfolio-role">Concept, Art, Design, Sound</p>
                     <a href="https://ahmedpashafaisal.github.io/zen-merge-puzzle.html">
                         <button type="button" class="btn-lg view-game-btn">View Game</button>
@@ -209,7 +207,28 @@
 
                 </div>
             </div>
+
+            <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 my-3 filter pg">
+                <a href="https://ahmedpashafaisal.github.io/road-rush-puzzle.html">
+                    <img src="Images/Portfolio/road-rush-puzzle.png" class="img-responsive img-fluid">
+                </a>
+                <div class="span2 portfolio-title col-12 text-center">
+                    <h1 style="font-style:italic; font-weight:bolder;">Road Rush Puzzle</h1>
+                    <p class="portfolio-role">Concept, Level Design, 3D Assets, UI/UX, Game Economy</p>
+                    <a href="https://ahmedpashafaisal.github.io/road-rush-puzzle.html">
+                        <button type="button" class="btn-lg view-game-btn">View Game</button>
+                    </a>
+
+                </div>
+            </div>
         </div>
+    </div>
+
+    <!-- See All Button -->
+    <div class="text-center my-4">
+        <a href="https://ahmedpashafaisal.github.io/portfolio.html">
+            <button type="button" class="btn-lg btn-primary see-all-btn">See All Projects</button>
+        </a>
     </div>
 
 
