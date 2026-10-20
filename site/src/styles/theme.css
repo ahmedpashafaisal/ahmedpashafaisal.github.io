@@ -217,6 +217,32 @@
   text-decoration: none;
 }
 
+/* Phones: four buttons on the right leave no room for equal sides, so the
+   sides size to their buttons and the score takes the middle */
+@media (max-width: 480px) {
+  .hud {
+    grid-template-columns: auto 1fr auto;
+    gap: 0.5rem;
+  }
+
+  .hud__side {
+    gap: 0.4rem;
+  }
+
+  .hud__score {
+    justify-self: center;
+    padding: 0.45rem 0.7rem;
+    white-space: nowrap;
+  }
+}
+
+/* Smallest phones: still too tight, so back to top goes (scrolling works) */
+@media (max-width: 379px) {
+  .hud__top {
+    display: none;
+  }
+}
+
 /* Room at the page bottom so the bar never hides the last content */
 body {
   padding-bottom: 64px;

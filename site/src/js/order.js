@@ -1,7 +1,7 @@
 // One game order for the whole site: the featured games first (in their
 // featured order: Wildlings, Magic Mineral, Storm Alert), then Legendary
 // games, then grouped by category in the order of games.json "categories"
-// (Mobile, PC / Steam, Gamification, Jams, Web games), newest first inside
+// (PC / Steam, Gamification, Mobile, Jams, Web games), newest first inside
 // each group. The deck's All tab and the next/previous links on game pages
 // both use it. Each game has exactly one category; it sets its colour tint.
 import data from '../data/games.json';

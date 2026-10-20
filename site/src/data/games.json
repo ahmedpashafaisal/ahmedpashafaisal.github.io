@@ -2,16 +2,16 @@
   "_note": "Source of truth for the card deck and case studies. Facts from the old game pages and Common/thesis_summary.md (20 Oct 2026). blurb = Claude's condensed draft; Ahmed rewrites. Rarity: 6 Legendary agreed 20 Oct. Storm Alert public: Mattia OK (per Ahmed, 20 Oct). Twist the News moved out of the games list to the About page thesis section (21 Oct); its old entry is kept under \"thesis\" for reference. builtWith: only verified tools (itch 'Made with', Ahmed's own game texts, or Ahmed); empty = not yet confirmed (21 Oct).",
   "categories": [
     {
-      "id": "mobile",
-      "label": "Mobile"
-    },
-    {
       "id": "pc-steam",
       "label": "PC / Steam"
     },
     {
       "id": "gamification",
-      "label": "Gamification"
+      "label": "Gamification / IDN"
+    },
+    {
+      "id": "mobile",
+      "label": "Mobile"
     },
     {
       "id": "jams",
