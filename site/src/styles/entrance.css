@@ -143,6 +143,7 @@ html.pre-entry {
 .games {
   min-height: 100vh;
   display: grid;
+  grid-template-columns: minmax(0, 1fr); /* never wider than the screen */
   justify-items: center;
   align-content: start;
   gap: 2.5rem;
@@ -181,7 +182,7 @@ html.pre-entry {
   translate: 0 calc(var(--p, 0) * -40px);
 }
 
-.games > * {
+.featured > * {
   translate: 0 calc((1 - var(--q, 1)) * 70px);
   opacity: calc(0.2 + var(--q, 1) * 0.8);
 }

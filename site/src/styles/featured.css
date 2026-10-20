@@ -1,0 +1,243 @@
+/* Featured section: stacked full-width banners */
+.featured {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  gap: 2.5rem;
+  padding: 5rem 16px 2rem;
+}
+
+.featured__head {
+  display: grid;
+  justify-items: center;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.featured__head h2 {
+  font-size: clamp(2rem, 5vw, 3.25rem);
+}
+
+.featured__sub {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.featured__list {
+  display: grid;
+  gap: 0;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.banner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+}
+
+.banner--flip {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+}
+
+.banner--flip .banner__lean {
+  order: 2;
+}
+
+.banner__lean {
+  will-change: transform;
+}
+
+/* Media frame */
+.banner__media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  border: 2px solid var(--ink);
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--ink);
+  box-shadow: 8px 8px 0 var(--ink);
+}
+
+.banner__shot {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 900ms ease;
+}
+
+.banner__shot.is-active {
+  opacity: 1;
+  animation: ken-burns 7s ease-out both;
+}
+
+@keyframes ken-burns {
+  from { transform: scale(1.12) translate(-1.5%, 1%); }
+  to { transform: scale(1) translate(0, 0); }
+}
+
+/* Mobile games: phone frame over the cover art */
+.banner__media--phone {
+  display: grid;
+  place-items: center;
+  background: var(--ink) var(--backdrop) center / cover no-repeat;
+}
+
+.banner__media--phone::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(250, 246, 238, 0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.banner__phone {
+  position: relative;
+  height: 86%;
+  aspect-ratio: 9 / 19.5;
+  border: 3px solid var(--ink);
+  border-radius: 22px;
+  overflow: hidden;
+  background: var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+/* Text */
+.banner__text {
+  display: grid;
+  gap: 0.9rem;
+  justify-items: start;
+}
+
+.banner__meta {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.banner__title {
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  transform-origin: 0 100%;
+}
+
+.banner__hook {
+  margin: 0;
+  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+  max-width: 34ch;
+}
+
+.banner__role {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.banner__role strong {
+  color: var(--ink);
+  margin-right: 0.4rem;
+}
+
+.banner__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+.banner__cta {
+  min-width: 0;
+  padding: 0.8rem 1.5rem;
+  font-size: 1.05rem;
+  text-decoration: none;
+}
+
+/* Stack on small screens: media on top */
+@media (max-width: 860px) {
+  .banner,
+  .banner--flip {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .banner--flip .banner__lean {
+    order: 0;
+  }
+
+  .banner__media {
+    box-shadow: 5px 5px 0 var(--ink);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .banner__shot.is-active {
+    animation: none;
+  }
+}
+
+/* No screenshots yet */
+.banner__placeholder {
+  position: absolute;
+  inset: 0;
+  font-size: clamp(5rem, 14vw, 10rem);
+}
+
+/* Separator between banners: line with a rarity gem in the middle */
+.banner-sep {
+  position: relative;
+  display: grid;
+  place-items: center;
+  margin: clamp(3.5rem, 8vw, 6rem) 0;
+  height: 1.2rem;
+}
+
+.banner-sep::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  border-top: 2px dashed var(--line);
+}
+
+.banner-sep__gem {
+  position: relative;
+  width: 1rem;
+  height: 1rem;
+  border: 1.5px solid var(--ink);
+  background: var(--accent);
+  transform: rotate(45deg);
+  box-shadow: 0 0 0 6px var(--bg);
+}
+
+/* Juice: title letters, waiting state, magnetic button */
+.banner__word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.banner__letter {
+  display: inline-block;
+  transform-origin: 50% 100%;
+}
+
+.banner.is-waiting .banner__media,
+.banner.is-waiting .banner__text > * {
+  opacity: 0;
+}
+
+.banner__cta {
+  transition:
+    translate 380ms var(--ease-spring),
+    transform var(--t-release) var(--ease-spring),
+    box-shadow var(--t-release) var(--ease-spring),
+    background-color var(--t-hover) ease;
+}

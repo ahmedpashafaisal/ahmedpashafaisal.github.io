@@ -1,0 +1,117 @@
+/* Deck section */
+.games__head {
+  display: grid;
+  justify-items: center;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.games__sub {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.deck-tools {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  max-width: 1200px;
+}
+
+.deck-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* Filter chip: small sibling of the juicy button */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 0.95rem;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink);
+  font: 700 0.9rem/1 var(--font-body);
+  cursor: pointer;
+  box-shadow: 0 3px 0 var(--ink);
+  transition:
+    transform var(--t-release) var(--ease-spring),
+    box-shadow var(--t-release) var(--ease-spring),
+    background-color var(--t-hover) ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.chip:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 0 var(--ink);
+}
+
+.chip:active {
+  transform: translateY(2px) scale(1.06, 0.9);
+  box-shadow: 0 1px 0 var(--ink);
+  transition-duration: var(--t-press);
+}
+
+.chip[aria-pressed="true"] {
+  background: var(--accent);
+}
+
+.chip__count {
+  min-width: 1.4em;
+  padding: 0.15em 0.4em;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--surface);
+  font-size: 0.72rem;
+  text-align: center;
+}
+
+.deck-shuffle {
+  background: var(--bg);
+}
+
+.deck {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 1200px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 2.5rem 1.5rem;
+  justify-items: center;
+}
+
+.deck__slot {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  transition: translate 420ms var(--ease-spring);
+}
+
+.deck__slot.is-lifted {
+  z-index: 2;
+  translate: 0 -14px;
+}
+
+.deck__slot.nudge-left {
+  translate: -12px 0;
+}
+
+.deck__slot.nudge-right {
+  translate: 12px 0;
+}
+
+.deck__slot .card {
+  width: 100%;
+}
+
+.deck__slot.is-undealt {
+  opacity: 0;
+}

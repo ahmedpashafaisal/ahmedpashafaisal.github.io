@@ -112,6 +112,13 @@ export const sfx = {
     if (!ready()) return;
     [523, 659, 784, 1047].forEach((f, i) => tone({ from: f, dur: 0.16, type: 'triangle', gain: 0.22, delay: i * 0.06 }));
   },
+  // Card riffle: a quick run of soft clicks
+  riffle() {
+    if (!ready()) return;
+    for (let i = 0; i < 7; i++) {
+      tone({ from: vary(1400, 0.2), to: 700, dur: 0.025, type: 'triangle', gain: 0.1, delay: i * 0.035 });
+    }
+  },
   // See-games launch: filtered noise sweeping up
   whoosh() {
     if (!ready()) return;

@@ -20,11 +20,12 @@ A simple, minimal portfolio where every element has juice, so the visitor feels 
 | See games button | Anticipation: crouch, hold, launch scroll. Manual scroll = calm parallax |
 | Landing | One-press entry: name + role visible, one juicy button bursts the site alive |
 | First screen | Full-screen entrance: name, one fun line about what I do (joke OK), entry button. Fun elements at the edges. No cards |
-| Games | Trading-card deck, rarity tiers, games only (13) |
+| Games | Trading-card deck, rarity tiers, games only (12) |
 | Legendary cards | Best 5–6, each with a case study |
+| Featured | Stacked full-width banners (~70vh), Legendary only, alternating sides, screenshot pan, "Case study →"; then full deck (all games) |
 | Common cards | Card back only, links out |
 | Game page | Short case study: hook clip, role, 1 problem + solution, result, links |
-| Pages | Home (hero + deck), case studies, About |
+| Pages | Home (entrance + featured + deck), case studies, About |
 | Extras | Achievements, XP bar, easter eggs, juicy cursor + buttons |
 | Extras limit | XP bar = 2 px line; achievements = 1 small toast at a time, corner, never over content |
 | Copy | Claude drafts, Ahmed rewrites in his voice |
@@ -73,7 +74,7 @@ A simple, minimal portfolio where every element has juice, so the visitor feels 
 |---|---|---|
 | 1 | Scaffold | Docs saved, branch `redesign`, Vite project, Actions workflow (not live) |
 | 2 | Look + feel test | 1 card + 1 button on off-white dot grid, with motion tokens. Checks the main cue: does a press *feel* like something |
-| 3 | Game data | `games.json` (13); rarity proposal; media table for you |
+| 3 | Game data | `games.json` (12); rarity proposal; media table for you |
 | 4 | Card deck | Flip, filter, shuffle, rarity on Home |
 | 5 | Landing + juice hero | Entry press, three.js shapes, name + fun line, parallax, See-games anticipation, sound toggle; mobile + reduced-motion fallback |
 | 6 | Case studies | Template + 5–6 Legendary drafts for your rewrite |

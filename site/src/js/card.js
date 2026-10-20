@@ -33,8 +33,18 @@ export function initCard(card) {
     if (!raf) raf = requestAnimationFrame(tick);
   };
 
+  // Nearby-cursor lean, set by the deck while this card is not hovered
+  let hovering = false;
+  card.setLean = (rx, ry) => {
+    if (hovering) return;
+    target.rx = rx;
+    target.ry = ry;
+    wake();
+  };
+
   card.addEventListener('pointermove', (e) => {
     if (e.pointerType !== 'mouse' || !juicy()) return;
+    hovering = true;
     const r = card.getBoundingClientRect();
     const nx = (e.clientX - r.left) / r.width; // 0..1
     const ny = (e.clientY - r.top) / r.height;
@@ -46,6 +56,7 @@ export function initCard(card) {
   });
 
   card.addEventListener('pointerleave', () => {
+    hovering = false;
     target.rx = target.ry = 0;
     card.classList.remove('is-pressed');
     wake();

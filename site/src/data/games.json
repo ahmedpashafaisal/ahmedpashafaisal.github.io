@@ -1,0 +1,535 @@
+{
+  "_note": "Source of truth for the card deck and case studies. Facts from the old game pages and Common/thesis_summary.md (20 Oct 2026). blurb = Claude's condensed draft; Ahmed rewrites. Rarity: 6 Legendary agreed 20 Oct. Storm Alert public: Mattia OK (per Ahmed, 20 Oct).",
+  "categories": [
+    {
+      "id": "mobile",
+      "label": "Mobile"
+    },
+    {
+      "id": "pc-steam",
+      "label": "PC / Steam"
+    },
+    {
+      "id": "gamification",
+      "label": "Gamification"
+    },
+    {
+      "id": "research",
+      "label": "Research"
+    },
+    {
+      "id": "jams",
+      "label": "Jams"
+    },
+    {
+      "id": "web-games",
+      "label": "Web games"
+    }
+  ],
+  "games": [
+    {
+      "slug": "wildling",
+      "title": "Wildlings",
+      "fullTitle": "Wildlings: Why is There a Zoo in Bazooka",
+      "rarity": "legendary",
+      "year": 2025,
+      "status": "Demo on Steam",
+      "genre": "Rage platformer",
+      "platforms": [
+        "PC (Steam)"
+      ],
+      "role": "Concept, game design, level design, dev",
+      "roleTags": [
+        "Core concept",
+        "Level design",
+        "Physics mechanics",
+        "Character customisation",
+        "Unity dev",
+        "UI"
+      ],
+      "blurb": "Blast yourself across one giant level with a bazooka. No jumps. Just recoil, traps and bad decisions.",
+      "links": {
+        "steam": "https://store.steampowered.com/app/3221320/Wildlings_Why_is_There_a_Zoo_in_Bazooka/"
+      },
+      "media": {
+        "cover": "Images/Portfolio/wildling.png",
+        "screenshots": 8,
+        "youtube": "Jvot8iuNIIM",
+        "card": "/img/cards/wildling.jpg",
+        "shots": [
+          "/img/shots/wildling/1.jpg",
+          "/img/shots/wildling/2.jpg",
+          "/img/shots/wildling/3.jpg",
+          "/img/shots/wildling/4.jpg",
+          "/img/shots/wildling/5.jpg"
+        ],
+        "orientation": "landscape"
+      },
+      "categories": [
+        "pc-steam"
+      ],
+      "featured": 1
+    },
+    {
+      "slug": "ant-march-adventure",
+      "title": "Ant March Adventure",
+      "rarity": "legendary",
+      "year": 2025,
+      "status": "Released",
+      "genre": "Roguelike",
+      "platforms": [
+        "iOS",
+        "Android"
+      ],
+      "role": "Concept, design, lead dev, UI/UX",
+      "roleTags": [
+        "Level design",
+        "Roguelike systems",
+        "Progression",
+        "Economy",
+        "Game feel",
+        "Team lead"
+      ],
+      "blurb": "Lead a growing ant colony through 10 randomised levels. Every run, every choice, a different colony.",
+      "links": {
+        "appStore": "https://apps.apple.com/us/app/ant-march-adventure-roguelike/id6745928475",
+        "googlePlay": "https://play.google.com/store/apps/details?id=tech.atm.antmarchadventure&hl=en"
+      },
+      "media": {
+        "cover": "Images/Portfolio/ant-march-adventure.png",
+        "screenshots": 12,
+        "youtube": null,
+        "storeVideo": "none found on Play Store or App Store listing (checked 20 Oct)",
+        "card": "/img/cards/ant-march-adventure.jpg",
+        "shots": [
+          "/img/shots/ant-march-adventure/1.jpg",
+          "/img/shots/ant-march-adventure/2.jpg",
+          "/img/shots/ant-march-adventure/3.jpg",
+          "/img/shots/ant-march-adventure/4.jpg",
+          "/img/shots/ant-march-adventure/5.jpg"
+        ],
+        "orientation": "portrait"
+      },
+      "categories": [
+        "mobile"
+      ]
+    },
+    {
+      "slug": "road-rush-puzzle",
+      "title": "Road Rush Puzzle",
+      "rarity": "legendary",
+      "year": 2025,
+      "status": "Released",
+      "genre": "Puzzle / strategy",
+      "platforms": [
+        "iOS",
+        "Android"
+      ],
+      "role": "Concept, levels, 3D art, UI/UX, economy",
+      "roleTags": [
+        "Core concept",
+        "Level design",
+        "Economy",
+        "Puzzle mechanics",
+        "3D art",
+        "UI/UX"
+      ],
+      "blurb": "Lay road tiles fast enough to keep a speeding car alive. Quick thinking, spatial puzzles, a ticking clock.",
+      "links": {
+        "appStore": "https://apps.apple.com/us/app/road-rush-puzzle/id6745928507",
+        "googlePlay": "https://play.google.com/store/apps/details?id=tech.atm.roadrushpuzzle&hl=en"
+      },
+      "media": {
+        "cover": "Images/Portfolio/road-rush-puzzle.png",
+        "screenshots": 14,
+        "youtube": null,
+        "storeVideo": "none found on Play Store or App Store listing (checked 20 Oct)",
+        "card": "/img/cards/road-rush-puzzle.jpg",
+        "shots": [
+          "/img/shots/road-rush-puzzle/1.jpg",
+          "/img/shots/road-rush-puzzle/2.jpg",
+          "/img/shots/road-rush-puzzle/3.jpg",
+          "/img/shots/road-rush-puzzle/4.jpg",
+          "/img/shots/road-rush-puzzle/5.jpg"
+        ],
+        "orientation": "portrait"
+      },
+      "categories": [
+        "mobile"
+      ]
+    },
+    {
+      "slug": "zen-merge-puzzle",
+      "title": "Zen Puzzle Saga",
+      "rarity": "legendary",
+      "year": 2025,
+      "status": "Released",
+      "genre": "Puzzle",
+      "platforms": [
+        "iOS",
+        "Android"
+      ],
+      "role": "Concept, design, art, music + sound",
+      "roleTags": [
+        "Mirror-movement mechanic",
+        "Level design",
+        "Difficulty curve",
+        "Minimalist art",
+        "Music",
+        "SFX"
+      ],
+      "blurb": "Two orbs, Yin and Yang, move as mirror images with every swipe. Guide both past spikes and traps until they meet.",
+      "links": {
+        "appStore": "https://apps.apple.com/ee/app/zen-puzzle-saga/id6745928396",
+        "googlePlay": "https://play.google.com/store/apps/details?id=tech.atm.zenmergepuzzle"
+      },
+      "media": {
+        "cover": "Images/Portfolio/zen-merge-puzzle.png",
+        "screenshots": 7,
+        "youtube": null,
+        "storeVideo": "none found on Play Store or App Store listing (checked 20 Oct)",
+        "card": "/img/cards/zen-merge-puzzle.jpg",
+        "shots": [
+          "/img/shots/zen-merge-puzzle/1.jpg",
+          "/img/shots/zen-merge-puzzle/2.jpg",
+          "/img/shots/zen-merge-puzzle/3.jpg",
+          "/img/shots/zen-merge-puzzle/4.jpg",
+          "/img/shots/zen-merge-puzzle/5.jpg"
+        ],
+        "orientation": "portrait"
+      },
+      "categories": [
+        "mobile"
+      ]
+    },
+    {
+      "slug": "sweet-shot",
+      "title": "Sweet Shot",
+      "rarity": "common",
+      "year": 2024,
+      "status": "Released",
+      "genre": "Hyper-casual puzzle",
+      "platforms": [
+        "iOS",
+        "Android"
+      ],
+      "role": "Project lead, level design, dev",
+      "roleTags": [
+        "Level design",
+        "Puzzle design",
+        "Custom physics",
+        "Particle effects",
+        "Unity dev"
+      ],
+      "blurb": "Guide candies from the factory pipeline into the jar. Every level adds a new obstacle to time and outsmart.",
+      "links": {
+        "appStore": "https://apps.apple.com/ee/app/sweet-shot/id6505140548",
+        "googlePlay": "https://play.google.com/store/apps/details?id=tech.atm.sweetshot&hl=en"
+      },
+      "media": {
+        "cover": "Images/Portfolio/sweet-shot.jpg",
+        "screenshots": 8,
+        "youtube": null,
+        "card": "/img/cards/sweet-shot.jpg"
+      },
+      "categories": [
+        "mobile"
+      ]
+    },
+    {
+      "slug": "storm-alert",
+      "title": "Storm Alert",
+      "rarity": "legendary",
+      "year": null,
+      "status": "Proof of concept, University of Tartu",
+      "genre": "Preparedness simulation",
+      "platforms": [
+        "Web"
+      ],
+      "categories": [
+        "gamification"
+      ],
+      "role": "Co-design (interactive digital narrative), development",
+      "roleTags": [
+        "Interactive digital narrative",
+        "Co-design",
+        "Development"
+      ],
+      "blurb": "Your home, right before a real crisis. Gather supplies, decide under pressure, and work out who to call when things go wrong.",
+      "links": {},
+      "media": {
+        "cover": "placeholder",
+        "screenshots": 0,
+        "youtube": null,
+        "placeholderNote": "Placeholder art until real screenshots"
+      },
+      "description": "A preparedness simulation that puts you at home right before a real crisis, preparing for the emergency. Gather supplies, make decisions under pressure, and figure out who to call when things go wrong. Your choices determine how you and your household make it through the storm.",
+      "featured": 3
+    },
+    {
+      "slug": "magic-mineral",
+      "title": "Magic Mineral",
+      "rarity": "legendary",
+      "year": 2023,
+      "status": "In development",
+      "genre": "2D top-down survival",
+      "platforms": [
+        "Web",
+        "PC"
+      ],
+      "role": "Concept, design, art direction, Unity dev",
+      "roleTags": [
+        "Game design document",
+        "Enemy + ability design",
+        "Branching narrative",
+        "Shaders",
+        "Environment art",
+        "Unity dev"
+      ],
+      "blurb": "A dark cave, a dimming light, and magic that both helps and haunts you. Find the crystal that could save your village.",
+      "links": {
+        "itch": "https://pashafaisal.itch.io/magic-mineral"
+      },
+      "media": {
+        "cover": "Images/Portfolio/magic-mineral.png",
+        "screenshots": 7,
+        "youtube": "tGL_LLIlFmg",
+        "card": "/img/cards/magic-mineral.jpg",
+        "shots": [
+          "/img/shots/magic-mineral/1.jpg",
+          "/img/shots/magic-mineral/2.jpg",
+          "/img/shots/magic-mineral/3.jpg",
+          "/img/shots/magic-mineral/4.jpg",
+          "/img/shots/magic-mineral/5.jpg"
+        ],
+        "orientation": "landscape"
+      },
+      "categories": [
+        "web-games",
+        "pc-steam"
+      ],
+      "featured": 2
+    },
+    {
+      "slug": "leaping-liliy",
+      "title": "Leaping Frog",
+      "storeTitle": "Leaping Frog Endless",
+      "rarity": "common",
+      "year": 2024,
+      "status": "Released",
+      "genre": "Endless runner",
+      "platforms": [
+        "iOS",
+        "Android"
+      ],
+      "role": "Game + level design, character art",
+      "roleTags": [
+        "Obstacle design",
+        "Difficulty tuning",
+        "Balancing",
+        "Character modelling + animation (Blender)"
+      ],
+      "blurb": "An endless runner: one frog, endless leaps, and obstacles that get nastier the longer you last.",
+      "links": {
+        "appStore": "https://apps.apple.com/ee/app/leaping-frog-endless/id6737447859",
+        "googlePlay": "https://play.google.com/store/apps/details?id=tech.atm.leapingfrog"
+      },
+      "media": {
+        "cover": "Images/Portfolio/leaping-frog.png",
+        "screenshots": 5,
+        "youtube": null,
+        "card": "/img/cards/leaping-liliy.jpg"
+      },
+      "categories": [
+        "mobile"
+      ]
+    },
+    {
+      "slug": "the-unwanted",
+      "title": "The Unwanted",
+      "rarity": "common",
+      "year": 2023,
+      "status": "Course project (MSc, Tallinn University)",
+      "genre": "Point-and-click adventure",
+      "platforms": [
+        "Web"
+      ],
+      "role": "Concept, narrative, hand-drawn art, Unity dev",
+      "roleTags": [
+        "Narrative design",
+        "Ghost-follow mechanic",
+        "Hand-drawn art",
+        "Dialogue system",
+        "Scene persistence"
+      ],
+      "blurb": "Take a helpless ghost back to the forest, past every challenge on the way.",
+      "links": {
+        "itch": "https://pashafaisal.itch.io/the-unwanted"
+      },
+      "media": {
+        "cover": "Images/Portfolio/the-unwanted.png",
+        "screenshots": 7,
+        "youtube": null,
+        "card": "/img/cards/the-unwanted.jpg"
+      },
+      "categories": [
+        "web-games"
+      ]
+    },
+    {
+      "slug": "after-the-end",
+      "title": "After the End",
+      "rarity": "common",
+      "year": 2023,
+      "status": "Game jam: Ludum Dare 53",
+      "genre": "Platformer",
+      "platforms": [
+        "Web"
+      ],
+      "role": "Concept, art direction, level design",
+      "roleTags": [
+        "Concept",
+        "Art direction",
+        "Level design"
+      ],
+      "blurb": "Humans left a dead Earth behind. As one of the last bees, pollinate what you can and dodge acid rain and mutants.",
+      "links": {
+        "itch": "https://pashafaisal.itch.io/after-the-end"
+      },
+      "media": {
+        "cover": "Images/Portfolio/after-the-end.png",
+        "screenshots": 6,
+        "youtube": null,
+        "card": "/img/cards/after-the-end.jpg"
+      },
+      "categories": [
+        "jams",
+        "web-games"
+      ]
+    },
+    {
+      "slug": "the-return",
+      "title": "The Return",
+      "rarity": "common",
+      "year": 2023,
+      "status": "Game jam: Global Game Jam, Pärnu",
+      "genre": "Adventure",
+      "platforms": [
+        "Web"
+      ],
+      "role": "Concept, game design",
+      "roleTags": [
+        "Concept",
+        "Game design"
+      ],
+      "blurb": "A journey where mother nature waits for \"The Run\" to return to its roots.",
+      "links": {
+        "itch": "https://pashafaisal.itch.io/the-return"
+      },
+      "media": {
+        "cover": "Images/Portfolio/the-return.png",
+        "screenshots": 7,
+        "youtube": null,
+        "card": "/img/cards/the-return.jpg"
+      },
+      "categories": [
+        "jams",
+        "web-games"
+      ]
+    },
+    {
+      "slug": "space-cricket",
+      "title": "Space Cricket",
+      "rarity": "common",
+      "year": 2019,
+      "status": "Released 2019, no longer on stores",
+      "genre": "Casual arcade",
+      "platforms": [
+        "Mobile"
+      ],
+      "role": "Concept, design, balancing, game art",
+      "roleTags": [
+        "Concept",
+        "Balancing via playtests",
+        "Player stats",
+        "Two special modes",
+        "Game art",
+        "Marketing content"
+      ],
+      "blurb": "A cricket bat spinning in space. One tap flips its direction; time it to smash the right score and dodge the red stumps.",
+      "links": {},
+      "media": {
+        "cover": "Images/Portfolio/space-cricket.png",
+        "screenshots": 10,
+        "youtube": "Ty-LMJ0NZ8k",
+        "card": "/img/cards/space-cricket.jpg"
+      },
+      "categories": [
+        "mobile"
+      ]
+    },
+    {
+      "slug": "toony-car",
+      "title": "Toony Car",
+      "rarity": "common",
+      "year": 2017,
+      "status": "Released 2017, no longer on stores",
+      "genre": "Casual endless runner",
+      "platforms": [
+        "Mobile"
+      ],
+      "role": "Economy design, AI, 3D art, UI",
+      "roleTags": [
+        "Game economy + currency",
+        "AI car behaviour",
+        "Shop design",
+        "Low-poly 3D (Blender)",
+        "6 car designs",
+        "VFX"
+      ],
+      "blurb": "An isometric car game with cute cars to unlock, each with its own ability.",
+      "links": {},
+      "media": {
+        "cover": "Images/Portfolio/toony-car.png",
+        "screenshots": 7,
+        "youtube": "eeg_SbRyyJk",
+        "card": "/img/cards/toony-car.jpg"
+      },
+      "categories": [
+        "mobile"
+      ]
+    },
+    {
+      "slug": "twist-the-news",
+      "title": "Twist the News",
+      "rarity": "common",
+      "year": 2024,
+      "status": "MSc thesis, Tallinn University (grade A)",
+      "genre": "Card-based party game",
+      "platforms": [
+        "Tabletop (playtested online)"
+      ],
+      "categories": [
+        "research"
+      ],
+      "role": "Design + research",
+      "roleTags": [
+        "Humour design",
+        "Design-based research",
+        "Playtests (12 players)",
+        "Thematic analysis"
+      ],
+      "blurb": "Players are news editors under an authoritarian regime, spinning embarrassing news into praise. Each round a new Propaganda Minister judges the headlines.",
+      "links": {
+        "thesis": "https://www.etera.ee/zoom/202074/view?page=1&p=separate"
+      },
+      "media": {
+        "cover": "site/public/img/cards/twist-the-news.jpg",
+        "screenshots": 0,
+        "youtube": null,
+        "coverSource": "Thesis Figure 3, card deck for propaganda talking points (p. 43)",
+        "card": "/img/cards/twist-the-news.jpg"
+      }
+    }
+  ]
+}

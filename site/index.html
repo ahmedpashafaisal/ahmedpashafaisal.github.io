@@ -20,7 +20,7 @@
       <h1 class="entrance__name">Ahmed Pasha Faisal</h1>
       <!-- Placeholder line: Ahmed rewrites -->
       <p class="entrance__line">I make buttons feel things. Sometimes whole games.</p>
-      <button class="juicy-btn entrance__btn" type="button" data-target="#games" data-after="See games ↓">
+      <button class="juicy-btn entrance__btn" type="button" data-target="#featured" data-after="See games ↓">
         <span class="entrance__btn-label">Press</span>
       </button>
     </div>
@@ -36,36 +36,28 @@
     </svg>
   </button>
 
-  <section class="games" id="games" aria-labelledby="games-title">
-    <h2 id="games-title">Games</h2>
+  <section class="featured" id="featured" aria-labelledby="featured-title">
+    <header class="featured__head">
+      <h2 id="featured-title">Featured</h2>
+      <!-- Placeholder line: Ahmed rewrites -->
+      <p class="featured__sub">The ones I'd show you first.</p>
+    </header>
+    <div class="featured__list"></div>
+  </section>
 
-    <!-- Temporary: full deck arrives in step 4 -->
-    <article class="card" data-rarity="legendary" tabindex="0" role="button" aria-pressed="false"
-      aria-label="Sweet Shot card. Press to flip.">
-      <div class="card__tilt">
-        <div class="card__inner">
-          <div class="card__face card__front">
-            <h3 class="card__name">Sweet Shot <span class="card__rarity" title="Legendary"></span></h3>
-            <div class="card__art">
-              <img src="/img/sweet-shot.jpg" alt="Sweet Shot gameplay" width="900" height="506" loading="lazy" />
-            </div>
-            <div class="card__type">Mobile · Physics puzzle</div>
-            <dl class="card__stats">
-              <dt>Role</dt><dd>Project lead, level design, dev</dd>
-              <dt>Platform</dt><dd>iOS, Android</dd>
-            </dl>
-          </div>
-          <div class="card__face card__back">
-            <h3 class="card__name">Sweet Shot</h3>
-            <p class="card__blurb">Placeholder text. Your rewrite goes here in step 6.</p>
-            <div class="card__links">
-              <a class="card__link" href="https://apps.apple.com/ee/app/sweet-shot/id6505140548" target="_blank" rel="noopener">App Store</a>
-              <a class="card__link" href="https://play.google.com/store/apps/details?id=tech.atm.sweetshot&hl=en" target="_blank" rel="noopener">Google Play</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </article>
+  <section class="games" id="games" aria-labelledby="games-title">
+    <header class="games__head">
+      <h2 id="games-title">All games</h2>
+      <!-- Placeholder line: Ahmed rewrites -->
+      <p class="games__sub">Flip a card. Legendary ones hold the full story.</p>
+    </header>
+
+    <div class="deck-tools">
+      <div class="deck-tabs" role="toolbar" aria-label="Filter games"></div>
+      <button class="chip deck-shuffle" type="button">Shuffle</button>
+    </div>
+
+    <ul class="deck" role="list"></ul>
   </section>
 
   <script type="module" src="./src/main.js"></script>
