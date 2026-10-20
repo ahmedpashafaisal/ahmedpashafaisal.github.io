@@ -1,0 +1,184 @@
+/* XP bar: 2 px line across the very top, grows with each unlock */
+.xp-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 60;
+  width: 100%;
+  height: 2px;
+  pointer-events: none;
+  background: transparent;
+}
+
+.xp-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform: scaleX(var(--xp, 0));
+  transform-origin: 0 50%;
+  transition: transform 700ms var(--ease-spring);
+}
+
+/* Toast: one at a time, top-right, small */
+.ach-toast {
+  position: fixed;
+  top: 14px;
+  right: 16px;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  max-width: min(20rem, calc(100vw - 32px));
+  padding: 0.6rem 0.95rem 0.6rem 0.6rem;
+  border: 1.5px solid var(--ink);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 4px 0 var(--ink);
+  pointer-events: none;
+}
+
+.ach-toast[hidden] {
+  display: none;
+}
+
+.ach-toast__badge,
+.ach__badge {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.3rem;
+  height: 2.3rem;
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+  background: var(--accent);
+  font: 800 1.1rem/1 var(--font-display);
+}
+
+.ach-toast__body {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.ach-toast__kicker {
+  font: 700 0.66rem/1.2 var(--font-body);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.ach-toast__title {
+  font: 800 1rem/1.15 var(--font-display);
+}
+
+.ach-toast__text {
+  font-size: 0.82rem;
+  line-height: 1.3;
+  color: var(--ink-soft);
+}
+
+/* About page list */
+.ach-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.ach-count {
+  font: 800 1rem/1 var(--font-display);
+}
+
+.ach-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ach {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.7rem 0.8rem;
+  border: 1.5px dashed var(--line);
+  border-radius: 14px;
+  color: var(--ink-soft);
+}
+
+.ach .ach__badge {
+  background: var(--bg);
+  border-style: dashed;
+  color: var(--ink-soft);
+}
+
+.ach b {
+  display: block;
+  font: 800 0.95rem/1.2 var(--font-display);
+}
+
+.ach small {
+  display: block;
+  font-size: 0.8rem;
+  line-height: 1.3;
+}
+
+.ach.is-got {
+  border: 1.5px solid var(--ink);
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 3px 0 var(--ink);
+}
+
+.ach.is-got .ach__badge {
+  background: var(--accent);
+  border-style: solid;
+  color: var(--ink);
+}
+
+/* ---------- Step 9 extras ---------- */
+
+/* Game cursor: Kenney "Cursor Pack" hand_point (CC0), white, everywhere.
+   Hotspot = fingertip (9, 3). Mouse only; touch keeps the system default. */
+@media (pointer: fine) {
+  html,
+  html * {
+    cursor: url("/cursors/hand_point.png") 9 3, auto !important;
+    cursor: -webkit-image-set(url("/cursors/hand_point.png") 1x, url("/cursors/hand_point@2x.png") 2x) 9 3, auto !important;
+    cursor: image-set(url("/cursors/hand_point.png") 1x, url("/cursors/hand_point@2x.png") 2x) 9 3, auto !important;
+  }
+
+  /* Pressed: smaller hand (hand_small_point), fingertip (10, 5) stays on the click point */
+  html.is-clicking,
+  html.is-clicking * {
+    cursor: url("/cursors/hand_small_point.png") 10 5, auto !important;
+    cursor: -webkit-image-set(url("/cursors/hand_small_point.png") 1x, url("/cursors/hand_small_point@2x.png") 2x) 10 5, auto !important;
+    cursor: image-set(url("/cursors/hand_small_point.png") 1x, url("/cursors/hand_small_point@2x.png") 2x) 10 5, auto !important;
+  }
+}
+
+/* Click ring popped from the fingertip by js/clickfx.js */
+.click-ring {
+  position: fixed;
+  z-index: 90;
+  width: 34px;
+  height: 34px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Press button charge: lime-deep fill grows left to right */
+.entrance__btn.is-charging {
+  background: linear-gradient(90deg, var(--accent-deep) calc(var(--charge, 0) * 100%), var(--accent) 0);
+}
+
+/* Name easter egg: the centre block passes clicks to the 3D shapes; the
+   name itself takes them (shapes live at the edges, never behind it) */
+.entrance__name {
+  pointer-events: auto;
+  user-select: none;
+}

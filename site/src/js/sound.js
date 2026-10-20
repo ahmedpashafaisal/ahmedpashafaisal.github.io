@@ -112,6 +112,23 @@ export const sfx = {
     if (!ready()) return;
     [523, 659, 784, 1047].forEach((f, i) => tone({ from: f, dur: 0.16, type: 'triangle', gain: 0.22, delay: i * 0.06 }));
   },
+  // Charging the big button: short blip, pitch rises with k (0..1)
+  charge(k) {
+    if (!ready()) return;
+    tone({ from: 300 + 700 * k, dur: 0.05, type: 'triangle', gain: 0.12 });
+  },
+  // Catching an idea: two quick square blips; each one in a chain is 2 semitones higher
+  collect(n = 0) {
+    if (!ready()) return;
+    const f = 784 * Math.pow(2, Math.min(n, 8) * (2 / 12));
+    tone({ from: f, dur: 0.07, type: 'square', gain: 0.07 });
+    tone({ from: f * 1.5, dur: 0.16, type: 'square', gain: 0.07, delay: 0.06 });
+  },
+  // Counter tick
+  tick() {
+    if (!ready()) return;
+    tone({ from: 2200, to: 1800, dur: 0.015, type: 'square', gain: 0.05 });
+  },
   // Card riffle: a quick run of soft clicks
   riffle() {
     if (!ready()) return;

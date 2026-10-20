@@ -1,0 +1,150 @@
+/* Step 9 extras: page wipe, level complete card, 404 page */
+
+/* Page wipe (js/wipe.js) */
+.wipe {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Level progress card at the top of the footer (js/levelup.js) */
+.levelup {
+  display: grid;
+  justify-items: center;
+  gap: 0.6rem;
+  width: min(26rem, 100%);
+  margin-bottom: 1.5rem;
+  padding: 1.1rem 1.25rem 1.2rem;
+  border: 2px solid var(--ink);
+  border-radius: 18px;
+  background: var(--surface);
+  box-shadow: 0 5px 0 var(--ink);
+}
+
+.levelup[hidden] {
+  display: none;
+}
+
+.levelup__title {
+  margin: 0;
+  font: 800 1.5rem/1 var(--font-display);
+}
+
+.levelup__stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.levelup__stats li {
+  display: grid;
+  justify-items: center;
+  gap: 0.15rem;
+  min-width: 6.5rem;
+  padding: 0.45rem 0.7rem;
+  border: 1.5px solid var(--ink);
+  border-radius: 12px;
+  background: var(--bg);
+}
+
+.levelup__stats span {
+  font: 700 0.66rem/1.2 var(--font-body);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.levelup__stats b {
+  font: 800 1.15rem/1 var(--font-display);
+}
+
+/* 404: Game Over */
+.gameover {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 1.25rem;
+  min-height: 100vh;
+  padding: 2rem 16px 6rem;
+  text-align: center;
+}
+
+.gameover__title {
+  font-size: clamp(3.5rem, 14vw, 9rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.gameover__text {
+  max-width: 34ch;
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.gameover__continue {
+  margin: 0.5rem 0 0;
+  font: 800 1.6rem/1 var(--font-display);
+}
+
+.gameover__count {
+  display: inline-block;
+  min-width: 1.2em;
+}
+
+.gameover__actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.gameover__actions .juicy-btn {
+  min-width: 7rem;
+  text-decoration: none;
+}
+
+.gameover__no {
+  background: var(--surface);
+}
+
+/* Clickable name (js/namefx.js): letters hop one by one */
+.name__word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.name__l {
+  display: inline-block;
+  transform-origin: 50% 100%;
+}
+
+/* Landing mini-game pop-ups (js/hero3d.js) */
+.idea-plus,
+.idea-wave {
+  position: fixed;
+  z-index: 40;
+  pointer-events: none;
+  white-space: nowrap;
+  font-family: var(--font-display);
+  font-weight: 800;
+}
+
+.idea-plus {
+  color: var(--ink);
+  font-size: 1.05rem;
+}
+
+.idea-wave {
+  padding: 0.45rem 1.1rem;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 1.5rem;
+  box-shadow: 0 4px 0 var(--ink);
+}

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en" class="entered">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{title}} · Ahmed Pasha Faisal</title>
+  <meta name="description" content="{{description}}" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/favicon.ico" sizes="48x48" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <script>try{var t=localStorage.getItem('apf-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.dataset.theme=t}catch(e){}</script>
+  <style>html.wipe-in{background:#caff00}html.wipe-in body{visibility:hidden}</style>
+  <script>try{if(sessionStorage.getItem('apf-wipe')){sessionStorage.removeItem('apf-wipe');document.documentElement.classList.add('wipe-in')}}catch(e){}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400..700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <canvas class="dot-grid" aria-hidden="true"></canvas>
+
+  <a class="site-pill" href="/about.html" aria-label="About me" title="About me">
+    <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4" fill="currentColor" /><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0" /></svg>
+  </a>
+
+  <!-- Generated from site/game-template.html by scripts/gen-pages.mjs; do not edit by hand -->
+  <main class="detail" data-slug="{{slug}}">
+    <a class="chip detail__back" href="/#games">← All games</a>
+    <noscript><h1>{{title}}</h1><p>{{description}}</p></noscript>
+  </main>
+
+  <footer class="site-foot">
+    <nav class="site-foot__links" aria-label="Footer">
+      <a href="/about.html">About</a>
+      <a href="mailto:ahmedpashafaisal@gmail.com">Email</a>
+      <a href="https://pashafaisal.itch.io/" target="_blank" rel="noopener">itch.io</a>
+      <a href="https://github.com/ahmedpashafaisal" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/ahmed-pasha-faisal/" target="_blank" rel="noopener">LinkedIn</a>
+    </nav>
+    <p class="site-foot__note">© 2026 Ahmed Pasha Faisal</p>
+  </footer>
+
+  <button class="sound-toggle" type="button" aria-pressed="false" aria-label="Sound">
+    <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor" />
+      <g class="sound-toggle__waves"><path d="M15.5 9a4 4 0 0 1 0 6" /><path d="M18 6.5a7.5 7.5 0 0 1 0 11" /></g>
+      <g class="sound-toggle__mute"><path d="M16 9.5l5 5" /><path d="M21 9.5l-5 5" /></g>
+    </svg>
+  </button>
+
+  <script type="module" src="/src/detail-main.js"></script>
+</body>
+</html>

@@ -3,6 +3,7 @@
 import { juicy } from './motion.js';
 import { sendShock } from './dotgrid.js';
 import { sfx } from './sound.js';
+import { act } from './achievements.js';
 
 const MAX_TILT = 10; // degrees
 const SMOOTH = 0.18; // lerp factor per frame
@@ -68,6 +69,7 @@ export function initCard(card) {
     angle += 180;
     const flipped = card.classList.toggle('is-flipped');
     card.setAttribute('aria-pressed', String(flipped));
+    if (flipped) act('flip');
     inner.style.setProperty('--flip', `${angle}deg`);
     if (!juicy()) return;
 

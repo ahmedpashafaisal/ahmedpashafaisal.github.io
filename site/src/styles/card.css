@@ -320,3 +320,12 @@
   font-size: clamp(0.66rem, 3.9cqi, 0.78rem);
   font-weight: 600;
 }
+
+.card__more {
+  background: var(--accent);
+}
+
+/* Category tint on both faces (data-cat from js/order.js primaryCat) */
+.card[data-cat] .card__face {
+  background: var(--cat, var(--surface));
+}

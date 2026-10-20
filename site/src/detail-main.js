@@ -1,0 +1,42 @@
+// Entry point for the per-game "See more" pages.
+import './styles/tokens.css';
+import './styles/base.css';
+import './styles/button.css';
+import './styles/card.css';
+import './styles/entrance.css';
+import './styles/deck.css';
+import './styles/featured.css';
+import './styles/detail.css';
+import './styles/site.css';
+import './styles/achievements.css';
+import './styles/scrollcar.css';
+import './styles/extras.css';
+import './styles/theme.css';
+
+import { initDotGrid } from './js/dotgrid.js';
+import { initAchievements } from './js/achievements.js';
+import { initEggs } from './js/eggs.js';
+import { initClickFx } from './js/clickfx.js';
+import { initScrollCar } from './js/scrollcar.js';
+import { initWipe } from './js/wipe.js';
+import { initTheme } from './js/theme.js';
+import { initHud } from './js/hud.js';
+import { initTabTitle } from './js/tabtitle.js';
+import { initLevelUp } from './js/levelup.js';
+import { initJuicyButton } from './js/button.js';
+import { initSoundToggle } from './js/sound-toggle.js';
+import { initDetail } from './js/detail.js';
+
+initDotGrid(document.querySelector('.dot-grid'));
+initAchievements();
+initEggs();
+initClickFx();
+initScrollCar();
+initWipe();
+initTheme();
+initTabTitle();
+initLevelUp(document.querySelector('.site-foot'));
+initDetail(document.querySelector('.detail'));
+document.querySelectorAll('.juicy-btn').forEach(initJuicyButton);
+initSoundToggle(document.querySelector('.sound-toggle'));
+initHud();

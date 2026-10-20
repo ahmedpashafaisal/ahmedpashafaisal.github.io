@@ -10,6 +10,14 @@
   --accent: #caff00;
   --accent-deep: #9fcc00;
 
+  /* Category tints: soft and low-saturation, one per games.json category.
+     Cards, tab dots and next/previous links use them (js/order.js). */
+  --cat-mobile: #cfe1ef; /* sky */
+  --cat-pc-steam: #ddd3ef; /* lilac */
+  --cat-gamification: #eedcb5; /* sand */
+  --cat-jams: #d0e5c7; /* sage */
+  --cat-web-games: #f1d7e3; /* blush */
+
   /* Type */
   --font-display: "Bricolage Grotesque", system-ui, sans-serif;
   --font-body: "Figtree", system-ui, sans-serif;
@@ -27,3 +35,10 @@
   --t-hover: 180ms;
   --t-flip: 560ms;
 }
+
+/* Any element with data-cat gets its category tint as --cat */
+[data-cat="mobile"] { --cat: var(--cat-mobile); }
+[data-cat="pc-steam"] { --cat: var(--cat-pc-steam); }
+[data-cat="gamification"] { --cat: var(--cat-gamification); }
+[data-cat="jams"] { --cat: var(--cat-jams); }
+[data-cat="web-games"] { --cat: var(--cat-web-games); }

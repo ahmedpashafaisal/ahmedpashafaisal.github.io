@@ -1,9 +1,11 @@
-// Card deck built from games.json: filter tabs, shuffle, deal-in on first view.
+// Card deck built from games.json: filter tabs, deal-in on first view.
 // Layout changes animate with FLIP (measure First, apply, measure Last, Invert, Play).
 import data from '../data/games.json';
+import { byCategory, primaryCat } from './order.js';
 import { initCard } from './card.js';
 import { juicy } from './motion.js';
 import { sfx } from './sound.js';
+import { act } from './achievements.js';
 
 const LINK_LABELS = {
   steam: 'Steam',
@@ -25,10 +27,9 @@ const esc = (s) =>
 const rand = (a, b) => a + Math.random() * (b - a);
 
 function cardHTML(g) {
-  const legendary = g.rarity === 'legendary';
   const platform = g.platforms.join(', ');
   const art = g.media.card
-    ? `<img src="${esc(g.media.card)}" alt="${esc(g.title)} cover art" width="800" height="450" loading="lazy" decoding="async" />`
+    ? `<img src="${esc(g.media.card)}" alt="${esc(g.title)} cover art" width="800" height="450" loading="lazy" decoding="async"${g.media.focus ? ` style="object-position: ${esc(g.media.focus)}"` : ''} />`
     : `<div class="card__placeholder" aria-hidden="true">${esc(g.title.charAt(0))}</div>`;
   const meta = [g.year, g.status].filter(Boolean).map(esc).join(' · ');
   const tags = (g.roleTags || []).map((t) => `<li>${esc(t)}</li>`).join('');
@@ -38,12 +39,12 @@ function cardHTML(g) {
     .join('');
 
   return `
-  <article class="card" data-rarity="${g.rarity}" tabindex="0" role="button" aria-pressed="false"
-    aria-label="${esc(g.title)}, ${legendary ? 'legendary' : 'common'} card. Press to flip.">
+  <article class="card" data-rarity="${g.rarity}" data-cat="${esc(primaryCat(g))}" tabindex="0" role="button" aria-pressed="false"
+    aria-label="${esc(g.title)} card. Press to flip.">
     <div class="card__tilt">
       <div class="card__inner">
         <div class="card__face card__front">
-          <h3 class="card__name">${esc(g.title)} <span class="card__rarity" title="${legendary ? 'Legendary' : 'Common'}"></span></h3>
+          <h3 class="card__name">${esc(g.title)} <span class="card__rarity" aria-hidden="true"></span></h3>
           <div class="card__art">${art}</div>
           <div class="card__type">${esc(platform)} · ${esc(g.genre)}</div>
           <dl class="card__stats">
@@ -55,7 +56,7 @@ function cardHTML(g) {
           ${meta ? `<p class="card__meta">${meta}</p>` : ''}
           <p class="card__blurb">${esc(g.blurb)}</p>
           ${tags ? `<p class="card__label">What I did</p><ul class="card__tags">${tags}</ul>` : ''}
-          ${links ? `<div class="card__links">${links}</div>` : ''}
+          <div class="card__links"><a class="card__link card__more" href="/games/${esc(g.slug)}.html">See more →</a>${links}</div>
         </div>
       </div>
     </div>
@@ -64,13 +65,10 @@ function cardHTML(g) {
 
 export function initDeck(root) {
   const preview = new URLSearchParams(location.search).has('preview');
-  const games = data.games
-    .filter((g) => preview || !g.hidden)
-    .sort((a, b) => (a.rarity === b.rarity ? 0 : a.rarity === 'legendary' ? -1 : 1));
+  const games = byCategory(data.games.filter((g) => preview || !g.hidden));
 
   const list = root.querySelector('.deck');
   const tabsEl = root.querySelector('.deck-tabs');
-  const shuffleBtn = root.querySelector('.deck-shuffle');
 
   // Cards
   list.innerHTML = games
@@ -90,7 +88,7 @@ export function initDeck(root) {
   tabsEl.innerHTML = tabs
     .map(
       (t) =>
-        `<button class="chip" type="button" data-filter="${t.id}" aria-pressed="${t.id === 'all'}">${esc(t.label)}<span class="chip__count">${t.id === 'all' ? games.length : counts[t.id]}</span></button>`,
+        `<button class="chip" type="button" data-filter="${t.id}" aria-pressed="${t.id === 'all'}">${t.id === 'all' ? '' : `<span class="chip__dot" data-cat="${esc(t.id)}" aria-hidden="true"></span>`}${esc(t.label)}<span class="chip__count">${t.id === 'all' ? games.length : counts[t.id]}</span></button>`,
     )
     .join('');
 
@@ -160,15 +158,8 @@ export function initDeck(root) {
     const chip = e.target.closest('.chip');
     if (!chip) return;
     sfx.press();
+    act(`tab:${chip.dataset.filter}`);
     setFilter(chip.dataset.filter);
-  });
-
-  shuffleBtn.addEventListener('click', () => {
-    sfx.riffle();
-    flip(() => {
-      const order = slots.slice().sort(() => Math.random() - 0.5);
-      for (const s of order) list.appendChild(s);
-    });
   });
 
   // Cards notice a passing cursor and lean toward it
@@ -222,7 +213,10 @@ export function initDeck(root) {
   });
   list.addEventListener('pointerleave', clearLift);
 
-  // Deal the whole deck the first time it scrolls into view
+  // Deal the whole deck the first time it scrolls into view. Triggered by any
+  // part of the deck entering the lower screen edge (minus 10%), not by a share
+  // of its height: on phones the deck is a 6000 px column and a share-based
+  // threshold could never be reached, leaving the cards invisible.
   if (juicy()) {
     slots.forEach((s) => s.classList.add('is-undealt'));
     const io = new IntersectionObserver(
@@ -232,7 +226,7 @@ export function initDeck(root) {
         slots.filter((s) => !s.hidden).forEach((s, i) => deal(s, i));
         sfx.riffle();
       },
-      { threshold: 0.12 },
+      { threshold: 0, rootMargin: '0px 0px -10% 0px' },
     );
     io.observe(list);
   }

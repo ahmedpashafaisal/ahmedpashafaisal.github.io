@@ -10,6 +10,7 @@ A simple, minimal portfolio where every element has juice, so the visitor feels 
 | Audience | Studios first, PhD panels second |
 | Identity | Creative game designer: juice in every small thing |
 | Rule | Show, never say "I'm creative" |
+| Wording | Never show the word "Legendary"; rarity is styling only |
 | Feel | Minimal and special. No narrative frame, nothing fancy |
 | Look | Clean base + juicy motion |
 | Colour | Light, warm off-white |
@@ -24,7 +25,7 @@ A simple, minimal portfolio where every element has juice, so the visitor feels 
 | Legendary cards | Best 5–6, each with a case study |
 | Featured | Stacked full-width banners (~70vh), Legendary only, alternating sides, screenshot pan, "Case study →"; then full deck (all games) |
 | Common cards | Card back only, links out |
-| Game page | Short case study: hook clip, role, 1 problem + solution, result, links |
+| Game page | "See more" detail page for every game, built from data; sections without content (video, screenshots…) are skipped |
 | Pages | Home (entrance + featured + deck), case studies, About |
 | Extras | Achievements, XP bar, easter eggs, juicy cursor + buttons |
 | Extras limit | XP bar = 2 px line; achievements = 1 small toast at a time, corner, never over content |
@@ -77,7 +78,7 @@ A simple, minimal portfolio where every element has juice, so the visitor feels 
 | 3 | Game data | `games.json` (12); rarity proposal; media table for you |
 | 4 | Card deck | Flip, filter, shuffle, rarity on Home |
 | 5 | Landing + juice hero | Entry press, three.js shapes, name + fun line, parallax, See-games anticipation, sound toggle; mobile + reduced-motion fallback |
-| 6 | Case studies | Template + 5–6 Legendary drafts for your rewrite |
+| 6 | Detail pages | Generated page per game, fixed order: hero (description + links + facts, screenshot slider) → my role → what I did (flip) → video → prev/next row; empty sections skipped |
 | 7 | Media | Clips cut/compressed (ffmpeg) from your sources |
 | 8 | About page | Bio, MSc, CV link, contact |
 | 9 | Extras | Achievements, XP bar, easter eggs, cursor, puzzle button (pieces snap together; never a gate), Press button more fun |

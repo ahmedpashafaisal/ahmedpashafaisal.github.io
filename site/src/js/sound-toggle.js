@@ -1,5 +1,6 @@
 // Speaker toggle. Its click is the browser permission that unlocks audio.
 import { setSound, sfx, soundOn } from './sound.js';
+import { act } from './achievements.js';
 
 export function initSoundToggle(btn) {
   const render = () => {
@@ -9,6 +10,7 @@ export function initSoundToggle(btn) {
   };
   btn.addEventListener('click', () => {
     setSound(!soundOn());
+    if (soundOn()) act('sound');
     render();
     sfx.ding();
   });

@@ -1,0 +1,516 @@
+/* Per-game "See more" page: same order on every page */
+.detail {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(2.5rem, 5vw, 4rem);
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 1.5rem 16px 7rem;
+}
+
+.detail__back {
+  justify-self: start;
+  text-decoration: none;
+}
+
+.page__label {
+  margin: 0;
+  font: 700 0.78rem/1 var(--font-body);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* Hero: text left, slider right */
+.page__hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+}
+
+.page__intro {
+  display: grid;
+  gap: 1.1rem;
+  justify-items: start;
+}
+
+.page__title {
+  font-size: clamp(2.6rem, 6vw, 4.75rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+
+.page__desc {
+  margin: 0;
+  max-width: 46ch;
+  font-size: clamp(1.02rem, 1.4vw, 1.15rem);
+}
+
+.page__cta {
+  min-width: 0;
+  padding: 0.8rem 1.5rem;
+  font-size: 1.05rem;
+  text-decoration: none;
+  transition:
+    translate 380ms var(--ease-spring),
+    transform var(--t-release) var(--ease-spring),
+    box-shadow var(--t-release) var(--ease-spring),
+    background-color var(--t-hover) ease;
+}
+
+.page__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.9rem;
+  margin: 0.25rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.page__facts li + li::before {
+  content: "·";
+  margin-right: 0.9rem;
+}
+
+/* Slider */
+.page__media {
+  display: grid;
+  gap: 0.75rem;
+  transition: transform 380ms var(--ease-spring);
+  will-change: transform;
+}
+
+.page__screen {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  padding: 0;
+  border: 2px solid var(--ink);
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--ink);
+  box-shadow: 8px 8px 0 var(--ink);
+  cursor: zoom-in;
+}
+
+.page__screen--static {
+  cursor: default;
+}
+
+.page__placeholder {
+  position: absolute;
+  inset: 0;
+  font-size: clamp(5rem, 14vw, 10rem);
+}
+
+/* Portrait games: phone frame over the blurred cover */
+.page__media--phone .page__screen {
+  background: var(--ink) var(--backdrop) center / cover no-repeat;
+}
+
+.page__media--phone .page__screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(250, 246, 238, 0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.page__media--phone .banner__shot {
+  inset: 6% auto;
+  left: 50%;
+  width: auto;
+  height: 88%;
+  aspect-ratio: 9 / 19.5;
+  translate: -50% 0;
+  border: 3px solid var(--ink);
+  border-radius: 20px;
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.page__thumbs {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding: 0.25rem 0.1rem 0.5rem;
+}
+
+.page__thumb {
+  flex: 0 0 auto;
+  width: 4.5rem;
+  aspect-ratio: 16 / 10;
+  padding: 0;
+  border: 1.5px solid var(--ink);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--ink);
+  opacity: 0.55;
+  cursor: pointer;
+  transition:
+    opacity 200ms ease,
+    transform var(--t-release) var(--ease-spring);
+}
+
+.page__media--phone .page__thumb {
+  width: 2.6rem;
+  aspect-ratio: 9 / 19.5;
+}
+
+.page__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.page__thumb:hover {
+  opacity: 0.9;
+  transform: translateY(-3px);
+}
+
+.page__thumb.is-active {
+  opacity: 1;
+  transform: translateY(-3px);
+  box-shadow: 0 3px 0 var(--ink);
+}
+
+/* Sections */
+.page__section {
+  display: grid;
+  gap: 1rem;
+}
+
+/* My role: label on top, content under it, left-aligned like every other section */
+.page__role {
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  padding-top: 2rem;
+  border-top: 2px dashed var(--line);
+}
+
+.page__rolebig {
+  margin: 0 0 0.75rem;
+  font: 800 clamp(1.3rem, 2.4vw, 1.75rem) / 1.2 var(--font-display);
+}
+
+.page__section .card__tags {
+  margin: 0;
+  gap: 0.4rem;
+}
+
+.page__section .card__tags li {
+  padding: 0.25rem 0.7rem;
+  font-size: 0.84rem;
+}
+
+/* What I did: equal tiles, flip for notes */
+.page__dids {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.page__did {
+  position: relative;
+  min-height: 11rem;
+  transition: transform 380ms var(--ease-spring);
+  will-change: transform;
+}
+
+.page__h3 {
+  font-size: 1.25rem;
+}
+
+.tile__face {
+  display: grid;
+  align-content: start;
+  gap: 0.75rem;
+  height: 100%;
+  padding: 1.25rem;
+  border: 2px solid var(--ink);
+  border-radius: 18px;
+  background: var(--surface);
+  box-shadow: 5px 5px 0 var(--ink);
+  transition: box-shadow 380ms var(--ease-spring);
+}
+
+.page__did:hover .tile__face {
+  box-shadow: 8px 10px 0 var(--ink);
+}
+
+.tile--flip {
+  display: block;
+  cursor: pointer;
+  perspective: 1000px;
+}
+
+.tile__inner {
+  position: relative;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 560ms var(--ease-spring);
+}
+
+.tile--flip.is-flipped .tile__inner {
+  transform: rotateY(180deg);
+}
+
+.tile--flip .tile__face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.tile__back {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(180deg);
+  background: var(--ink);
+  color: var(--surface);
+  overflow: auto;
+}
+
+.tile__back p {
+  margin: 0;
+  color: rgba(255, 253, 248, 0.85);
+}
+
+.tile__hint {
+  position: absolute;
+  right: 1rem;
+  bottom: 0.8rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+/* Video */
+.page__video {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  padding: 0;
+  border: 2px solid var(--ink);
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--ink);
+  box-shadow: 8px 8px 0 var(--ink);
+  cursor: pointer;
+}
+
+/* Phone games: tall frame, centred, same border + shadow */
+.page__video--tall {
+  aspect-ratio: 9 / 16;
+  max-width: 22rem;
+  margin-inline: auto;
+}
+
+.page__clip {
+  object-fit: contain;
+  cursor: auto;
+}
+
+.page__video img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 500ms var(--ease-out);
+}
+
+.page__video:hover img {
+  transform: scale(1.04);
+}
+
+.detail__play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 5rem;
+  height: 5rem;
+  margin: -2.5rem 0 0 -2.5rem;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--ink);
+  font-size: 1.8rem;
+  box-shadow: 0 4px 0 var(--ink);
+  transition: transform var(--t-release) var(--ease-spring);
+}
+
+.page__video:hover .detail__play {
+  transform: scale(1.12);
+}
+
+.page__video:active .detail__play {
+  transform: scale(0.92, 0.82);
+  transition-duration: var(--t-press);
+}
+
+/* Prev / next: own row, two identical buttons */
+.page__navrow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  padding-top: 2rem;
+  border-top: 2px dashed var(--line);
+}
+
+.page__nav {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+  min-height: 6rem;
+  padding: 0.9rem 1.2rem 0.9rem 0.9rem;
+  border: 2px solid var(--ink);
+  border-radius: 18px;
+  background: var(--surface);
+  color: var(--ink);
+  text-decoration: none;
+  box-shadow: 5px 5px 0 var(--ink);
+  transition:
+    transform 380ms var(--ease-spring),
+    box-shadow 380ms var(--ease-spring);
+}
+
+.page__nav:hover {
+  transform: translateY(-4px);
+  box-shadow: 7px 9px 0 var(--ink);
+}
+
+.page__nav:active {
+  transform: translateY(2px) scale(0.98);
+  box-shadow: 2px 2px 0 var(--ink);
+  transition-duration: var(--t-press);
+}
+
+/* Mirrored: Previous = [← thumb title], Next = [title thumb →] */
+.page__nav--prev {
+  grid-template-columns: auto auto minmax(0, 1fr);
+  padding: 0.9rem 1.2rem;
+}
+
+.page__nav--prev .page__arrow { order: -1; }
+
+.page__nav--next {
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  padding: 0.9rem 1.2rem;
+  text-align: right;
+}
+
+.page__nav--next .page__navtext { order: 0; }
+.page__nav--next .page__navthumb { order: 1; }
+.page__nav--next .page__arrow { order: 2; }
+
+.page__navthumb {
+  display: grid;
+  place-items: center;
+  width: 4.25rem;
+  height: 4.25rem;
+  border: 1.5px solid var(--ink);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--ink-soft);
+  color: var(--surface);
+  font: 800 1.6rem/1 var(--font-display);
+  transition: transform 380ms var(--ease-spring);
+}
+
+.page__navthumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.page__nav:hover .page__navthumb {
+  transform: scale(1.08) rotate(-3deg);
+}
+
+.page__navtext {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.page__navtitle {
+  font: 800 clamp(1.1rem, 2vw, 1.45rem) / 1.15 var(--font-display);
+}
+
+.page__arrow {
+  font: 800 1.6rem/1 var(--font-display);
+  transition: translate 380ms var(--ease-spring);
+}
+
+.page__nav--next:hover .page__arrow {
+  translate: 6px 0;
+}
+
+.page__nav--prev:hover .page__arrow {
+  translate: -6px 0;
+}
+
+/* Tablet and phone */
+@media (max-width: 860px) {
+  .page__hero {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .page__media {
+    order: -1;
+  }
+
+}
+
+@media (max-width: 560px) {
+  .page__navrow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Lightbox */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 4rem 16px;
+  background: rgba(29, 27, 24, 0.82);
+}
+
+.lightbox[hidden] {
+  display: none;
+}
+
+.lightbox__img {
+  max-width: 100%;
+  max-height: 100%;
+  border: 2px solid var(--ink);
+  border-radius: 14px;
+  background: var(--ink);
+}
+
+.lightbox__btn {
+  position: absolute;
+}
+
+.lightbox__close { top: 16px; right: 16px; }
+.lightbox__prev { left: 16px; top: 50%; }
+.lightbox__next { right: 16px; top: 50%; }
+
+/* Next / previous take the tint of the game they lead to */
+.page__nav[data-cat] {
+  background: var(--cat, var(--surface));
+}
+
+/* About: sections stay hidden until their fade-in starts (no flash on load) */
+.parts-hidden .page__part {
+  opacity: 0;
+}

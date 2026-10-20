@@ -1,5 +1,5 @@
 {
-  "_note": "Source of truth for the card deck and case studies. Facts from the old game pages and Common/thesis_summary.md (20 Oct 2026). blurb = Claude's condensed draft; Ahmed rewrites. Rarity: 6 Legendary agreed 20 Oct. Storm Alert public: Mattia OK (per Ahmed, 20 Oct).",
+  "_note": "Source of truth for the card deck and case studies. Facts from the old game pages and Common/thesis_summary.md (20 Oct 2026). blurb = Claude's condensed draft; Ahmed rewrites. Rarity: 6 Legendary agreed 20 Oct. Storm Alert public: Mattia OK (per Ahmed, 20 Oct). Twist the News moved out of the games list to the About page thesis section (21 Oct); its old entry is kept under \"thesis\" for reference. builtWith: only verified tools (itch 'Made with', Ahmed's own game texts, or Ahmed); empty = not yet confirmed (21 Oct).",
   "categories": [
     {
       "id": "mobile",
@@ -12,10 +12,6 @@
     {
       "id": "gamification",
       "label": "Gamification"
-    },
-    {
-      "id": "research",
-      "label": "Research"
     },
     {
       "id": "jams",
@@ -37,6 +33,9 @@
       "genre": "Rage platformer",
       "platforms": [
         "PC (Steam)"
+      ],
+      "builtWith": [
+        "Unity"
       ],
       "role": "Concept, game design, level design, dev",
       "roleTags": [
@@ -61,14 +60,48 @@
           "/img/shots/wildling/2.jpg",
           "/img/shots/wildling/3.jpg",
           "/img/shots/wildling/4.jpg",
-          "/img/shots/wildling/5.jpg"
+          "/img/shots/wildling/5.jpg",
+          "/img/shots/wildling/6.jpg",
+          "/img/shots/wildling/7.jpg",
+          "/img/shots/wildling/8.jpg"
         ],
         "orientation": "landscape"
       },
       "categories": [
         "pc-steam"
       ],
-      "featured": 1
+      "featured": 1,
+      "description": "Blast yourself with a bazooka across one giant rage-filled level in this brutal physics platformer. Mix and match animal heads and bodies, master precision recoil, and survive deadly traps. No mercy. No jumps. Just you, a bazooka, and bad decisions.",
+      "contributions": [
+        {
+          "title": "Game Design",
+          "text": "Designed the unique bazooka-based physics mechanics and challenging level structure",
+          "bullets": [
+            "Core Concept",
+            "Level Design",
+            "Physics Mechanics",
+            "Character Customization System"
+          ]
+        },
+        {
+          "title": "Unity Development",
+          "text": "Implemented the core gameplay systems and physics interactions",
+          "bullets": [
+            "Physics Implementation",
+            "Character Controller",
+            "Gameplay Mechanics"
+          ]
+        },
+        {
+          "title": "UI Design",
+          "text": "Created an engaging and intuitive user interface for the game",
+          "bullets": [
+            "UI Design",
+            "Menu Systems",
+            "HUD Elements"
+          ]
+        }
+      ]
     },
     {
       "slug": "ant-march-adventure",
@@ -81,6 +114,9 @@
         "iOS",
         "Android"
       ],
+      "builtWith": [
+        "Unity"
+      ],
       "role": "Concept, design, lead dev, UI/UX",
       "roleTags": [
         "Level design",
@@ -92,26 +128,63 @@
       ],
       "blurb": "Lead a growing ant colony through 10 randomised levels. Every run, every choice, a different colony.",
       "links": {
-        "appStore": "https://apps.apple.com/us/app/ant-march-adventure-roguelike/id6745928475",
         "googlePlay": "https://play.google.com/store/apps/details?id=tech.atm.antmarchadventure&hl=en"
       },
       "media": {
         "cover": "Images/Portfolio/ant-march-adventure.png",
         "screenshots": 12,
         "youtube": null,
-        "storeVideo": "none found on Play Store or App Store listing (checked 20 Oct)",
         "card": "/img/cards/ant-march-adventure.jpg",
         "shots": [
           "/img/shots/ant-march-adventure/1.jpg",
           "/img/shots/ant-march-adventure/2.jpg",
           "/img/shots/ant-march-adventure/3.jpg",
           "/img/shots/ant-march-adventure/4.jpg",
-          "/img/shots/ant-march-adventure/5.jpg"
+          "/img/shots/ant-march-adventure/5.jpg",
+          "/img/shots/ant-march-adventure/6.jpg",
+          "/img/shots/ant-march-adventure/7.jpg",
+          "/img/shots/ant-march-adventure/8.jpg"
         ],
-        "orientation": "portrait"
+        "orientation": "portrait",
+        "video": {
+          "src": "/video/ant-march-adventure.mp4",
+          "poster": "/video/ant-march-adventure.jpg"
+        }
       },
       "categories": [
         "mobile"
+      ],
+      "description": "Roguelike mobile game where players lead a growing ant colony through 10 randomized, increasingly difficult levels. Command your ant army as you navigate through procedurally generated environments, collecting resources and facing escalating challenges. Each run offers a unique experience with strategic decisions that determine the survival and growth of your colony.",
+      "contributions": [
+        {
+          "title": "Game Design",
+          "text": "Designed the core systems and mechanics that make each run unique and engaging",
+          "bullets": [
+            "Level Design",
+            "Roguelike Mechanics",
+            "Progression System",
+            "Game Economy",
+            "Game Feedback and Juice"
+          ]
+        },
+        {
+          "title": "Lead Development",
+          "text": "Mentored and directed the development team to bring the vision to life",
+          "bullets": [
+            "Technical Direction",
+            "Code Review and Mentorship",
+            "Feature Implementation Guidance"
+          ]
+        },
+        {
+          "title": "UI/UX Design",
+          "text": "Crafted an intuitive and accessible interface for mobile players",
+          "bullets": [
+            "Menu Design",
+            "User Flow",
+            "Interface Layout"
+          ]
+        }
       ]
     },
     {
@@ -125,6 +198,9 @@
         "iOS",
         "Android"
       ],
+      "builtWith": [
+        "Unity"
+      ],
       "role": "Concept, levels, 3D art, UI/UX, economy",
       "roleTags": [
         "Core concept",
@@ -136,7 +212,6 @@
       ],
       "blurb": "Lay road tiles fast enough to keep a speeding car alive. Quick thinking, spatial puzzles, a ticking clock.",
       "links": {
-        "appStore": "https://apps.apple.com/us/app/road-rush-puzzle/id6745928507",
         "googlePlay": "https://play.google.com/store/apps/details?id=tech.atm.roadrushpuzzle&hl=en"
       },
       "media": {
@@ -150,12 +225,46 @@
           "/img/shots/road-rush-puzzle/2.jpg",
           "/img/shots/road-rush-puzzle/3.jpg",
           "/img/shots/road-rush-puzzle/4.jpg",
-          "/img/shots/road-rush-puzzle/5.jpg"
+          "/img/shots/road-rush-puzzle/5.jpg",
+          "/img/shots/road-rush-puzzle/6.jpg",
+          "/img/shots/road-rush-puzzle/7.jpg",
+          "/img/shots/road-rush-puzzle/8.jpg"
         ],
         "orientation": "portrait"
       },
       "categories": [
         "mobile"
+      ],
+      "description": "Fast-paced puzzle game where players build roads to guide a speeding car to its destination. Test your quick thinking and spatial awareness as you strategically place road tiles to create the perfect path. Race against time and overcome challenging obstacles to complete each level and master the art of road building.",
+      "contributions": [
+        {
+          "title": "Game Design",
+          "text": "Designed the core gameplay mechanics and progression systems",
+          "bullets": [
+            "Core Concept",
+            "Level Design",
+            "Game Economy",
+            "Puzzle Mechanics"
+          ]
+        },
+        {
+          "title": "3D Art",
+          "text": "Created all visual assets to bring the game world to life",
+          "bullets": [
+            "3D Asset Creation",
+            "Environment Design",
+            "Visual Style"
+          ]
+        },
+        {
+          "title": "UI/UX Design",
+          "text": "Crafted an intuitive and engaging user experience",
+          "bullets": [
+            "UI Design",
+            "User Flow",
+            "Interface Layout"
+          ]
+        }
       ]
     },
     {
@@ -169,6 +278,9 @@
         "iOS",
         "Android"
       ],
+      "builtWith": [
+        "Unity"
+      ],
       "role": "Concept, design, art, music + sound",
       "roleTags": [
         "Mirror-movement mechanic",
@@ -180,26 +292,59 @@
       ],
       "blurb": "Two orbs, Yin and Yang, move as mirror images with every swipe. Guide both past spikes and traps until they meet.",
       "links": {
-        "appStore": "https://apps.apple.com/ee/app/zen-puzzle-saga/id6745928396",
         "googlePlay": "https://play.google.com/store/apps/details?id=tech.atm.zenmergepuzzle"
       },
       "media": {
         "cover": "Images/Portfolio/zen-merge-puzzle.png",
         "screenshots": 7,
         "youtube": null,
-        "storeVideo": "none found on Play Store or App Store listing (checked 20 Oct)",
         "card": "/img/cards/zen-merge-puzzle.jpg",
         "shots": [
           "/img/shots/zen-merge-puzzle/1.jpg",
           "/img/shots/zen-merge-puzzle/2.jpg",
           "/img/shots/zen-merge-puzzle/3.jpg",
           "/img/shots/zen-merge-puzzle/4.jpg",
-          "/img/shots/zen-merge-puzzle/5.jpg"
+          "/img/shots/zen-merge-puzzle/5.jpg",
+          "/img/shots/zen-merge-puzzle/6.jpg",
+          "/img/shots/zen-merge-puzzle/7.jpg"
         ],
-        "orientation": "portrait"
+        "orientation": "portrait",
+        "video": {
+          "src": "/video/zen-merge-puzzle.mp4",
+          "poster": "/video/zen-merge-puzzle.jpg"
+        }
       },
       "categories": [
         "mobile"
+      ],
+      "description": "Welcome to Zen Puzzle Saga – the relaxing yet challenging puzzle game! Step into a world of balance, where Yin & Yang orbs move in perfect reflection every time you swipe. Guide these twin orbs through spiked edges, tricky walls, and cunning traps until they unite on the sacred Harmony tile.",
+      "contributions": [
+        {
+          "title": "Game Design",
+          "text": "Crafted the core mirror-movement mechanic and level progression, balancing puzzle difficulty from beginner to expert.",
+          "bullets": [
+            "Designed mirrored orb controls and reflection rules",
+            "Authored & iterated hand crafted levels"
+          ]
+        },
+        {
+          "title": "Game Art",
+          "text": "Established a minimalist “Zen” aesthetic—clean lines, calming color palette, and ambient UI—to enhance focus and relaxation.",
+          "bullets": [
+            "Designed Yin & Yang orb sprites",
+            "Created tilemap assets and UI icons",
+            "Composed subtle animations for smooth feedback"
+          ]
+        },
+        {
+          "title": "Sound Design",
+          "text": "Created the music from scratch with a relaxing mood.",
+          "bullets": [
+            "Created Menu Music",
+            "Created Game Music",
+            "Sound effects"
+          ]
+        }
       ]
     },
     {
@@ -213,6 +358,9 @@
         "iOS",
         "Android"
       ],
+      "builtWith": [
+        "Unity"
+      ],
       "role": "Project lead, level design, dev",
       "roleTags": [
         "Level design",
@@ -223,28 +371,62 @@
       ],
       "blurb": "Guide candies from the factory pipeline into the jar. Every level adds a new obstacle to time and outsmart.",
       "links": {
-        "appStore": "https://apps.apple.com/ee/app/sweet-shot/id6505140548",
         "googlePlay": "https://play.google.com/store/apps/details?id=tech.atm.sweetshot&hl=en"
       },
       "media": {
         "cover": "Images/Portfolio/sweet-shot.jpg",
         "screenshots": 8,
         "youtube": null,
-        "card": "/img/cards/sweet-shot.jpg"
+        "card": "/img/cards/sweet-shot.jpg",
+        "shots": [
+          "/img/shots/sweet-shot/1.jpg",
+          "/img/shots/sweet-shot/2.jpg",
+          "/img/shots/sweet-shot/3.jpg",
+          "/img/shots/sweet-shot/4.jpg",
+          "/img/shots/sweet-shot/5.jpg",
+          "/img/shots/sweet-shot/6.jpg",
+          "/img/shots/sweet-shot/7.jpg",
+          "/img/shots/sweet-shot/8.jpg"
+        ],
+        "orientation": "portrait"
       },
       "categories": [
         "mobile"
+      ],
+      "description": "Hyper casual game with puzzle elements made for mobile. Step into the world of candy making, where you control the flow of delicious candies from the factory pipeline to the jar. Guide colorful candies through tricky factory pipelines and land them perfectly in the jar. But beware-each level is filled with unique challenges and obstacles that test your strategy and timing!",
+      "contributions": [
+        {
+          "title": "Unity Development",
+          "text": "The game has some unique mechanics that I loved to implement",
+          "bullets": [
+            "Particle Effects",
+            "Gameplay Mechanics",
+            "Custom Physics"
+          ]
+        },
+        {
+          "title": "Game Design",
+          "text": "I loved designing the levels for this game as it challenged me to create a immersive flow throughout",
+          "bullets": [
+            "Puzzle Design",
+            "Level Design",
+            "Mechanics Design"
+          ]
+        }
       ]
     },
     {
       "slug": "storm-alert",
       "title": "Storm Alert",
       "rarity": "legendary",
-      "year": null,
+      "year": 2026,
       "status": "Proof of concept, University of Tartu",
       "genre": "Preparedness simulation",
       "platforms": [
         "Web"
+      ],
+      "builtWith": [
+        "React"
       ],
       "categories": [
         "gamification"
@@ -258,10 +440,24 @@
       "blurb": "Your home, right before a real crisis. Gather supplies, decide under pressure, and work out who to call when things go wrong.",
       "links": {},
       "media": {
-        "cover": "placeholder",
-        "screenshots": 0,
+        "cover": "/img/cards/storm-alert.jpg",
+        "screenshots": 9,
         "youtube": null,
-        "placeholderNote": "Placeholder art until real screenshots"
+        "artNote": "1 = key art illustration; 2-9 = gameplay screenshots from Ahmed (21 Oct)",
+        "card": "/img/cards/storm-alert.jpg",
+        "shots": [
+          "/img/shots/storm-alert/1.jpg",
+          "/img/shots/storm-alert/2.jpg",
+          "/img/shots/storm-alert/3.jpg",
+          "/img/shots/storm-alert/4.jpg",
+          "/img/shots/storm-alert/5.jpg",
+          "/img/shots/storm-alert/6.jpg",
+          "/img/shots/storm-alert/7.jpg",
+          "/img/shots/storm-alert/8.jpg",
+          "/img/shots/storm-alert/9.jpg"
+        ],
+        "orientation": "landscape",
+        "focus": "72% 50%"
       },
       "description": "A preparedness simulation that puts you at home right before a real crisis, preparing for the emergency. Gather supplies, make decisions under pressure, and figure out who to call when things go wrong. Your choices determine how you and your household make it through the storm.",
       "featured": 3
@@ -277,11 +473,13 @@
         "Web",
         "PC"
       ],
+      "builtWith": [
+        "Unity"
+      ],
       "role": "Concept, design, art direction, Unity dev",
       "roleTags": [
         "Game design document",
         "Enemy + ability design",
-        "Branching narrative",
         "Shaders",
         "Environment art",
         "Unity dev"
@@ -300,48 +498,49 @@
           "/img/shots/magic-mineral/2.jpg",
           "/img/shots/magic-mineral/3.jpg",
           "/img/shots/magic-mineral/4.jpg",
-          "/img/shots/magic-mineral/5.jpg"
+          "/img/shots/magic-mineral/5.jpg",
+          "/img/shots/magic-mineral/6.jpg",
+          "/img/shots/magic-mineral/7.jpg"
         ],
         "orientation": "landscape"
       },
       "categories": [
-        "web-games",
         "pc-steam"
       ],
-      "featured": 2
-    },
-    {
-      "slug": "leaping-liliy",
-      "title": "Leaping Frog",
-      "storeTitle": "Leaping Frog Endless",
-      "rarity": "common",
-      "year": 2024,
-      "status": "Released",
-      "genre": "Endless runner",
-      "platforms": [
-        "iOS",
-        "Android"
-      ],
-      "role": "Game + level design, character art",
-      "roleTags": [
-        "Obstacle design",
-        "Difficulty tuning",
-        "Balancing",
-        "Character modelling + animation (Blender)"
-      ],
-      "blurb": "An endless runner: one frog, endless leaps, and obstacles that get nastier the longer you last.",
-      "links": {
-        "appStore": "https://apps.apple.com/ee/app/leaping-frog-endless/id6737447859",
-        "googlePlay": "https://play.google.com/store/apps/details?id=tech.atm.leapingfrog"
-      },
-      "media": {
-        "cover": "Images/Portfolio/leaping-frog.png",
-        "screenshots": 5,
-        "youtube": null,
-        "card": "/img/cards/leaping-liliy.jpg"
-      },
-      "categories": [
-        "mobile"
+      "featured": 2,
+      "description": "Explore the dangerous cave with very limited dimming light and experience the magic that both helps and haunts you. A top-down 2D survival game where you need to find a magic crystal that can potentially save your village.",
+      "contributions": [
+        {
+          "title": "Game Design",
+          "text": "This is an ongoing project but the overall design of the enemies and player abilities have been finalised.",
+          "bullets": [
+            "Created and updated concept",
+            "Created Game Design Document",
+            "Enemy Behavior and Player Ability Design",
+            "Narrative Design"
+          ]
+        },
+        {
+          "title": "Game Art",
+          "text": "This was the most interesting and my favourite part of the contribution. I wanted to maintain a unique look to the overall game and create the scary dungeon vibe with the lights and darkness.",
+          "bullets": [
+            "Environment Design",
+            "Character design and Animation",
+            "Shader Creation using Unity Shader Graph",
+            "Tilemap Creation"
+          ]
+        },
+        {
+          "title": "Programming (Unity)",
+          "text": "Programming wise this is a very demanding job considering the scale of the game. I have already designed and developed the main systems but need to implement the rest of the enemies.",
+          "bullets": [
+            "AI Player Chase System",
+            "Ability System",
+            "Modular Architecture using Scriptable Object",
+            "Event System",
+            "Basic Dialogue System"
+          ]
+        }
       ]
     },
     {
@@ -353,6 +552,9 @@
       "genre": "Point-and-click adventure",
       "platforms": [
         "Web"
+      ],
+      "builtWith": [
+        "Unity"
       ],
       "role": "Concept, narrative, hand-drawn art, Unity dev",
       "roleTags": [
@@ -370,10 +572,51 @@
         "cover": "Images/Portfolio/the-unwanted.png",
         "screenshots": 7,
         "youtube": null,
-        "card": "/img/cards/the-unwanted.jpg"
+        "card": "/img/cards/the-unwanted.jpg",
+        "shots": [
+          "/img/shots/the-unwanted/1.jpg",
+          "/img/shots/the-unwanted/2.jpg",
+          "/img/shots/the-unwanted/3.jpg",
+          "/img/shots/the-unwanted/4.jpg",
+          "/img/shots/the-unwanted/5.jpg",
+          "/img/shots/the-unwanted/6.jpg",
+          "/img/shots/the-unwanted/7.jpg"
+        ],
+        "orientation": "landscape"
       },
       "categories": [
         "web-games"
+      ],
+      "description": "Can you take the helpless ghost back to the forest and pass all the challenges on the way? A point-and-click adventure game made as a project for the Advance Game Development course in the Digital Learning Games program, at Tallinn University.",
+      "contributions": [
+        {
+          "title": "Game Design",
+          "text": "The main objective of this game was to design a point and click adventure with puzzle element. The narrative of this game is very close to me.",
+          "bullets": [
+            "Concept and narrative design",
+            "Character and ghost follow mechanics",
+            "UI Design"
+          ]
+        },
+        {
+          "title": "Game Art",
+          "text": "The game art was developed from scratch and I tried to maintain a stylized and personal look to the overall game as the game is trying to tell an emotional story. That's why I have chosen te hand drawn style",
+          "bullets": [
+            "Hand drawn Environment Design",
+            "Character design and Animation",
+            "Unity Post Processing using URP"
+          ]
+        },
+        {
+          "title": "Programming (Unity)",
+          "text": "Implementing the logic for this game was very simple, but the requirement was to make the game persistent through scenes. I have learned some advanced architecture during this game.",
+          "bullets": [
+            "Scene Persistance",
+            "Character and Ghost Mechanics implementation",
+            "Dialogue System",
+            "Event System"
+          ]
+        }
       ]
     },
     {
@@ -385,6 +628,9 @@
       "genre": "Platformer",
       "platforms": [
         "Web"
+      ],
+      "builtWith": [
+        "Unity"
       ],
       "role": "Concept, art direction, level design",
       "roleTags": [
@@ -400,12 +646,21 @@
         "cover": "Images/Portfolio/after-the-end.png",
         "screenshots": 6,
         "youtube": null,
-        "card": "/img/cards/after-the-end.jpg"
+        "card": "/img/cards/after-the-end.jpg",
+        "shots": [
+          "/img/shots/after-the-end/1.jpg",
+          "/img/shots/after-the-end/2.jpg",
+          "/img/shots/after-the-end/3.jpg",
+          "/img/shots/after-the-end/4.jpg",
+          "/img/shots/after-the-end/5.jpg",
+          "/img/shots/after-the-end/6.jpg"
+        ],
+        "orientation": "landscape"
       },
       "categories": [
-        "jams",
-        "web-games"
-      ]
+        "jams"
+      ],
+      "description": "Submitted to Ludum Dare 53 Game Jam The humans have left the Earth leaving a dead planet behind. The few surviving plants and animals are now dying due to high level of pollution. Yet, hope remains. You are one of the last surviving bees of the planet, searching for other members of your tribe, are they alive? For your survival you can pollinate as many flowers as you can so the plants can repopulate and fix the Earth. But be aware! Earth is not what it was before, it's filled with pollutants, acid rain and mutant species. Do not spend too much time in the polluted area, come out for fresh air"
     },
     {
       "slug": "the-return",
@@ -416,6 +671,9 @@
       "genre": "Adventure",
       "platforms": [
         "Web"
+      ],
+      "builtWith": [
+        "Unity"
       ],
       "role": "Concept, game design",
       "roleTags": [
@@ -430,12 +688,66 @@
         "cover": "Images/Portfolio/the-return.png",
         "screenshots": 7,
         "youtube": null,
-        "card": "/img/cards/the-return.jpg"
+        "card": "/img/cards/the-return.jpg",
+        "shots": [
+          "/img/shots/the-return/1.jpg",
+          "/img/shots/the-return/2.jpg",
+          "/img/shots/the-return/3.jpg",
+          "/img/shots/the-return/4.jpg",
+          "/img/shots/the-return/5.jpg",
+          "/img/shots/the-return/6.jpg",
+          "/img/shots/the-return/7.jpg"
+        ],
+        "orientation": "landscape"
       },
       "categories": [
-        "jams",
-        "web-games"
-      ]
+        "jams"
+      ],
+      "description": "“Embark on a journey where mother nature awaits “The Run” to arrive at their roots” A game jam project submitted on Global Game Jam, Pärnu, 2023"
+    },
+    {
+      "slug": "eat-the-rich",
+      "title": "Eat the Rich",
+      "rarity": "common",
+      "year": 2023,
+      "status": "Game jam: Un-Jam (NASG), Copenhagen",
+      "genre": "Party card game",
+      "platforms": [
+        "Tabletop"
+      ],
+      "builtWith": [
+        "Paper prototype"
+      ],
+      "role": "Concept, game design",
+      "roleTags": [
+        "Concept",
+        "Game design"
+      ],
+      "blurb": "A party card game about inequality. You are a PR manager hiding your rich client's dirty secrets, while the Hungry Crowd asks questions until someone ends up in the soup.",
+      "links": {
+        "itch": "https://outintotheblue.itch.io/eat-the-rich"
+      },
+      "linkLabels": {
+        "itch": "View on itch.io"
+      },
+      "media": {
+        "cover": "/img/cards/eat-the-rich.jpg",
+        "screenshots": 5,
+        "youtube": null,
+        "card": "/img/cards/eat-the-rich.jpg",
+        "shots": [
+          "/img/shots/eat-the-rich/1.jpg",
+          "/img/shots/eat-the-rich/2.jpg",
+          "/img/shots/eat-the-rich/3.jpg",
+          "/img/shots/eat-the-rich/4.jpg",
+          "/img/shots/eat-the-rich/5.jpg"
+        ],
+        "orientation": "landscape"
+      },
+      "categories": [
+        "jams"
+      ],
+      "description": "Made in a five-day game jam at the Un-Jam workshop, hosted by the Nordic Alliance for Sustainability in Gaming (NASG) in Copenhagen, by a team of five students from different backgrounds. The aim: draw attention to inequality, provoke discussion and ridicule the situation through a fun party game. You play a PR manager trying to hide the terrible truths about your rich client. The Hungry Crowd asks questions to bring the dirty secrets out, and finally throws your Rich into the soup."
     },
     {
       "slug": "space-cricket",
@@ -446,6 +758,9 @@
       "genre": "Casual arcade",
       "platforms": [
         "Mobile"
+      ],
+      "builtWith": [
+        "Unity"
       ],
       "role": "Concept, design, balancing, game art",
       "roleTags": [
@@ -462,10 +777,45 @@
         "cover": "Images/Portfolio/space-cricket.png",
         "screenshots": 10,
         "youtube": "Ty-LMJ0NZ8k",
-        "card": "/img/cards/space-cricket.jpg"
+        "card": "/img/cards/space-cricket.jpg",
+        "shots": [
+          "/img/shots/space-cricket/1.jpg",
+          "/img/shots/space-cricket/2.jpg",
+          "/img/shots/space-cricket/3.jpg",
+          "/img/shots/space-cricket/4.jpg",
+          "/img/shots/space-cricket/5.jpg",
+          "/img/shots/space-cricket/6.jpg",
+          "/img/shots/space-cricket/7.jpg",
+          "/img/shots/space-cricket/8.jpg"
+        ],
+        "orientation": "portrait"
       },
       "categories": [
         "mobile"
+      ],
+      "description": "A simple casual game made for mobile. There is a bat in space, unlike normal cricket bat it’s rotating constantly. However, you can change the direction of rotation by a quick single tap. Timing of your tap is important to swing the bat to hit the target color score. Each color bar represents a unique cricket score. Be careful of the nasty red color stumps. On hitting those you’ll loose wicket. Smashing boundary enables exciting power-ups and increase your trophies. So swing your bat accordingly and try to hit the target of boundary.",
+      "contributions": [
+        {
+          "title": "Game Design",
+          "text": "I loved designing this game because of it's simplicity but yet the ability to immerse certain types of audience who loves challenge. The game balancing was also a fun part of designing the game as it involved lots of Playtesting session",
+          "bullets": [
+            "Game Balancing",
+            "Concept Development",
+            "Player Stat System Design",
+            "Two Special mode (Danger and Slog)",
+            "UI Design"
+          ]
+        },
+        {
+          "title": "Game Art",
+          "text": "",
+          "bullets": [
+            "Casual Game Asset",
+            "Interface Design",
+            "Visual Effects",
+            "Marketing Content"
+          ]
+        }
       ]
     },
     {
@@ -477,6 +827,10 @@
       "genre": "Casual endless runner",
       "platforms": [
         "Mobile"
+      ],
+      "builtWith": [
+        "Unity",
+        "Blender"
       ],
       "role": "Economy design, AI, 3D art, UI",
       "roleTags": [
@@ -493,43 +847,77 @@
         "cover": "Images/Portfolio/toony-car.png",
         "screenshots": 7,
         "youtube": "eeg_SbRyyJk",
-        "card": "/img/cards/toony-car.jpg"
+        "card": "/img/cards/toony-car.jpg",
+        "shots": [
+          "/img/shots/toony-car/1.jpg",
+          "/img/shots/toony-car/2.jpg",
+          "/img/shots/toony-car/3.jpg",
+          "/img/shots/toony-car/4.jpg",
+          "/img/shots/toony-car/5.jpg",
+          "/img/shots/toony-car/6.jpg",
+          "/img/shots/toony-car/7.jpg"
+        ],
+        "orientation": "landscape"
       },
       "categories": [
         "mobile"
+      ],
+      "description": "An isometric casual car control with lots of cute car to choose from. Each car has unique abilities and unlocking them makes the game even more fun.",
+      "contributions": [
+        {
+          "title": "Game Design",
+          "text": "The most difficult yet satisfying part of game design for this game was to create the Game Economy system. This game involves a complex economy system that allows the player to buy special cars, fuels and other items to make the game more fun and immersive.",
+          "bullets": [
+            "Designed the game economy and virtual currency system",
+            "AI car behavior design",
+            "Shop Design",
+            "UI Design"
+          ]
+        },
+        {
+          "title": "Game Art",
+          "text": "This was the first experience of mine to create a 3d low poly environment. As it was intented for mobile, I had to keep the polycount significantly low. But I love the fact that it turned out decent looking.",
+          "bullets": [
+            "3D modeling in Blender",
+            "6 different Car Design",
+            "Isometric Environment Design in Low Poly",
+            "Texturing the assets, optimized for moblie (Baking)",
+            "Created Visual Effects in Unity"
+          ]
+        }
       ]
-    },
-    {
-      "slug": "twist-the-news",
-      "title": "Twist the News",
-      "rarity": "common",
-      "year": 2024,
-      "status": "MSc thesis, Tallinn University (grade A)",
-      "genre": "Card-based party game",
-      "platforms": [
-        "Tabletop (playtested online)"
-      ],
-      "categories": [
-        "research"
-      ],
-      "role": "Design + research",
-      "roleTags": [
-        "Humour design",
-        "Design-based research",
-        "Playtests (12 players)",
-        "Thematic analysis"
-      ],
-      "blurb": "Players are news editors under an authoritarian regime, spinning embarrassing news into praise. Each round a new Propaganda Minister judges the headlines.",
-      "links": {
-        "thesis": "https://www.etera.ee/zoom/202074/view?page=1&p=separate"
-      },
-      "media": {
-        "cover": "site/public/img/cards/twist-the-news.jpg",
-        "screenshots": 0,
-        "youtube": null,
-        "coverSource": "Thesis Figure 3, card deck for propaganda talking points (p. 43)",
-        "card": "/img/cards/twist-the-news.jpg"
-      }
     }
-  ]
+  ],
+  "thesis": {
+    "slug": "twist-the-news",
+    "title": "Twist the News",
+    "rarity": "common",
+    "year": 2024,
+    "status": "MSc thesis, Tallinn University (grade A)",
+    "genre": "Card-based party game",
+    "platforms": [
+      "Tabletop (playtested online)"
+    ],
+    "categories": [
+      "research"
+    ],
+    "role": "Design + research",
+    "roleTags": [
+      "Humour design",
+      "Design-based research",
+      "Playtests (12 players)",
+      "Thematic analysis"
+    ],
+    "blurb": "Players are news editors under an authoritarian regime, spinning embarrassing news into praise. Each round a new Propaganda Minister judges the headlines.",
+    "links": {
+      "thesis": "https://www.etera.ee/zoom/202074/view?page=1&p=separate"
+    },
+    "media": {
+      "cover": "site/public/img/cards/twist-the-news.jpg",
+      "screenshots": 0,
+      "youtube": null,
+      "coverSource": "Thesis Figure 3, card deck for propaganda talking points (p. 43)",
+      "card": "/img/cards/twist-the-news.jpg"
+    }
+  }
 }

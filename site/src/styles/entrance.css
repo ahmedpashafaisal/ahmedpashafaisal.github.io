@@ -13,7 +13,8 @@ html.pre-entry {
   overflow: hidden;
 }
 
-.hero-3d {
+.hero-3d,
+.hero-fx {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -48,6 +49,28 @@ html.pre-entry {
   color: var(--ink-soft);
 }
 
+/* Roles never break inside; a narrow screen wraps between them */
+.entrance__line > span:not(.entrance__sep) {
+  white-space: nowrap;
+}
+
+.entrance__sep {
+  margin: 0 0.15em 0 0.45em;
+  color: var(--ink-soft);
+  font-weight: 800;
+}
+
+/* Phone: one role per line, no dots (a wrapped line would end on a dot) */
+@media (max-width: 599px) {
+  .entrance__line > span:not(.entrance__sep) {
+    display: block;
+  }
+
+  .entrance__sep {
+    display: none;
+  }
+}
+
 .entrance__btn {
   margin-top: 1.25rem;
   pointer-events: auto;
@@ -65,23 +88,6 @@ html.pre-entry {
 .entered .entrance__edge {
   opacity: 1;
   pointer-events: auto;
-}
-
-.entrance__hint {
-  right: 16px;
-  bottom: 22px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--ink-soft);
-}
-
-.entered .entrance__hint {
-  pointer-events: none;
-}
-
-.entered .entrance__hint.is-gone {
-  opacity: 0;
-  transition-delay: 0ms;
 }
 
 /* Sound toggle: pinned bottom-left on every screen once the visitor is in */
@@ -174,13 +180,68 @@ html.pre-entry {
   opacity: calc(1 - var(--p, 0) * 1.1);
 }
 
-.hero-3d {
+.hero-3d,
+.hero-fx {
   opacity: calc(1 - var(--p, 0) * 0.9);
 }
 
-.entrance__hint {
-  translate: 0 calc(var(--p, 0) * -40px);
+/* "Point to any idea" bubble over the car (hero3d.js moves it; pops in when the car rests) */
+.car-bubble {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  pointer-events: none;
 }
+
+.car-bubble span {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  translate: -50% 0;
+  scale: 0;
+  transform-origin: 50% 100%;
+  padding: 0.2rem 0.6rem;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink);
+  font: 800 0.8rem/1.2 var(--font-display);
+  white-space: nowrap;
+  box-shadow: 0 3px 0 var(--ink);
+  transition: scale 180ms ease-in;
+}
+
+/* tail */
+.car-bubble span::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -7px;
+  width: 10px;
+  height: 10px;
+  translate: -50% 0;
+  rotate: 45deg;
+  border-right: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+  background: var(--surface);
+}
+
+.car-bubble.is-on span {
+  scale: 1;
+  transition: scale 420ms var(--ease-spring);
+  animation: bubble-bob 1.6s ease-in-out 420ms infinite;
+}
+
+@keyframes bubble-bob {
+  50% { translate: -50% -4px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .car-bubble.is-on span { animation: none; }
+}
+
+
 
 .featured > * {
   translate: 0 calc((1 - var(--q, 1)) * 70px);

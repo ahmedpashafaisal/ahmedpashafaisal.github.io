@@ -7,7 +7,7 @@
 import { juicy } from './motion.js';
 import { sfx } from './sound.js';
 
-const GAP = 26; // px between dots
+export const GAP = 26; // px between dots (the page transition uses the same grid)
 const DOT_R = 1.3; // resting radius
 const PUSH_R = 180; // pointer influence radius
 const PUSH = 16; // max pointer displacement
@@ -40,9 +40,19 @@ const refill = (t) => {
 
 export function initDotGrid(canvas) {
   const ctx = canvas.getContext('2d');
-  const css = getComputedStyle(document.documentElement);
-  const base = hexToRgb(css.getPropertyValue('--dot').trim());
-  const hot = hexToRgb(css.getPropertyValue('--accent-deep').trim());
+  let base = [0, 0, 0];
+  let hot = [0, 0, 0];
+  // Colours come from the theme tokens; re-read when light/dark switches
+  const readColours = () => {
+    const css = getComputedStyle(document.documentElement);
+    base = hexToRgb(css.getPropertyValue('--dot').trim());
+    hot = hexToRgb(css.getPropertyValue('--accent-deep').trim());
+  };
+  readColours();
+  window.addEventListener('themechange', () => {
+    readColours();
+    draw();
+  });
 
   let width = 0;
   let height = 0;

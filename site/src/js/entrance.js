@@ -6,6 +6,7 @@ import { burst } from './burst.js';
 import { sendShock } from './dotgrid.js';
 import { juicy } from './motion.js';
 import { sfx } from './sound.js';
+import { act } from './achievements.js';
 
 const KEY = 'apf-entered';
 const ENTER_KEYS = new Set(['Enter', ' ', 'ArrowDown', 'PageDown', 'End']);
@@ -30,10 +31,8 @@ export function initEntrance(root) {
   const btn = root.querySelector('.entrance__btn');
   const label = btn.querySelector('.entrance__btn-label');
   const name = root.querySelector('.entrance__name');
-  const hint = root.querySelector('.entrance__hint');
   const canvas = root.querySelector('.hero-3d');
   const target = document.querySelector(btn.dataset.target);
-  if (hint && window.matchMedia('(pointer: coarse)').matches) hint.textContent = 'psst: tap the shapes';
 
   if (new URLSearchParams(location.search).has('reset')) {
     try {
@@ -54,7 +53,8 @@ export function initEntrance(root) {
   if (canvas && hasWebGL()) {
     import('./hero3d.js').then(({ initHero }) => {
       hero = initHero(canvas, {
-        onPoke: () => hint?.classList.add('is-gone'),
+        onCollect: () => act('idea'),
+        onWave: () => act('storm'),
       });
       if (entered) hero.enter();
     });
@@ -63,6 +63,7 @@ export function initEntrance(root) {
   function enter(x, y) {
     if (entered) return;
     entered = true;
+    act('enter');
     try {
       localStorage.setItem(KEY, '1');
     } catch {}

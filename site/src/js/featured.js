@@ -11,8 +11,6 @@ const MAX_TILT = 5; // degrees
 const STAGGER_MS = 80; // gap between banner parts appearing
 const SLAM_MS = 560;
 const LETTER_MS = 26; // gap between title letters
-const MAGNET_R = 110; // px: cursor pull radius around the Case study button
-const MAGNET_PULL = 0.28;
 const STORE = { steam: 'Steam', appStore: 'App Store', googlePlay: 'Google Play', itch: 'itch.io', gdd: 'Design doc' };
 
 const esc = (s) =>
@@ -30,7 +28,7 @@ function bannerHTML(g, i) {
   const shots = (g.media.shots || [])
     .map(
       (src, k) =>
-        `<img class="banner__shot${k === 0 ? ' is-active' : ''}" src="${esc(src)}" alt="${esc(g.title)} screenshot ${k + 1}" loading="lazy" decoding="async" />`,
+        `<img class="banner__shot${k === 0 ? ' is-active' : ''}" src="${esc(src)}" alt="${esc(g.title)} screenshot ${k + 1}" loading="lazy" decoding="async"${g.media.focus && k === 0 ? ` style="object-position: ${esc(g.media.focus)}"` : ''} />`,
     )
     .join('');
   const links = Object.entries(g.links)
@@ -54,7 +52,7 @@ function bannerHTML(g, i) {
       <p class="banner__hook">${esc(g.blurb)}</p>
       <p class="banner__role"><strong>My role</strong> ${esc(g.role)}</p>
       <div class="banner__actions">
-        <a class="juicy-btn banner__cta" href="/games/${esc(g.slug)}.html">Case study →</a>
+        <a class="juicy-btn banner__cta" href="/games/${esc(g.slug)}.html">See more →</a>
         ${links}
       </div>
     </div>
@@ -110,29 +108,6 @@ function appear(banner) {
   });
 }
 
-// Case study button drifts toward a nearby cursor, springs back when it leaves
-function magnet(btn) {
-  let on = false;
-  window.addEventListener(
-    'pointermove',
-    (e) => {
-      if (e.pointerType !== 'mouse' || !juicy()) return;
-      const r = btn.getBoundingClientRect();
-      const dx = e.clientX - (r.left + r.width / 2);
-      const dy = e.clientY - (r.top + r.height / 2);
-      const near = Math.hypot(dx, dy) < MAGNET_R;
-      if (near) {
-        btn.style.translate = `${(dx * MAGNET_PULL).toFixed(1)}px ${(dy * MAGNET_PULL).toFixed(1)}px`;
-        on = true;
-      } else if (on) {
-        btn.style.translate = '';
-        on = false;
-      }
-    },
-    { passive: true },
-  );
-}
-
 export function initFeatured(root) {
   // ?preview shows hidden entries (e.g. Storm Alert before it is cleared)
   const preview = new URLSearchParams(location.search).has('preview');
@@ -161,7 +136,6 @@ export function initFeatured(root) {
   }, { threshold: 1 });
   list.querySelectorAll('.banner-sep').forEach((s) => sepIO.observe(s));
 
-  list.querySelectorAll('.banner__cta').forEach(magnet);
   if (juicy()) list.querySelectorAll('.banner').forEach((b) => b.classList.add('is-waiting'));
 
   for (const banner of list.querySelectorAll('.banner')) {

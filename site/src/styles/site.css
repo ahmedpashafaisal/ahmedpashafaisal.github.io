@@ -1,0 +1,219 @@
+/* Site-wide chrome: round page button bottom-right (twin of the sound
+   toggle bottom-left) + footer. Used on every page. */
+.site-pill {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 3px 0 var(--ink);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 400ms ease,
+    transform var(--t-release) var(--ease-spring),
+    box-shadow var(--t-release) var(--ease-spring),
+    background-color var(--t-hover) ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.site-pill:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 0 var(--ink);
+  background: var(--accent);
+}
+
+.site-pill:active {
+  transform: translateY(2px) scale(0.94);
+  box-shadow: 0 1px 0 var(--ink);
+  transition-duration: var(--t-press);
+}
+
+/* Hidden during the first-visit entrance, like the sound toggle */
+.entered .site-pill {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.site-foot {
+  display: grid;
+  justify-items: center;
+  gap: 0.75rem;
+  /* Same width as the page content above it */
+  width: min(1088px, 100% - 32px);
+  margin: 0 auto;
+  padding: 2.5rem 0 6rem;
+  border-top: 2px dashed var(--line);
+  text-align: center;
+}
+
+.site-foot__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1.4rem;
+}
+
+.site-foot__links a {
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: none;
+  transition: translate 380ms var(--ease-spring);
+}
+
+.site-foot__links a:hover {
+  translate: 0 -3px;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.site-foot__note {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+/* About page */
+/* Text-only hero; the photo is a small avatar above the name */
+.about__hero {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.about__avatar {
+  width: 6rem;
+  height: 6rem;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: 50% 30%;
+  box-shadow: 0 4px 0 var(--ink);
+}
+
+/* Three role tags under the name */
+.about__roles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.about__roles li {
+  padding: 0.4rem 0.85rem;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  background: var(--accent);
+  font: 700 0.9rem/1 var(--font-body);
+}
+
+.about__big {
+  color: var(--ink);
+  font: 800 clamp(1rem, 1.5vw, 1.1rem) / 1.2 var(--font-display);
+  text-decoration: none;
+}
+
+.about__big:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.about__copy {
+  justify-self: start;
+  align-self: end;
+}
+
+.tile__back a {
+  color: inherit;
+  font-weight: 700;
+}
+
+/* ---------- About: master's thesis, laid out like a paper's first page ---------- */
+.thesis {
+  display: grid;
+  gap: 1.75rem;
+  width: 100%;
+  padding: clamp(1.25rem, 4vw, 3rem);
+  border: 1.5px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: 0 5px 0 var(--ink);
+}
+
+.thesis__head {
+  display: grid;
+  justify-items: center;
+  gap: 0.6rem;
+  text-align: center;
+}
+
+.thesis__title {
+  max-width: 28ch;
+  font: 800 clamp(1.4rem, 3.2vw, 2.1rem)/1.12 var(--font-display);
+  text-wrap: balance;
+}
+
+.thesis__by {
+  font-weight: 700;
+}
+
+.thesis__meta {
+  justify-content: center;
+}
+
+.thesis__sup {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.thesis__abstract {
+  max-width: 62ch;
+  margin: 0 auto;
+  padding-top: 1.25rem;
+  border-top: 1.5px dashed var(--line);
+  text-align: center;
+}
+
+.thesis__h {
+  margin-bottom: 0.5rem;
+  font: 800 0.78rem/1.2 var(--font-body);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.thesis__cols {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem 2.5rem;
+}
+
+.thesis__cols p + p {
+  margin-top: 0.5rem;
+}
+
+.thesis__list {
+  display: grid;
+  gap: 0.45rem;
+  padding-left: 1.1rem;
+  list-style: disc;
+}
+
+.thesis__cta {
+  justify-self: center;
+}
+
+@media (max-width: 700px) {
+  .thesis__cols {
+    grid-template-columns: 1fr;
+  }
+}
