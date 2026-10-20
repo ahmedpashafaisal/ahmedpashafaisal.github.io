@@ -421,7 +421,7 @@
       "rarity": "legendary",
       "year": 2026,
       "status": "Proof of concept, University of Tartu",
-      "genre": "Preparedness simulation",
+      "genre": "Interactive narrative",
       "platforms": [
         "Web"
       ],
@@ -459,7 +459,7 @@
         "orientation": "landscape",
         "focus": "72% 50%"
       },
-      "description": "A preparedness simulation that puts you at home right before a real crisis, preparing for the emergency. Gather supplies, make decisions under pressure, and figure out who to call when things go wrong. Your choices determine how you and your household make it through the storm.",
+      "description": "An interactive narrative about emergency preparedness that puts you at home right before a real crisis. Gather supplies, make decisions under pressure, and figure out who to call when things go wrong. Your choices determine how you and your household make it through the storm.",
       "featured": 3
     },
     {
