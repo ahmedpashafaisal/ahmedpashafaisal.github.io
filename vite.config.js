@@ -14,9 +14,27 @@ const gamePages = existsSync(gamesDir)
     )
   : {};
 
+// The landing car (hero3d.js, three.js) is a dynamic import, so the browser
+// would only start fetching it after the main script runs. Preload it from
+// the landing HTML so the download starts with the page.
+const preloadHero = {
+  name: 'preload-hero3d',
+  apply: 'build',
+  transformIndexHtml: {
+    order: 'post',
+    handler(html, { path, bundle }) {
+      if (path !== '/index.html' || !bundle) return html;
+      const chunk = Object.values(bundle).find((c) => c.type === 'chunk' && c.name === 'hero3d');
+      if (!chunk) return html;
+      return [{ tag: 'link', attrs: { rel: 'modulepreload', crossorigin: true, href: `/${chunk.fileName}` }, injectTo: 'head' }];
+    },
+  },
+};
+
 export default defineConfig({
   root,
   base: '/',
+  plugins: [preloadHero],
   build: {
     outDir: resolve(import.meta.dirname, 'dist'),
     emptyOutDir: true,

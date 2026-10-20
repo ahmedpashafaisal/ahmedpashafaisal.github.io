@@ -28,7 +28,9 @@ function bannerHTML(g, i) {
   const shots = (g.media.shots || [])
     .map(
       (src, k) =>
-        `<img class="banner__shot${k === 0 ? ' is-active' : ''}" src="${esc(src)}" alt="${esc(g.title)} screenshot ${k + 1}" loading="lazy" decoding="async"${g.media.focus && k === 0 ? ` style="object-position: ${esc(g.media.focus)}"` : ''} />`,
+        // data-src, not src: the browser fetches lazy images far ahead of the
+        // screen, which starves the landing car. The observer below sets src.
+        `<img class="banner__shot${k === 0 ? ' is-active' : ''}" data-src="${esc(src)}" alt="${esc(g.title)} screenshot ${k + 1}" decoding="async"${g.media.focus && k === 0 ? ` style="object-position: ${esc(g.media.focus)}"` : ''} />`,
     )
     .join('');
   const links = Object.entries(g.links)
@@ -152,11 +154,26 @@ export function initFeatured(root) {
       shots[index].classList.add('is-active');
     };
 
+    // First screenshot loads just before the banner scrolls into view; the
+    // rest (only needed for the cross-fade) once it is on screen
+    const load = (s) => {
+      if (!s.getAttribute('src')) s.src = s.dataset.src;
+    };
+    if (shots.length) {
+      new IntersectionObserver(
+        ([entry], obs) => {
+          if (!entry.isIntersecting) return;
+          load(shots[0]);
+          obs.disconnect();
+        },
+        { rootMargin: '400px 0px' },
+      ).observe(banner);
+    }
+
     new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          // Load every screenshot once the banner is close
-          shots.forEach((s) => (s.loading = 'eager'));
+          shots.forEach(load);
           if (juicy() && shots.length > 1 && !timer) timer = setInterval(next, SHOT_MS);
           if (!landed) {
             landed = true;
