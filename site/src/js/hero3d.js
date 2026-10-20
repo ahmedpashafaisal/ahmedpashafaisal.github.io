@@ -1,5 +1,5 @@
 // Landing mini-game in three.js: the ink toy car (seen from above, slightly
-// tilted) sits on the landing with a "Point to any idea" bubble. Click
+// tilted) sits on the landing with a "Drive me to an idea" bubble. Click
 // anywhere on the landing and the car drives there and parks (turning,
 // drifting, leaving tyre marks and a smoke trail); hold and move and it
 // follows. It catches the ideas (lightbulbs) that pop up on fixed spots around
@@ -993,7 +993,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
         bubble = document.createElement('span');
         bubble.className = 'car-bubble';
         bubble.setAttribute('aria-hidden', 'true');
-        bubble.innerHTML = '<span>Point to any idea</span>';
+        bubble.innerHTML = '<span>Drive me to an idea</span>';
         canvas.parentElement.append(bubble);
       }
       car.restAt = performance.now() - BUBBLE_REST_MS + 900; // bubble pops up just after the car lands
