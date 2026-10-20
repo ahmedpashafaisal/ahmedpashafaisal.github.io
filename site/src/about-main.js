@@ -25,6 +25,7 @@ import { initClickFx } from './js/clickfx.js';
 import { initScrollCar } from './js/scrollcar.js';
 import { initWipe } from './js/wipe.js';
 import { initTheme } from './js/theme.js';
+import { initMail, copyText } from './js/mail.js';
 import { initHud } from './js/hud.js';
 import { initTabTitle } from './js/tabtitle.js';
 import { initLevelUp } from './js/levelup.js';
@@ -33,24 +34,6 @@ const root = document.querySelector('.about');
 const title = root.querySelector('[data-letters]');
 title.setAttribute('aria-label', title.textContent);
 title.innerHTML = letters(title.textContent);
-
-// Clipboard API first; older execCommand route when the browser refuses
-async function copyText(text) {
-  try {
-    await navigator.clipboard.writeText(text);
-    return true;
-  } catch {
-    const t = document.createElement('textarea');
-    t.value = text;
-    t.setAttribute('readonly', '');
-    t.style.cssText = 'position:fixed;opacity:0';
-    document.body.appendChild(t);
-    t.select();
-    const ok = document.execCommand('copy');
-    t.remove();
-    return ok;
-  }
-}
 
 // Copy buttons: say "Copied!", pop, then go back
 root.querySelectorAll('.about__copy').forEach((btn) => {
@@ -71,6 +54,7 @@ initEggs();
 initClickFx();
 initScrollCar();
 initWipe();
+initMail();
 initTheme();
 initTabTitle();
 initLevelUp(document.querySelector('.site-foot'));

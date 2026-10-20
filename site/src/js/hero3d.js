@@ -251,7 +251,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     walls = [
       ...host.querySelectorAll('.entrance__name, .entrance__line, .entrance__btn'),
       // Corner buttons, while they sit in their corners over the landing
-      ...[...document.querySelectorAll('.sound-toggle, .theme-toggle, .site-pill')].filter((el) => !el.closest('.hud')),
+      ...[...document.querySelectorAll('.sound-toggle, .mail-btn, .theme-toggle, .site-pill')].filter((el) => !el.closest('.hud')),
     ].map(rel);
     const roadW = document.querySelector('.scrollcar') ? 40 : 0;
     area = { l: EDGE, t: EDGE, r: W - EDGE - roadW, b: H - BOTTOM };

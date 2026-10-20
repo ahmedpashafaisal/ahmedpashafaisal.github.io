@@ -36,12 +36,14 @@
 .banner-sep__gem,
 .site-pill:hover,
 .theme-toggle:hover,
+.mail-btn:hover,
 .about__roles li {
   color: var(--on-accent);
 }
 
-/* Theme toggle: round button left of the About button */
-.theme-toggle {
+/* Theme toggle: round button left of the About button (email button left of it) */
+.theme-toggle,
+.mail-btn {
   position: fixed;
   right: calc(16px + 2.75rem + 10px);
   bottom: 16px;
@@ -65,21 +67,57 @@
     background-color var(--t-hover) ease;
 }
 
-.entered .theme-toggle {
+.entered .theme-toggle,
+.entered .mail-btn {
   opacity: 1;
   pointer-events: auto;
 }
 
-.theme-toggle:hover {
+.theme-toggle:hover,
+.mail-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 5px 0 var(--ink);
   background: var(--accent);
 }
 
-.theme-toggle:active {
+.theme-toggle:active,
+.mail-btn:active {
   transform: translateY(2px) scale(0.94);
   box-shadow: 0 1px 0 var(--ink);
   transition-duration: var(--t-press);
+}
+
+.mail-btn {
+  right: calc(16px + 2 * (2.75rem + 10px));
+}
+
+/* "Copied!" bubble above the email button (js/mail.js) */
+.mail-btn__tip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  right: 0;
+  scale: 0;
+  transform-origin: calc(100% - 1.375rem) 100%;
+  padding: 0.3rem 0.7rem;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink);
+  font: 800 0.8rem/1.2 var(--font-display);
+  white-space: nowrap;
+  box-shadow: 0 3px 0 var(--ink);
+  pointer-events: none;
+  transition: scale 180ms ease-in;
+}
+
+.mail-btn__tip b {
+  font-weight: 600;
+  font-family: var(--font-body);
+}
+
+.mail-btn.is-tip .mail-btn__tip {
+  scale: 1;
+  transition: scale 320ms var(--ease-spring);
 }
 
 /* Moon shows in light mode (go dark), sun in dark mode (go light) */
@@ -127,6 +165,7 @@
 /* Buttons inside the bar: same round style, no longer fixed in corners */
 .hud .sound-toggle,
 .hud .theme-toggle,
+.hud .mail-btn,
 .hud .site-pill,
 .hud__btn {
   position: static;

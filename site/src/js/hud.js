@@ -1,7 +1,7 @@
 // Bottom bar (HUD). At the top of a page the buttons sit in their corners as
-// before (sound bottom-left, theme + About bottom-right). Once you scroll, the
+// before (sound bottom-left, email + theme + About bottom-right). Once you scroll, the
 // bar slides up and those buttons move into it, so nothing floats over content:
-//   left: sound · centre: achievements count · right: back to top, theme, About
+//   left: sound · centre: achievements count · right: back to top, email, theme, About
 // Short pages (nothing to scroll) show the bar at once.
 import { juicy } from './motion.js';
 import { sfx } from './sound.js';
@@ -31,6 +31,7 @@ export function initHud() {
   const left = bar.querySelector('.hud__left');
   const right = bar.querySelector('.hud__right');
   const sound = document.querySelector('.sound-toggle');
+  const mail = document.querySelector('.mail-btn');
   const theme = document.querySelector('.theme-toggle');
   const page = document.querySelector('.site-pill');
   let inBar = false;
@@ -39,7 +40,7 @@ export function initHud() {
     inBar = on;
     const home = on ? null : document.body;
     if (sound) (home || left).appendChild(sound);
-    for (const el of [theme, page]) if (el) (home || right).appendChild(el);
+    for (const el of [mail, theme, page]) if (el) (home || right).appendChild(el);
   };
 
   bar.querySelector('.hud__top').addEventListener('click', () => {
