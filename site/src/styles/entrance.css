@@ -1,0 +1,187 @@
+/* Full-screen entrance */
+html.pre-entry {
+  overflow: hidden;
+}
+
+.entrance {
+  position: relative;
+  height: 100vh;
+  height: 100svh;
+  min-height: 520px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.hero-3d {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: manipulation;
+}
+
+.entrance__center {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  padding: 0 16px;
+  text-align: center;
+  pointer-events: none;
+}
+
+.entrance__name {
+  font-size: clamp(2.6rem, 9vw, 6.75rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  transform-origin: 50% 100%;
+}
+
+.entrance__line {
+  margin: 0;
+  max-width: 40ch;
+  text-wrap: balance;
+  font-size: clamp(1.05rem, 2.2vw, 1.4rem);
+  color: var(--ink-soft);
+}
+
+.entrance__btn {
+  margin-top: 1.25rem;
+  pointer-events: auto;
+}
+
+/* Edge toys appear once the visitor is in */
+.entrance__edge {
+  position: absolute;
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 400ms ease 300ms;
+}
+
+.entered .entrance__edge {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.entrance__hint {
+  right: 16px;
+  bottom: 22px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.entered .entrance__hint {
+  pointer-events: none;
+}
+
+.entered .entrance__hint.is-gone {
+  opacity: 0;
+  transition-delay: 0ms;
+}
+
+/* Sound toggle: pinned bottom-left on every screen once the visitor is in */
+.sound-toggle {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+  box-shadow: 0 3px 0 var(--ink);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 400ms ease 300ms,
+    transform var(--t-release) var(--ease-spring),
+    box-shadow var(--t-release) var(--ease-spring),
+    background-color var(--t-hover) ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.entered .sound-toggle {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sound-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 0 var(--ink);
+}
+
+.sound-toggle:active {
+  transform: translateY(2px) scale(0.94);
+  box-shadow: 0 1px 0 var(--ink);
+  transition-duration: var(--t-press);
+}
+
+.sound-toggle[aria-pressed="true"] {
+  background: var(--accent);
+}
+
+.sound-toggle__waves,
+.sound-toggle[aria-pressed="true"] .sound-toggle__mute {
+  display: none;
+}
+
+.sound-toggle[aria-pressed="true"] .sound-toggle__waves {
+  display: inline;
+}
+
+/* Section after the entrance (deck arrives in step 4) */
+.games {
+  min-height: 100vh;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 2.5rem;
+  padding: 5rem 16px 6rem;
+}
+
+.games h2 {
+  font-size: clamp(2rem, 5vw, 3.25rem);
+}
+
+/* Calm parallax, scrubbed by scroll (--p and --q set in js/scroll.js).
+   Uses translate/opacity so it never fights the juicy transforms. */
+.entrance__name {
+  translate: 0 calc(var(--p, 0) * -140px);
+  opacity: calc(1 - var(--p, 0) * 1.3);
+}
+
+.entrance__line {
+  translate: 0 calc(var(--p, 0) * -100px);
+  opacity: calc(1 - var(--p, 0) * 1.6);
+}
+
+.entrance__btn {
+  translate: 0 calc(var(--p, 0) * -60px);
+}
+
+.entrance__center {
+  opacity: calc(1 - var(--p, 0) * 1.1);
+}
+
+.hero-3d {
+  opacity: calc(1 - var(--p, 0) * 0.9);
+}
+
+.entrance__hint {
+  translate: 0 calc(var(--p, 0) * -40px);
+}
+
+.games > * {
+  translate: 0 calc((1 - var(--q, 1)) * 70px);
+  opacity: calc(0.2 + var(--q, 1) * 0.8);
+}

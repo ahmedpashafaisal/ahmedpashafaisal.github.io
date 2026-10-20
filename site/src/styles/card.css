@@ -1,0 +1,262 @@
+/* Game card. Standard trading-card ratio 63 x 88 mm (5:7). */
+.card {
+  --rx: 0deg;
+  --ry: 0deg;
+  --mx: 50%;
+  --my: 50%;
+  width: min(300px, 78vw);
+  aspect-ratio: 63 / 88;
+  position: relative;
+  perspective: 900px;
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.card:focus-visible {
+  outline: none;
+}
+
+.card:focus-visible .card__face {
+  outline: 3px solid var(--ink);
+  outline-offset: 4px;
+}
+
+@property --press {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 1;
+}
+
+/* Tilt + press + idle float layer. Tilt is set from JS; float uses the
+   separate `translate` property so it never fights the transform. */
+.card__tilt {
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transform: rotateX(var(--rx)) rotateY(var(--ry)) scale(var(--press));
+  transition: --press var(--t-release) var(--ease-spring);
+  animation: card-float 3.6s ease-in-out infinite alternate;
+}
+
+.card.is-pressed .card__tilt {
+  --press: 0.96;
+  transition-duration: var(--t-press);
+}
+
+.card:hover .card__tilt,
+.card:hover .card__ground,
+.card:focus-visible .card__tilt,
+.card:focus-visible .card__ground {
+  animation-play-state: paused;
+}
+
+@keyframes card-float {
+  from { translate: 0 0; rotate: -0.6deg; }
+  to { translate: 0 -7px; rotate: 0.6deg; }
+}
+
+/* Soft shadow on the "table": shrinks while the card floats or lifts */
+.card__ground {
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  bottom: -22px;
+  height: 22px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(29, 27, 24, 0.28), rgba(29, 27, 24, 0));
+  pointer-events: none;
+  animation: ground-float 3.6s ease-in-out infinite alternate;
+}
+
+@keyframes ground-float {
+  from { scale: 1; opacity: 1; }
+  to { scale: 0.88 1; opacity: 0.7; }
+}
+
+/* Flip layer: angle set from JS, the juicy motion is a JS animation */
+.card__inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transform: rotateY(var(--flip, 0deg));
+}
+
+.card__face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 0.7rem;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1.5px solid var(--ink);
+  box-shadow: var(--shadow);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+  transition: box-shadow var(--t-hover) ease;
+}
+
+.card:hover .card__face {
+  box-shadow: var(--shadow-lift);
+}
+
+/* Moving glint, follows pointer */
+.card__face::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at var(--mx) var(--my),
+    rgba(255, 255, 255, 0.55),
+    rgba(255, 255, 255, 0) 45%
+  );
+  opacity: 0;
+  mix-blend-mode: soft-light;
+  transition: opacity var(--t-hover) ease;
+  pointer-events: none;
+}
+
+.card:hover .card__face::after {
+  opacity: 1;
+}
+
+.card__back {
+  transform: rotateY(180deg);
+  padding: 1.1rem;
+}
+
+.card__name {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font: 800 1.35rem/1 var(--font-display);
+  padding: 0.15rem 0.2rem 0;
+}
+
+.card__rarity {
+  width: 0.85rem;
+  height: 0.85rem;
+  flex: none;
+  transform: rotate(45deg);
+  border: 1.5px solid var(--ink);
+  background: var(--accent);
+}
+
+.card__art {
+  flex: 1;
+  min-height: 0;
+  border-radius: calc(var(--radius) - 6px);
+  border: 1.5px solid var(--ink);
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.card__art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card__type {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+  padding: 0 0.2rem;
+}
+
+.card__stats {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25rem 0.75rem;
+  margin: 0;
+  padding: 0.6rem 0.7rem;
+  border-radius: calc(var(--radius) - 6px);
+  background: var(--bg);
+  font-size: 0.85rem;
+}
+
+.card__stats dt {
+  font-weight: 700;
+}
+
+.card__stats dd {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.card__blurb {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.card__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+.card__link {
+  padding: 0.45rem 0.9rem;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-decoration: none;
+  background: var(--surface);
+  transition: transform var(--t-release) var(--ease-spring), background-color var(--t-hover) ease;
+}
+
+.card__link:hover {
+  background: var(--accent);
+  transform: translateY(-2px);
+}
+
+.card__link:active {
+  transform: translateY(1px) scale(0.95);
+  transition-duration: var(--t-press);
+}
+
+/* Legendary: one soft light band that slides with tilt (satin, not rainbow) */
+.card[data-rarity="legendary"] .card__front::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.7) 48%,
+    rgba(234, 255, 160, 0.5) 52%,
+    transparent 65%
+  );
+  background-size: 260% 260%;
+  background-position: var(--mx) var(--my);
+  mix-blend-mode: soft-light;
+  opacity: 0;
+  transition: opacity var(--t-hover) ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.card[data-rarity="legendary"]:hover .card__front::before {
+  opacity: 0.8;
+}
+
+/* Legendary: lime rim */
+.card[data-rarity="legendary"] .card__face {
+  box-shadow: 0 0 0 3px var(--accent), var(--shadow);
+}
+
+.card[data-rarity="legendary"]:hover .card__face {
+  box-shadow: 0 0 0 3px var(--accent), var(--shadow-lift);
+}

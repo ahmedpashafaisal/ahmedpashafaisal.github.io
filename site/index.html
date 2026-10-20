@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ahmed Pasha Faisal · Game Designer</title>
+  <meta name="description" content="Ahmed Pasha Faisal, game designer and developer. Shipped mobile games, Steam, and game jams." />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400..700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <canvas class="dot-grid" aria-hidden="true"></canvas>
+
+  <section class="entrance" aria-label="Welcome">
+    <canvas class="hero-3d" aria-hidden="true"></canvas>
+
+    <div class="entrance__center">
+      <h1 class="entrance__name">Ahmed Pasha Faisal</h1>
+      <!-- Placeholder line: Ahmed rewrites -->
+      <p class="entrance__line">I make buttons feel things. Sometimes whole games.</p>
+      <button class="juicy-btn entrance__btn" type="button" data-target="#games" data-after="See games ↓">
+        <span class="entrance__btn-label">Press</span>
+      </button>
+    </div>
+
+    <p class="entrance__edge entrance__hint" aria-hidden="true">psst: poke the shapes</p>
+  </section>
+
+  <button class="sound-toggle" type="button" aria-pressed="false" aria-label="Sound">
+    <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor" />
+      <g class="sound-toggle__waves"><path d="M15.5 9a4 4 0 0 1 0 6" /><path d="M18 6.5a7.5 7.5 0 0 1 0 11" /></g>
+      <g class="sound-toggle__mute"><path d="M16 9.5l5 5" /><path d="M21 9.5l-5 5" /></g>
+    </svg>
+  </button>
+
+  <section class="games" id="games" aria-labelledby="games-title">
+    <h2 id="games-title">Games</h2>
+
+    <!-- Temporary: full deck arrives in step 4 -->
+    <article class="card" data-rarity="legendary" tabindex="0" role="button" aria-pressed="false"
+      aria-label="Sweet Shot card. Press to flip.">
+      <div class="card__tilt">
+        <div class="card__inner">
+          <div class="card__face card__front">
+            <h3 class="card__name">Sweet Shot <span class="card__rarity" title="Legendary"></span></h3>
+            <div class="card__art">
+              <img src="/img/sweet-shot.jpg" alt="Sweet Shot gameplay" width="900" height="506" loading="lazy" />
+            </div>
+            <div class="card__type">Mobile · Physics puzzle</div>
+            <dl class="card__stats">
+              <dt>Role</dt><dd>Project lead, level design, dev</dd>
+              <dt>Platform</dt><dd>iOS, Android</dd>
+            </dl>
+          </div>
+          <div class="card__face card__back">
+            <h3 class="card__name">Sweet Shot</h3>
+            <p class="card__blurb">Placeholder text. Your rewrite goes here in step 6.</p>
+            <div class="card__links">
+              <a class="card__link" href="https://apps.apple.com/ee/app/sweet-shot/id6505140548" target="_blank" rel="noopener">App Store</a>
+              <a class="card__link" href="https://play.google.com/store/apps/details?id=tech.atm.sweetshot&hl=en" target="_blank" rel="noopener">Google Play</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

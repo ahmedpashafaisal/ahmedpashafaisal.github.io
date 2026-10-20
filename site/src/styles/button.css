@@ -1,0 +1,61 @@
+/* Juicy button: squashes fast on press, springs back past rest on release. */
+.juicy-btn {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  min-width: 9rem;
+  padding: 1rem 2.25rem;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--ink);
+  font: 700 1.25rem/1 var(--font-display);
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  box-shadow: 0 4px 0 var(--ink);
+  transform-origin: 50% 100%;
+  transition:
+    transform var(--t-release) var(--ease-spring),
+    box-shadow var(--t-release) var(--ease-spring),
+    background-color var(--t-hover) ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.juicy-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 var(--ink);
+}
+
+.juicy-btn.is-pressed {
+  transform: translateY(4px) scale(1.08, 0.86);
+  box-shadow: 0 0 0 var(--ink);
+  background: var(--accent-deep);
+  transition-duration: var(--t-press);
+  transition-timing-function: var(--ease-out);
+}
+
+/* Combo counter that pops above the button on quick repeat presses */
+.combo {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 0.5rem);
+  font: 800 1rem/1 var(--font-display);
+  color: var(--ink);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* Particles spawned by js/burst.js */
+.burst-particle {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--size, 8px);
+  height: var(--size, 8px);
+  border-radius: 50%;
+  background: var(--color, var(--accent));
+  border: 1.5px solid var(--ink);
+  pointer-events: none;
+  z-index: 50;
+}
