@@ -660,7 +660,7 @@
       "categories": [
         "jams"
       ],
-      "description": "Made for the Ludum Dare 53 game jam. The humans have left Earth, leaving a dead planet behind. The few surviving plants and animals are now dying from high levels of pollution. Yet hope remains. You are one of the last surviving bees on the planet, searching for other members of your tribe. Are they alive? To survive, pollinate as many flowers as you can so the plants can repopulate and fix the Earth. But beware! Earth is not what it was before: it is filled with pollutants, acid rain and mutant species. Do not spend too long in polluted areas; come out for fresh air."
+      "description": "Made for the Ludum Dare 53 game jam, on the theme “Delivery”. The humans have left Earth, leaving a dead planet behind. The few surviving plants and animals are now dying from high levels of pollution. Yet hope remains. You are one of the last surviving bees on the planet, searching for other members of your tribe. Are they alive? To survive, pollinate as many flowers as you can so the plants can repopulate and fix the Earth. But beware! Earth is not what it was before: it is filled with pollutants, acid rain and mutant species. Do not spend too long in polluted areas; come out for fresh air."
     },
     {
       "slug": "the-return",
@@ -682,7 +682,7 @@
       ],
       "blurb": "A journey where Mother Nature waits for “The Run” to return to its roots.",
       "links": {
-        "itch": "https://pashafaisal.itch.io/the-return"
+        "itch": "https://alpyalti.itch.io/the-return"
       },
       "media": {
         "cover": "Images/Portfolio/the-return.png",
@@ -703,7 +703,7 @@
       "categories": [
         "jams"
       ],
-      "description": "Embark on a journey where Mother Nature waits for “The Run” to arrive at their roots. A game jam project made at Global Game Jam, Pärnu, 2023."
+      "description": "Embark on a journey where Mother Nature waits for “The Run” to arrive at their roots. Made at Global Game Jam, Pärnu, 2023, on the theme “Roots”."
     },
     {
       "slug": "eat-the-rich",
@@ -747,7 +747,7 @@
       "categories": [
         "jams"
       ],
-      "description": "Made in a five-day game jam at the Un-Jam workshop, hosted by the Nordic Alliance for Sustainability in Gaming (NASG) in Copenhagen, by a team of five students from different backgrounds. The aim: draw attention to inequality, provoke discussion and ridicule the situation through a fun party game. You play a PR manager trying to hide the terrible truths about your rich client. The Hungry Crowd asks questions to bring the dirty secrets out, and finally throws your rich client into the soup."
+      "description": "Made in a five-day game jam at the Un-Jam workshop, hosted by the Nordic Alliance for Sustainability in Gaming (NASG) in Copenhagen, by a team of five students from different backgrounds, on the theme “Sustainability”. The aim: draw attention to inequality, provoke discussion and ridicule the situation through a fun party game. You play a PR manager trying to hide the terrible truths about your rich client. The Hungry Crowd asks questions to bring the dirty secrets out, and finally throws your rich client into the soup."
     },
     {
       "slug": "space-cricket",
