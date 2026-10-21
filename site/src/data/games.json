@@ -37,13 +37,13 @@
       "builtWith": [
         "Unity"
       ],
-      "role": "Concept, game design, level design, dev",
+      "role": "Concept, game design, level design, development",
       "roleTags": [
         "Core concept",
         "Level design",
         "Physics mechanics",
         "Character customisation",
-        "Unity dev",
+        "Unity development",
         "UI"
       ],
       "blurb": "Blast yourself across one giant level with a bazooka. No jumps. Just recoil, traps and bad decisions.",
@@ -74,31 +74,31 @@
       "description": "Blast yourself with a bazooka across one giant rage-filled level in this brutal physics platformer. Mix and match animal heads and bodies, master precision recoil, and survive deadly traps. No mercy. No jumps. Just you, a bazooka, and bad decisions.",
       "contributions": [
         {
-          "title": "Game Design",
-          "text": "Designed the unique bazooka-based physics mechanics and challenging level structure",
+          "title": "Game design",
+          "text": "Designed the unique bazooka-based physics mechanics and challenging level structure.",
           "bullets": [
-            "Core Concept",
-            "Level Design",
-            "Physics Mechanics",
-            "Character Customization System"
+            "Core concept",
+            "Level design",
+            "Physics mechanics",
+            "Character customisation system"
           ]
         },
         {
-          "title": "Unity Development",
-          "text": "Implemented the core gameplay systems and physics interactions",
+          "title": "Unity development",
+          "text": "Implemented the core gameplay systems and physics interactions.",
           "bullets": [
-            "Physics Implementation",
-            "Character Controller",
-            "Gameplay Mechanics"
+            "Physics implementation",
+            "Character controller",
+            "Gameplay mechanics"
           ]
         },
         {
-          "title": "UI Design",
-          "text": "Created an engaging and intuitive user interface for the game",
+          "title": "UI design",
+          "text": "Created an engaging and intuitive user interface for the game.",
           "bullets": [
-            "UI Design",
-            "Menu Systems",
-            "HUD Elements"
+            "UI design",
+            "Menu systems",
+            "HUD elements"
           ]
         }
       ]
@@ -117,7 +117,7 @@
       "builtWith": [
         "Unity"
       ],
-      "role": "Concept, design, lead dev, UI/UX",
+      "role": "Concept, design, lead development, UI/UX",
       "roleTags": [
         "Level design",
         "Roguelike systems",
@@ -154,35 +154,35 @@
       "categories": [
         "mobile"
       ],
-      "description": "Roguelike mobile game where players lead a growing ant colony through 10 randomized, increasingly difficult levels. Command your ant army as you navigate through procedurally generated environments, collecting resources and facing escalating challenges. Each run offers a unique experience with strategic decisions that determine the survival and growth of your colony.",
+      "description": "A roguelike mobile game where players lead a growing ant colony through 10 randomised, increasingly difficult levels. Command your ant army as you navigate through procedurally generated environments, collecting resources and facing escalating challenges. Each run offers a unique experience, with strategic decisions that determine the survival and growth of your colony.",
       "contributions": [
         {
-          "title": "Game Design",
-          "text": "Designed the core systems and mechanics that make each run unique and engaging",
+          "title": "Game design",
+          "text": "Designed the core systems and mechanics that make each run unique and engaging.",
           "bullets": [
-            "Level Design",
-            "Roguelike Mechanics",
-            "Progression System",
-            "Game Economy",
-            "Game Feedback and Juice"
+            "Level design",
+            "Roguelike mechanics",
+            "Progression system",
+            "Game economy",
+            "Game feedback and juice"
           ]
         },
         {
-          "title": "Lead Development",
-          "text": "Mentored and directed the development team to bring the vision to life",
+          "title": "Lead development",
+          "text": "Mentored and directed the development team to bring the vision to life.",
           "bullets": [
-            "Technical Direction",
-            "Code Review and Mentorship",
-            "Feature Implementation Guidance"
+            "Technical direction",
+            "Code review and mentorship",
+            "Feature implementation guidance"
           ]
         },
         {
-          "title": "UI/UX Design",
-          "text": "Crafted an intuitive and accessible interface for mobile players",
+          "title": "UI/UX design",
+          "text": "Crafted an intuitive and accessible interface for mobile players.",
           "bullets": [
-            "Menu Design",
-            "User Flow",
-            "Interface Layout"
+            "Menu design",
+            "User flow",
+            "Interface layout"
           ]
         }
       ]
@@ -235,34 +235,34 @@
       "categories": [
         "mobile"
       ],
-      "description": "Fast-paced puzzle game where players build roads to guide a speeding car to its destination. Test your quick thinking and spatial awareness as you strategically place road tiles to create the perfect path. Race against time and overcome challenging obstacles to complete each level and master the art of road building.",
+      "description": "A fast-paced puzzle game where players build roads to guide a speeding car to its destination. Test your quick thinking and spatial awareness as you strategically place road tiles to create the perfect path. Race against time and overcome challenging obstacles to complete each level and master the art of road building.",
       "contributions": [
         {
-          "title": "Game Design",
-          "text": "Designed the core gameplay mechanics and progression systems",
+          "title": "Game design",
+          "text": "Designed the core gameplay mechanics and progression systems.",
           "bullets": [
-            "Core Concept",
-            "Level Design",
-            "Game Economy",
-            "Puzzle Mechanics"
+            "Core concept",
+            "Level design",
+            "Game economy",
+            "Puzzle mechanics"
           ]
         },
         {
-          "title": "3D Art",
-          "text": "Created all visual assets to bring the game world to life",
+          "title": "3D art",
+          "text": "Created all visual assets to bring the game world to life.",
           "bullets": [
-            "3D Asset Creation",
-            "Environment Design",
-            "Visual Style"
+            "3D asset creation",
+            "Environment design",
+            "Visual style"
           ]
         },
         {
-          "title": "UI/UX Design",
-          "text": "Crafted an intuitive and engaging user experience",
+          "title": "UI/UX design",
+          "text": "Crafted an intuitive and engaging user experience.",
           "bullets": [
-            "UI Design",
-            "User Flow",
-            "Interface Layout"
+            "UI design",
+            "User flow",
+            "Interface layout"
           ]
         }
       ]
@@ -281,14 +281,14 @@
       "builtWith": [
         "Unity"
       ],
-      "role": "Concept, design, art, music + sound",
+      "role": "Concept, design, art, music and sound",
       "roleTags": [
         "Mirror-movement mechanic",
         "Level design",
         "Difficulty curve",
         "Minimalist art",
         "Music",
-        "SFX"
+        "Sound effects"
       ],
       "blurb": "Two orbs, Yin and Yang, move as mirror images with every swipe. Guide both past spikes and traps until they meet.",
       "links": {
@@ -317,31 +317,31 @@
       "categories": [
         "mobile"
       ],
-      "description": "Welcome to Zen Puzzle Saga – the relaxing yet challenging puzzle game! Step into a world of balance, where Yin & Yang orbs move in perfect reflection every time you swipe. Guide these twin orbs through spiked edges, tricky walls, and cunning traps until they unite on the sacred Harmony tile.",
+      "description": "Welcome to Zen Puzzle Saga, the relaxing yet challenging puzzle game! Step into a world of balance, where Yin and Yang orbs move in perfect reflection every time you swipe. Guide these twin orbs through spiked edges, tricky walls and cunning traps until they unite on the sacred Harmony tile.",
       "contributions": [
         {
-          "title": "Game Design",
+          "title": "Game design",
           "text": "Crafted the core mirror-movement mechanic and level progression, balancing puzzle difficulty from beginner to expert.",
           "bullets": [
             "Designed mirrored orb controls and reflection rules",
-            "Authored & iterated hand crafted levels"
+            "Authored and iterated handcrafted levels"
           ]
         },
         {
-          "title": "Game Art",
-          "text": "Established a minimalist “Zen” aesthetic—clean lines, calming color palette, and ambient UI—to enhance focus and relaxation.",
+          "title": "Game art",
+          "text": "Established a minimalist “Zen” aesthetic (clean lines, a calming colour palette and ambient UI) to enhance focus and relaxation.",
           "bullets": [
-            "Designed Yin & Yang orb sprites",
+            "Designed Yin and Yang orb sprites",
             "Created tilemap assets and UI icons",
             "Composed subtle animations for smooth feedback"
           ]
         },
         {
-          "title": "Sound Design",
+          "title": "Sound design",
           "text": "Created the music from scratch with a relaxing mood.",
           "bullets": [
-            "Created Menu Music",
-            "Created Game Music",
+            "Created menu music",
+            "Created game music",
             "Sound effects"
           ]
         }
@@ -361,13 +361,13 @@
       "builtWith": [
         "Unity"
       ],
-      "role": "Project lead, level design, dev",
+      "role": "Project lead, level design, development",
       "roleTags": [
         "Level design",
         "Puzzle design",
         "Custom physics",
         "Particle effects",
-        "Unity dev"
+        "Unity development"
       ],
       "blurb": "Guide candies from the factory pipeline into the jar. Every level adds a new obstacle to time and outsmart.",
       "links": {
@@ -393,24 +393,24 @@
       "categories": [
         "mobile"
       ],
-      "description": "Hyper casual game with puzzle elements made for mobile. Step into the world of candy making, where you control the flow of delicious candies from the factory pipeline to the jar. Guide colorful candies through tricky factory pipelines and land them perfectly in the jar. But beware-each level is filled with unique challenges and obstacles that test your strategy and timing!",
+      "description": "A hyper-casual game with puzzle elements, made for mobile. Step into the world of candy making, where you control the flow of delicious candies from the factory pipeline to the jar. Guide colourful candies through tricky factory pipelines and land them perfectly in the jar. But beware: each level is filled with unique challenges and obstacles that test your strategy and timing!",
       "contributions": [
         {
-          "title": "Unity Development",
-          "text": "The game has some unique mechanics that I loved to implement",
+          "title": "Unity development",
+          "text": "The game has some unique mechanics that I loved implementing.",
           "bullets": [
-            "Particle Effects",
-            "Gameplay Mechanics",
-            "Custom Physics"
+            "Particle effects",
+            "Gameplay mechanics",
+            "Custom physics"
           ]
         },
         {
-          "title": "Game Design",
-          "text": "I loved designing the levels for this game as it challenged me to create a immersive flow throughout",
+          "title": "Game design",
+          "text": "I loved designing the levels for this game, as it challenged me to create an immersive flow throughout.",
           "bullets": [
-            "Puzzle Design",
-            "Level Design",
-            "Mechanics Design"
+            "Puzzle design",
+            "Level design",
+            "Mechanics design"
           ]
         }
       ]
@@ -476,13 +476,13 @@
       "builtWith": [
         "Unity"
       ],
-      "role": "Concept, design, art direction, Unity dev",
+      "role": "Concept, design, art direction, Unity development",
       "roleTags": [
         "Game design document",
-        "Enemy + ability design",
+        "Enemy and ability design",
         "Shaders",
         "Environment art",
-        "Unity dev"
+        "Unity development"
       ],
       "blurb": "A dark cave, a dimming light, and magic that both helps and haunts you. Find the crystal that could save your village.",
       "links": {
@@ -508,37 +508,37 @@
         "pc-steam"
       ],
       "featured": 2,
-      "description": "Explore the dangerous cave with very limited dimming light and experience the magic that both helps and haunts you. A top-down 2D survival game where you need to find a magic crystal that can potentially save your village.",
+      "description": "Explore a dangerous cave with a very limited, dimming light, and experience the magic that both helps and haunts you. A top-down 2D survival game where you need to find a magic crystal that could save your village.",
       "contributions": [
         {
-          "title": "Game Design",
-          "text": "This is an ongoing project but the overall design of the enemies and player abilities have been finalised.",
+          "title": "Game design",
+          "text": "This is an ongoing project, but the overall design of the enemies and player abilities has been finalised.",
           "bullets": [
-            "Created and updated concept",
-            "Created Game Design Document",
-            "Enemy Behavior and Player Ability Design",
-            "Narrative Design"
+            "Created and updated the concept",
+            "Created the game design document",
+            "Enemy behaviour and player ability design",
+            "Narrative design"
           ]
         },
         {
-          "title": "Game Art",
-          "text": "This was the most interesting and my favourite part of the contribution. I wanted to maintain a unique look to the overall game and create the scary dungeon vibe with the lights and darkness.",
+          "title": "Game art",
+          "text": "This was the most interesting part of my work, and my favourite. I wanted a unique look across the whole game, and a scary dungeon atmosphere made of light and darkness.",
           "bullets": [
-            "Environment Design",
-            "Character design and Animation",
-            "Shader Creation using Unity Shader Graph",
-            "Tilemap Creation"
+            "Environment design",
+            "Character design and animation",
+            "Shader creation with Unity Shader Graph",
+            "Tilemap creation"
           ]
         },
         {
           "title": "Programming (Unity)",
-          "text": "Programming wise this is a very demanding job considering the scale of the game. I have already designed and developed the main systems but need to implement the rest of the enemies.",
+          "text": "Programming-wise, this is a demanding job given the scale of the game. I have designed and developed the main systems, but still need to implement the rest of the enemies.",
           "bullets": [
-            "AI Player Chase System",
-            "Ability System",
-            "Modular Architecture using Scriptable Object",
-            "Event System",
-            "Basic Dialogue System"
+            "AI player chase system",
+            "Ability system",
+            "Modular architecture using ScriptableObjects",
+            "Event system",
+            "Basic dialogue system"
           ]
         }
       ]
@@ -556,7 +556,7 @@
       "builtWith": [
         "Unity"
       ],
-      "role": "Concept, narrative, hand-drawn art, Unity dev",
+      "role": "Concept, narrative, hand-drawn art, Unity development",
       "roleTags": [
         "Narrative design",
         "Ghost-follow mechanic",
@@ -587,34 +587,34 @@
       "categories": [
         "web-games"
       ],
-      "description": "Can you take the helpless ghost back to the forest and pass all the challenges on the way? A point-and-click adventure game made as a project for the Advance Game Development course in the Digital Learning Games program, at Tallinn University.",
+      "description": "Can you take the helpless ghost back to the forest and pass all the challenges on the way? A point-and-click adventure made as a project for the Advanced Game Development course in the Digital Learning Games programme at Tallinn University.",
       "contributions": [
         {
-          "title": "Game Design",
-          "text": "The main objective of this game was to design a point and click adventure with puzzle element. The narrative of this game is very close to me.",
+          "title": "Game design",
+          "text": "The main objective of this game was to design a point-and-click adventure with puzzle elements. The narrative of this game is very close to me.",
           "bullets": [
             "Concept and narrative design",
-            "Character and ghost follow mechanics",
-            "UI Design"
+            "Character and ghost-follow mechanics",
+            "UI design"
           ]
         },
         {
-          "title": "Game Art",
-          "text": "The game art was developed from scratch and I tried to maintain a stylized and personal look to the overall game as the game is trying to tell an emotional story. That's why I have chosen te hand drawn style",
+          "title": "Game art",
+          "text": "The game art was made from scratch. I kept a stylised, personal look across the game because it tells an emotional story. That is why I chose the hand-drawn style.",
           "bullets": [
-            "Hand drawn Environment Design",
-            "Character design and Animation",
-            "Unity Post Processing using URP"
+            "Hand-drawn environment design",
+            "Character design and animation",
+            "Post-processing in Unity (URP)"
           ]
         },
         {
           "title": "Programming (Unity)",
-          "text": "Implementing the logic for this game was very simple, but the requirement was to make the game persistent through scenes. I have learned some advanced architecture during this game.",
+          "text": "The logic for this game was simple, but the game had to stay persistent across scenes. I learned some advanced architecture while making it.",
           "bullets": [
-            "Scene Persistance",
-            "Character and Ghost Mechanics implementation",
-            "Dialogue System",
-            "Event System"
+            "Scene persistence",
+            "Character and ghost mechanics",
+            "Dialogue system",
+            "Event system"
           ]
         }
       ]
@@ -660,7 +660,7 @@
       "categories": [
         "jams"
       ],
-      "description": "Submitted to Ludum Dare 53 Game Jam The humans have left the Earth leaving a dead planet behind. The few surviving plants and animals are now dying due to high level of pollution. Yet, hope remains. You are one of the last surviving bees of the planet, searching for other members of your tribe, are they alive? For your survival you can pollinate as many flowers as you can so the plants can repopulate and fix the Earth. But be aware! Earth is not what it was before, it's filled with pollutants, acid rain and mutant species. Do not spend too much time in the polluted area, come out for fresh air"
+      "description": "Made for the Ludum Dare 53 game jam. The humans have left Earth, leaving a dead planet behind. The few surviving plants and animals are now dying from high levels of pollution. Yet hope remains. You are one of the last surviving bees on the planet, searching for other members of your tribe. Are they alive? To survive, pollinate as many flowers as you can so the plants can repopulate and fix the Earth. But beware! Earth is not what it was before: it is filled with pollutants, acid rain and mutant species. Do not spend too long in polluted areas; come out for fresh air."
     },
     {
       "slug": "the-return",
@@ -680,7 +680,7 @@
         "Concept",
         "Game design"
       ],
-      "blurb": "A journey where mother nature waits for \"The Run\" to return to its roots.",
+      "blurb": "A journey where Mother Nature waits for “The Run” to return to its roots.",
       "links": {
         "itch": "https://pashafaisal.itch.io/the-return"
       },
@@ -703,7 +703,7 @@
       "categories": [
         "jams"
       ],
-      "description": "“Embark on a journey where mother nature awaits “The Run” to arrive at their roots” A game jam project submitted on Global Game Jam, Pärnu, 2023"
+      "description": "Embark on a journey where Mother Nature waits for “The Run” to arrive at their roots. A game jam project made at Global Game Jam, Pärnu, 2023."
     },
     {
       "slug": "eat-the-rich",
@@ -747,7 +747,7 @@
       "categories": [
         "jams"
       ],
-      "description": "Made in a five-day game jam at the Un-Jam workshop, hosted by the Nordic Alliance for Sustainability in Gaming (NASG) in Copenhagen, by a team of five students from different backgrounds. The aim: draw attention to inequality, provoke discussion and ridicule the situation through a fun party game. You play a PR manager trying to hide the terrible truths about your rich client. The Hungry Crowd asks questions to bring the dirty secrets out, and finally throws your Rich into the soup."
+      "description": "Made in a five-day game jam at the Un-Jam workshop, hosted by the Nordic Alliance for Sustainability in Gaming (NASG) in Copenhagen, by a team of five students from different backgrounds. The aim: draw attention to inequality, provoke discussion and ridicule the situation through a fun party game. You play a PR manager trying to hide the terrible truths about your rich client. The Hungry Crowd asks questions to bring the dirty secrets out, and finally throws your rich client into the soup."
     },
     {
       "slug": "space-cricket",
@@ -793,27 +793,27 @@
       "categories": [
         "mobile"
       ],
-      "description": "A simple casual game made for mobile. There is a bat in space, unlike normal cricket bat it’s rotating constantly. However, you can change the direction of rotation by a quick single tap. Timing of your tap is important to swing the bat to hit the target color score. Each color bar represents a unique cricket score. Be careful of the nasty red color stumps. On hitting those you’ll loose wicket. Smashing boundary enables exciting power-ups and increase your trophies. So swing your bat accordingly and try to hit the target of boundary.",
+      "description": "A simple casual game made for mobile. There is a bat in space and, unlike a normal cricket bat, it rotates constantly. A quick single tap changes the direction of rotation. The timing of your tap matters: swing the bat to hit the target colour score. Each colour bar represents a unique cricket score. Watch out for the nasty red stumps: hitting one loses you a wicket. Smashing a boundary unlocks exciting power-ups and earns trophies. So swing your bat carefully and aim for the boundary.",
       "contributions": [
         {
-          "title": "Game Design",
-          "text": "I loved designing this game because of it's simplicity but yet the ability to immerse certain types of audience who loves challenge. The game balancing was also a fun part of designing the game as it involved lots of Playtesting session",
+          "title": "Game design",
+          "text": "I loved designing this game because of its simplicity, and because it still hooks players who love a challenge. Balancing was also a fun part, as it involved many playtesting sessions.",
           "bullets": [
-            "Game Balancing",
-            "Concept Development",
-            "Player Stat System Design",
-            "Two Special mode (Danger and Slog)",
-            "UI Design"
+            "Game balancing",
+            "Concept development",
+            "Player stat system design",
+            "Two special modes (Danger and Slog)",
+            "UI design"
           ]
         },
         {
-          "title": "Game Art",
+          "title": "Game art",
           "text": "",
           "bullets": [
-            "Casual Game Asset",
-            "Interface Design",
-            "Visual Effects",
-            "Marketing Content"
+            "Casual game assets",
+            "Interface design",
+            "Visual effects",
+            "Marketing content"
           ]
         }
       ]
@@ -834,7 +834,7 @@
       ],
       "role": "Economy design, AI, 3D art, UI",
       "roleTags": [
-        "Game economy + currency",
+        "Game economy and currency",
         "AI car behaviour",
         "Shop design",
         "Low-poly 3D (Blender)",
@@ -862,27 +862,27 @@
       "categories": [
         "mobile"
       ],
-      "description": "An isometric casual car control with lots of cute car to choose from. Each car has unique abilities and unlocking them makes the game even more fun.",
+      "description": "An isometric casual car game with lots of cute cars to choose from. Each car has unique abilities, and unlocking them makes the game even more fun.",
       "contributions": [
         {
-          "title": "Game Design",
-          "text": "The most difficult yet satisfying part of game design for this game was to create the Game Economy system. This game involves a complex economy system that allows the player to buy special cars, fuels and other items to make the game more fun and immersive.",
+          "title": "Game design",
+          "text": "The most difficult yet satisfying part of designing this game was the economy system. It lets the player buy special cars, fuel and other items to make the game more fun and immersive.",
           "bullets": [
             "Designed the game economy and virtual currency system",
-            "AI car behavior design",
-            "Shop Design",
-            "UI Design"
+            "AI car behaviour design",
+            "Shop design",
+            "UI design"
           ]
         },
         {
-          "title": "Game Art",
-          "text": "This was the first experience of mine to create a 3d low poly environment. As it was intented for mobile, I had to keep the polycount significantly low. But I love the fact that it turned out decent looking.",
+          "title": "Game art",
+          "text": "This was my first time creating a low-poly 3D environment. As it was intended for mobile, I had to keep the polycount very low, but I love that it turned out looking decent.",
           "bullets": [
-            "3D modeling in Blender",
-            "6 different Car Design",
-            "Isometric Environment Design in Low Poly",
-            "Texturing the assets, optimized for moblie (Baking)",
-            "Created Visual Effects in Unity"
+            "3D modelling in Blender",
+            "6 different car designs",
+            "Low-poly isometric environment design",
+            "Texturing and baking assets optimised for mobile",
+            "Visual effects in Unity"
           ]
         }
       ]
