@@ -20,10 +20,9 @@ A livelier, more custom, fun site built from Ahmed's own idea, with no heavier l
 | End | No end: "rest when you rest" near-miss, anywhere |
 | Game pages | One shared beat; featured 3 keep their own banner beats |
 | Serious pages | Quiet beat (Storm Alert page, About thesis section) |
-| Skip | Fixed corner; does nothing; it is the gag |
 | Return visits | Bulb remembers you: starts closer each visit, never caught |
 | Skimmers | No car game played: the runaway hops off ahead of them when they start scrolling |
-| Car game rounds | One round of 6, no new rounds, no "Brainstorm!" text; the runaway comes back 6 s after leaving ("There you are!") |
+| Car game rounds | One round of 6 (4 or 2 when the screen is too short; the joke works the same), no new rounds, no "Brainstorm!" text; the runaway comes back 6 s after leaving ("There you are!") |
 | Landing hint | Car says "Drive me to an idea" until the first catch, then never again; "Catch me." dropped 22 Oct |
 | Bulb | Existing 3D bulb (`hero3d.js`); the 5 caught bulbs stay plain |
 | Runaway bulb | Eyes beside the filament, no mouth; eyes change with each motion (22 Oct) |
@@ -69,7 +68,6 @@ Core (never said on the site):
 | About | Bulb hovers over the avatar's head. Car: "There you are!" Rays flick, it hops off |
 | About: thesis section | Quiet: no gag |
 | 404 | Bulb sits in the middle: "You found my hiding spot." |
-| Corner Skip | Bulb lines rotate: "Nice try." "Ideas can't be skipped." "Still here." |
 
 ### Rest when you rest (the end that isn't one)
 - Visitor still for ~4 s, any page: bulb stops, settles, slowly edges closer.
@@ -96,6 +94,7 @@ Core (never said on the site):
 | Fonts flagged as template | Fonts kept; only shapes change | Ahmed, after the font comparison |
 | Lime pills with hard black shadow | Kept ("Glass" built, then reverted) | Ahmed: old look better in light mode |
 | Bulb: no face, acts through motion only | Runaway bulb gets eyes (beside the filament); 5 caught stay plain | Feelings looked alike; eyes mark the one that got away |
+| Fake Skip top-right on every page (the gag) | Dropped; step 5c is resting only | Ahmed: nothing blocks, so no Skip needed |
 
 ## Defaults I picked (not asked)
 | Default | Why |
@@ -103,10 +102,16 @@ Core (never said on the site):
 | Kit (fonts, buttons, shadows) site-wide in wave 1 | One look at all times |
 | Beat plays on scroll into view, once per visit | Never blocks; works without hover |
 | Bulb never covers text/buttons/cards; click-through | Rule: nothing blocks clicks |
-| Skip spot: top-right; toasts move below it | Bottom corners full; top-left = back button |
 | Car shouts in the existing ink bubble; bulb lines in a small lime bubble | Two voices told apart at a glance |
 | New achievement "So close" (23rd) on first near-miss | Visible payoff, existing system |
 | Rest trigger: ~4 s with no scroll, pointer or key input | Long enough to mean "stopped" |
+| Rest, landing: 3D runaway creeps up on the parked car to ~110 px; reaching for it: dodge + "So close!" (not one of the 3 dodges) | Car is right there; closer than a chase ever gets |
+| Rest, other pages: SVG bulb at a random free spot in the empty strips beside the page, random entrance (tiptoe, drop, pop); edges up to 4 hops toward the cursor's height; nods off if still 12 s | Fresh every time (Ahmed, 22 Oct); never on text |
+| Rest, no strip (phones, narrow windows): peeks from a side edge at a random row among those with the least page under it; entrance slide, drop or pop | Text stays readable |
+| Rest: never the same spot area or entrance twice in a row, for the whole visit | Fresh every time |
+| Rest leaves quietly on scroll, typing, or 5 s busy elsewhere; at most once per 30 s | Reading looks like resting |
+| Rest bulb loads on the first rest (lazy) | No first-load weight |
+| "So close!" on other pages: car's ink bubble at the pointer | Car = visitor, same voice |
 | Reduced motion: still poses, no hops | Accessibility |
 | Copy: Claude drafts, Ahmed rewrites; sentence case, UK spelling, no em dashes | Existing copy rules |
 | SVG twin inline, ≤ 5 KB; colours from CSS tokens (dark mode follows) | Budget, one source of colour |
@@ -123,7 +128,7 @@ Core (never said on the site):
 | 4 | Kit test | 2–3 button/font/card-frame sets from the bulb's look on one page; Ahmed picks | 2–3 h |
 | 5a | Wave 1a: Glass look everywhere (reverted) | Buttons, labels, game cards, picture frames, speech bubbles on all pages; dark mode outlines cream | 2–3 h |
 | 5b | Wave 1b: Landing joke | Last bulb left wakes up (3D eyes), dodges, hops off toward the games (or on scroll: a random one); "Hey! Come back!"; visit memory | 2–3 h |
-| 5c | Wave 1c: Skip + resting | Fake Skip top-right on every page (toasts move below); rest when you rest + "So close!" | 2 h |
+| 5c | Wave 1c: Resting | Rest when you rest + "So close!" (Skip dropped 22 Oct) | 3 h |
 | 6 | Wave 2: Featured + deck | Layouts; 3 banner beats; card beat ("Nope, not a game yet.") | ½ day |
 | 7 | Wave 3: Game pages | Template layout; shared peek beat; quiet beat on Storm Alert | 2–3 h |
 | 8 | Wave 4: About, footer, 404 | Head beat + "There you are!"; quiet thesis section; 404 beat; "So close" achievement | 2–3 h |

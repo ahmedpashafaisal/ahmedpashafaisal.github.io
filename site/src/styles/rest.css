@@ -1,0 +1,34 @@
+/* Rest when you rest (js/rest.js): the runaway bulb beside the page. A
+   full-screen click-through layer clips it at the screen edges. */
+.rest-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 26; /* over the scroll-car road, under the toast and the lightbox */
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Mouse screens: the right edge is the scroll-car road's (js/scrollcar.js) */
+.has-scrollcar .rest-layer { right: 40px; }
+
+/* Position (translate) slides one hop at a time; .rest__hop does the arc */
+.rest {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: translate 420ms ease-in-out;
+}
+
+.rest__hop { transform-origin: 50% 95%; }
+
+/* Peeking from behind the side edge: leans in, so its eyes clear the edge */
+.rest--peek .rest__hop { rotate: calc(var(--in) * 18deg); }
+
+.rest .bulb { display: block; }
+
+/* "So close!": the car's ink bubble (entrance.css), placed at the pointer */
+.rest-shout { z-index: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .rest { transition: none; }
+}

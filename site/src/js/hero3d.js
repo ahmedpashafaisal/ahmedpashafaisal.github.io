@@ -6,7 +6,8 @@
 // spots around the name. The name, the line and the button are walls: the
 // car drives round them and bounces off if it clips one.
 //
-// The runaway idea: there is one round of 6. Catch them in any order; the
+// The runaway idea: there is one round of 6 (4 or 2 when the screen is too
+// short for the rest). Catch them in any order; the
 // last one left will not be caught. When the car comes close it opens its
 // eyes and hops away (a little closer each visit, never close enough) while
 // the car reacts ("What the…!", "Hold still!", "Seriously?!"). After 3
@@ -14,6 +15,9 @@
 // ("Hey! Come back!"). No new round: a few seconds later it hops back in
 // ("There you are!") and the chase can start again. A visitor who scrolls
 // without playing sees a random bulb wake up and hop off the same way.
+// Rest when you rest: the visitor stops (no input for REST_MS) and the
+// runaway sneaks up on the parked car, closer than a chase ever gets it; the
+// car reaching for it sets it off only at the last moment ("So close!").
 //
 // Physics runs in canvas pixels (simple car: engine along the heading,
 // sideways grip so it drifts in fast turns; it can only turn while moving, so
@@ -28,6 +32,7 @@ import { readStats } from './achievements.js';
 import { burst } from './burst.js';
 import { sendShock } from './dotgrid.js';
 import { juicy, reducedMotion } from './motion.js';
+import { REST_MS, landingHolds, stillFor } from './rest.js';
 import { sfx } from './sound.js';
 
 const INK = 0x1d1b18;
@@ -66,6 +71,10 @@ const IDLE_ESCAPE_MS = 8000; // chase stopped this long after a dodge: it leaves
 const HOP_MS = 420; // one dodge hop
 const ESCAPE_MS = 900; // the hop off the landing
 const SHOUT_MS = 1800; // "Hey! Come back!" stays up this long
+const CREEP_GAP = 110; // resting: the runaway sneaks up to this far from the parked car...
+const CREEP_STEP = 30; // ...in hops this long...
+const CREEP_MS = 800; // ...this far apart
+const NEAR_R = 85; // crept up: hops off only when the moving car comes this close
 const MARK_LIFE = 1.6; // s, tyre marks fade out
 const SMOKE_LIFE = 0.7; // s
 
@@ -276,7 +285,6 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   let runawayDone = false; // escaped: later rounds are normal
   let shoutUntil = 0;
   let howTo = true; // "Drive me to an idea" until the first catch
-  let caught = 0;
   let returnAt = 0; // when the runaway comes back after hopping off
   const visits = Math.max(1, readStats().visits || 1);
   const dodgeR = Math.max(DODGE_MIN_R, DODGE_R - (visits - 1) * DODGE_STEP);
@@ -388,9 +396,10 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
       const waiting = Math.hypot(x - car.x, y - car.y) < PICK_R + carLen * 0.2 + 20;
       ideas.push({ g, x, y, hx: x, hy: y, vx: 0, vy: 0, pop: 0, popV: 0, delay: now + i * 140, phase: i * 0.9, mirror, gone: false, waiting });
     });
-    // First round: no bulb is picked yet; the last one left becomes the runaway
+    // First round: no bulb is picked yet; the last one left becomes the
+    // runaway. Short screens fit fewer (4 or 2): the joke works the same.
     runaway = null;
-    firstRound = !runawayDone && ideas.length === WAVE;
+    firstRound = !runawayDone && ideas.length >= 2;
     waveBusy = false;
   }
 
@@ -436,10 +445,42 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     it.vx = it.vy = 0;
     it.nextDodge = now + DODGE_MS;
     it.lastDodge = now;
-    it.dodges += 1;
     it.winkUntil = now + 700;
-    shout(DODGE_LINES[Math.min(it.dodges, DODGE_LINES.length) - 1], now);
+    // A near miss after resting is not one of the 3 dodges before it leaves
+    if (it.crept) {
+      it.crept = false;
+      shout('So close!', now);
+    } else {
+      it.dodges += 1;
+      shout(DODGE_LINES[Math.min(it.dodges, DODGE_LINES.length) - 1], now);
+    }
     sfx.thump();
+  }
+
+  // Rest when you rest: the visitor has stopped and the car is parked, so the
+  // runaway sneaks up on it in small hops and stops just short (CREEP_GAP)
+  function creep(it, now, d) {
+    if (stillFor() < REST_MS || !landingHolds() || Math.hypot(car.vx, car.vy) > 5) return;
+    it.calmAt = now; // no idle escape while the visitor rests
+    if (d <= CREEP_GAP + 4 || now < (it.nextCreep || 0)) return;
+    // Straight at the car, or round a wall at an angle while that still gets
+    // it closer; boxed in: it waits where it is
+    const step = Math.min(CREEP_STEP, d - CREEP_GAP);
+    const a0 = Math.atan2(car.y - it.y, car.x - it.x);
+    let x = 0;
+    let y = 0;
+    const ok = [0, 0.6, -0.6, 1.1, -1.1].some((da) => {
+      x = it.x + Math.cos(a0 + da) * step;
+      y = it.y + Math.sin(a0 + da) * step;
+      return free(x, y, 30) && Math.hypot(car.x - x, car.y - y) < d - 4;
+    });
+    if (!ok) return;
+    openEyes(it, now);
+    it.crept = true;
+    it.nextCreep = now + CREEP_MS;
+    it.hop = { x0: it.x, y0: it.y, x1: x, y1: y, t0: now, ms: 320, lift: 14 };
+    it.hx = x;
+    it.hy = y;
   }
 
   // The car (the visitor) talks back: one line in its bubble for SHOUT_MS
@@ -541,13 +582,15 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
       howTo = false;
       if (!shoutUntil) bubble?.classList.remove('is-on');
     }
-    // Every idea but one: that is the "Brainstorm" achievement now (no text,
-    // no new round), and the one left becomes the runaway
-    caught += 1;
-    if (firstRound && caught === WAVE - 1) onWave?.();
+    // Every idea but one (however many fit the screen): that is the
+    // "Brainstorm" achievement now (no text, no new round), and the one left
+    // becomes the runaway
     if (firstRound && !runaway) {
       const left = ideas.filter((o) => !o.gone);
-      if (left.length === 1) makeRunaway(left[0]);
+      if (left.length === 1) {
+        onWave?.();
+        makeRunaway(left[0]);
+      }
     }
     chain = now - chainAt < 1400 ? chain + 1 : 0;
     chainAt = now;
@@ -911,10 +954,19 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
           it.y = MathUtils.lerp(it.hop.y0, it.hop.y1, k);
           if (k >= 1 && !it.escaping) it.hop = null;
         } else if (!it.escaping) {
-          const chased = d < dodgeR && now >= it.nextDodge && Math.hypot(car.vx, car.vy) > 40;
-          if (chased && it.dodges >= DODGES) escape(now);
-          else if (chased) dodge(it, now, d);
-          else if (it.lastDodge && now - it.lastDodge > IDLE_ESCAPE_MS) escape(now);
+          const moving = Math.hypot(car.vx, car.vy) > 40;
+          if (it.crept) {
+            // Crept up while the visitor rested: only a car reaching for it
+            // sets it off, at the last moment; a car driving off ends it
+            if (moving && d < NEAR_R) dodge(it, now, d);
+            else if (moving && d > CREEP_GAP + 60 && car.vx * dx + car.vy * dy > 0) it.crept = false;
+          } else {
+            const chased = d < dodgeR && now >= it.nextDodge && moving;
+            if (chased && it.dodges >= DODGES) escape(now);
+            else if (chased) dodge(it, now, d);
+            else if (it.lastDodge && now - Math.max(it.lastDodge, it.calmAt || 0) > IDLE_ESCAPE_MS) escape(now);
+          }
+          if (!it.hop && !it.escaping) creep(it, now, d);
         }
         continue;
       }
