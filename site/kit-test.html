@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kit test</title>
+  <!-- Dev only (npm run dev → /kit-test.html). Not a build input, never deployed.
+       Step 4 of the runaway idea plan: three component sets, each grown from one
+       part of the bulb (glass, thread, filament), plus a heading font row. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400..700&family=Bagel+Fat+One&family=Bowlby+One&family=Dela+Gothic+One&family=Gluten:wght@800&display=swap" rel="stylesheet" />
+  <style>
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 400 1rem/1.5 var(--font-body); }
+    main { max-width: 84rem; margin: 0 auto; padding: 2rem 1rem 4rem; }
+    h1 { font: 800 2rem/1.1 var(--font-display); margin: 0 0 0.5rem; }
+    .note { margin: 0 0 1rem; color: var(--ink-soft); }
+    .bar { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.75rem 0 1.5rem; }
+    .bar button { font: 600 0.95rem var(--font-body); padding: 0.45rem 0.9rem; border: 2px solid var(--ink); border-radius: 999px; background: var(--surface); color: var(--ink); cursor: pointer; }
+    .bar button[aria-pressed="true"] { background: var(--accent); color: #1d1b18; }
+    .sets { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem; }
+    @media (max-width: 1100px) { .sets { grid-template-columns: 1fr; max-width: 30rem; margin: 0 auto; } }
+    .kit { display: grid; gap: 1.5rem; align-content: start; }
+    .kit__name { font: 800 1.6rem/1 var(--font-display); margin: 0; display: flex; align-items: center; gap: 0.5rem; }
+    .kit__from { margin: -1rem 0 0; color: var(--ink-soft); font-size: 0.9rem; }
+    .kit h3 { font: 800 2.2rem/1 var(--font-display); margin: 0 0 0.4rem; }
+    .kit p { margin: 0 0 0.9rem; }
+    .meta { font: 700 0.72rem/1.2 var(--font-body); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); }
+    .row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; }
+    .btn, .chip { font: 700 1rem/1 var(--font-display); color: #1d1b18; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .chip { font: 600 0.85rem/1 var(--font-body); color: var(--ink); }
+    .card { position: relative; width: 15rem; max-width: 100%; aspect-ratio: 5 / 7; display: grid; grid-template-rows: auto 1fr auto auto; gap: 0.5rem; padding: 0.7rem; box-sizing: border-box; background: var(--cat-pc-steam); }
+    .card__title { font: 800 1.15rem/1 var(--font-display); display: flex; justify-content: space-between; align-items: center; }
+    .card__art { background: center / cover url(/img/cards/wildling.jpg); min-height: 0; }
+    .card__role { background: var(--surface); padding: 0.5rem 0.6rem; font-size: 0.8rem; line-height: 1.35; }
+    .banner { display: grid; grid-template-columns: 1fr; gap: 0.9rem; }
+    .banner__img { aspect-ratio: 16 / 9; background: center / cover url(/img/shots/wildling/1.jpg); }
+    .bubbles { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 1rem; }
+    .bubble { position: relative; padding: 0.45rem 0.8rem; font: 700 0.9rem/1.2 var(--font-body); }
+    .bubble--car { background: var(--ink); color: var(--bg); }
+    .bubble--bulb { background: var(--accent); color: #1d1b18; }
+    .bulb-spot { cursor: pointer; }
+    .bulb-spot .bulb { pointer-events: none; }
+
+    /* ---------- Glass: round, two-tone toon fill, glow instead of hard shadows ---------- */
+    .kit--glass .btn {
+      padding: 0.95rem 1.8rem; border: 2px solid #1d1b18; border-radius: 999px;
+      background: radial-gradient(120% 140% at 68% 18%, #e2ff57 0 38%, var(--accent) 39% 72%, #b5e600 73%);
+      box-shadow: 0 0 0 6px rgba(202, 255, 0, 0.25), 0 10px 22px -8px rgba(159, 204, 0, 0.75);
+      transition: transform var(--t-release) var(--ease-spring), box-shadow var(--t-release) var(--ease-spring);
+    }
+    .kit--glass .btn:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 0 0 10px rgba(202, 255, 0, 0.32), 0 14px 26px -8px rgba(159, 204, 0, 0.85); }
+    .kit--glass .btn:active { transform: scale(1.06, 0.88); box-shadow: 0 0 0 14px rgba(202, 255, 0, 0.4), 0 4px 10px -6px rgba(159, 204, 0, 0.8); transition-duration: var(--t-press); }
+    .kit--glass .chip { padding: 0.5rem 0.9rem; border: 2px solid var(--ink); border-radius: 999px; background: radial-gradient(120% 140% at 68% 18%, var(--surface) 0 60%, var(--bg) 61%); box-shadow: 0 0 0 4px rgba(202, 255, 0, 0.18); }
+    .kit--glass .card { border: 2px solid #1d1b18; border-radius: 24px; box-shadow: 0 0 0 8px rgba(202, 255, 0, 0.2); transition: transform var(--t-release) var(--ease-spring), box-shadow var(--t-release) ease; }
+    .kit--glass .card:hover { transform: translateY(-6px); box-shadow: 0 0 0 12px rgba(202, 255, 0, 0.35), 0 18px 30px -12px rgba(159, 204, 0, 0.7); }
+    .kit--glass .card__art, .kit--glass .card__role { border-radius: 16px; }
+    .kit--glass .banner__img { border: 2px solid #1d1b18; border-radius: 28px; box-shadow: 0 0 0 8px rgba(202, 255, 0, 0.2); }
+    .kit--glass .bubble { border-radius: 999px; box-shadow: 0 0 0 5px rgba(202, 255, 0, 0.22); }
+
+    /* ---------- Thread: chunky, ribbed bottom like the screw base; press screws in ---------- */
+    .kit--thread .btn {
+      padding: 0.95rem 1.6rem; border: 2px solid #1d1b18; border-radius: 12px; background: var(--accent);
+      box-shadow: 0 4px 0 var(--bg), 0 6px 0 var(--ink), 0 10px 0 var(--bg), 0 12px 0 var(--ink);
+      transform-origin: 50% 100%;
+      transition: transform var(--t-release) var(--ease-spring), box-shadow var(--t-release) var(--ease-spring);
+    }
+    .kit--thread .btn:hover { transform: translateY(-2px) rotate(-1deg); }
+    .kit--thread .btn:active { transform: translateY(8px) rotate(-3deg) scale(1.03, 0.94); box-shadow: 0 2px 0 var(--bg), 0 4px 0 var(--ink); transition-duration: var(--t-press); }
+    .kit--thread .chip { padding: 0.5rem 0.85rem; border: 2px solid var(--ink); border-radius: 8px; background: var(--surface); box-shadow: 0 3px 0 var(--bg), 0 5px 0 var(--ink); }
+    .kit--thread .card { border: 2px solid #1d1b18; border-radius: 12px; box-shadow: 0 5px 0 var(--bg), 0 7px 0 var(--ink), 0 11px 0 var(--bg), 0 13px 0 var(--ink); padding-bottom: 1.6rem; transition: transform var(--t-release) var(--ease-spring); }
+    .kit--thread .card::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1rem; border-radius: 0 0 10px 10px; background: repeating-linear-gradient(180deg, #5c5750 0 4px, #1d1b18 4px 5px); }
+    .kit--thread .card:hover { transform: translateY(-4px) rotate(-1deg); }
+    .kit--thread .card__art, .kit--thread .card__role { border-radius: 6px; }
+    .kit--thread .banner__img { border: 2px solid #1d1b18; border-radius: 12px; box-shadow: 0 5px 0 var(--bg), 0 7px 0 var(--ink), 0 11px 0 var(--bg), 0 13px 0 var(--ink); }
+    .kit--thread .bubble { border-radius: 8px; box-shadow: 0 3px 0 var(--bg), 0 5px 0 var(--ink); }
+    .kit--thread .bubble--car { box-shadow: 0 3px 0 var(--bg), 0 5px 0 var(--ink-soft); }
+
+    /* ---------- Filament: ink line only, arch-topped (∩) tabs, wiggles; double line, no shadow ---------- */
+    .kit--filament .btn {
+      padding: 1rem 1.7rem 0.85rem; border: 2.5px solid var(--ink); border-radius: 999px 999px 10px 10px; background: var(--surface); color: var(--ink);
+      box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--ink);
+      transition: background-color var(--t-hover) ease, color var(--t-hover) ease;
+    }
+    .kit--filament .btn:hover { background: var(--accent); color: #1d1b18; animation: kit-wiggle 0.36s ease-in-out; }
+    .kit--filament .btn:active { transform: scale(0.95, 0.9); }
+    .kit--filament .chip { padding: 0.55rem 0.9rem 0.45rem; border: 2px solid var(--ink); border-radius: 999px 999px 6px 6px; background: transparent; }
+    .kit--filament .chip:hover { animation: kit-wiggle 0.36s ease-in-out; }
+    .kit--filament .card { border: 2.5px solid var(--ink); border-radius: 18px; margin-top: 18px; box-shadow: 0 0 0 4px var(--bg), 0 0 0 6px var(--ink); }
+    .kit--filament .card::before { content: ""; position: absolute; top: -26px; left: 50%; width: 26px; height: 18px; margin-left: -15px; border: 2.5px solid var(--ink); border-bottom: 0; border-radius: 14px 14px 0 0; }
+    .kit--filament .card:hover { animation: kit-wiggle 0.4s ease-in-out; }
+    .kit--filament .card__art, .kit--filament .card__role { border-radius: 10px; border: 2px solid var(--ink); }
+    .kit--filament .banner__img { border: 2.5px solid var(--ink); border-radius: 22px; box-shadow: 0 0 0 4px var(--bg), 0 0 0 6px var(--ink); }
+    .kit--filament .bubble { border-radius: 999px 999px 8px 8px; border: 2px solid var(--ink); }
+    .kit--filament .bubble--car { border-color: var(--ink); }
+
+    @keyframes kit-wiggle {
+      0%, 100% { transform: none; }
+      25% { transform: rotate(-2.5deg); }
+      75% { transform: rotate(2.5deg); }
+    }
+
+    /* ---------- Heading fonts ---------- */
+    .fonts { display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: 1.25rem; margin-top: 1rem; }
+    .font { padding: 1rem 1.1rem; border: 1px solid var(--line); border-radius: 14px; }
+    .font__label { font: 600 0.8rem var(--font-body); color: var(--ink-soft); margin: 0 0 0.6rem; }
+    .font__name { font-size: 2.1rem; line-height: 1; margin: 0 0 0.5rem; }
+    .font__head { font-size: 1.5rem; line-height: 1.1; margin: 0 0 0.4rem; }
+    .font p { margin: 0; }
+    .font p:last-child { font-size: 0.95rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Kit test</h1>
+    <p class="note">Dev only. Three sets, each grown from one part of the bulb. Same content in each; fonts are today's (Bricolage Grotesque, Figtree) so only the shapes differ. Hover and press the buttons, chips and cards. Click a bulb.</p>
+    <div class="bar" id="theme">
+      <button data-theme-set="light" aria-pressed="true">Light</button>
+      <button data-theme-set="dark" aria-pressed="false">Dark</button>
+    </div>
+
+    <div class="sets" id="sets"></div>
+
+    <h1 style="margin-top: 3rem">Heading fonts</h1>
+    <p class="note">Body text stays Figtree in every box. Today's heading font first.</p>
+    <div class="fonts" id="fonts"></div>
+  </main>
+
+  <script type="module">
+    import './src/styles/tokens.css';
+    import './src/styles/theme.css';
+    import './src/styles/bulb.css';
+    import { makeBulb, play } from './src/js/bulb.js';
+
+    const SETS = [
+      ['glass', 'Glass', 'From the round lime glass: two-tone fill, glow instead of hard shadows.'],
+      ['thread', 'Thread', 'From the screw base: ribbed bottoms, press screws in.'],
+      ['filament', 'Filament', 'From the ink ∩ line: outline only, arch-topped tabs, wiggle.'],
+    ];
+    const kit = ([key, name, from]) => `
+      <section class="kit kit--${key}" data-kit="${key}">
+        <h2 class="kit__name"><span class="bulb-spot"></span>${name}</h2>
+        <p class="kit__from">${from}</p>
+        <div>
+          <div class="meta">2025 · PC (Steam) · Rage platformer</div>
+          <h3>Wildlings</h3>
+          <p>Blast yourself across one giant level with a bazooka. No jumps. Just recoil, traps and bad decisions.</p>
+          <div class="row">
+            <button class="btn" data-test="btn">See more →</button>
+            <button class="chip" data-test="chip">Steam</button>
+            <span class="chip">Rage platformer</span>
+          </div>
+        </div>
+        <div class="card" data-test="card">
+          <div class="card__title">Wildlings <span>◆</span></div>
+          <div class="card__art"></div>
+          <div class="meta">PC (Steam) · Rage platformer</div>
+          <div class="card__role"><b>Role</b> Concept, game design, level design, development</div>
+        </div>
+        <div class="banner">
+          <div class="banner__img"></div>
+        </div>
+        <div class="bubbles">
+          <span class="bubble bubble--car">Hey! Come back!</span>
+          <span class="bubble bubble--bulb">Catch me.</span>
+        </div>
+      </section>`;
+    const sets = document.getElementById('sets');
+    sets.innerHTML = SETS.map(kit).join('');
+    sets.querySelectorAll('.bulb-spot').forEach((spot, i) => {
+      const b = makeBulb({ size: 44, phase: i * 0.33, eyes: true });
+      spot.append(b);
+      spot.addEventListener('click', () => play(b, ['laugh', 'show-off', 'dodge'][i]));
+    });
+
+    const FONTS = [
+      ['Bricolage Grotesque (today)', "'Bricolage Grotesque'", 800],
+      ['Bagel Fat One', "'Bagel Fat One'", 400],
+      ['Bowlby One', "'Bowlby One'", 400],
+      ['Dela Gothic One', "'Dela Gothic One'", 400],
+      ['Gluten', 'Gluten', 800],
+    ];
+    document.getElementById('fonts').innerHTML = FONTS.map(([label, family, weight]) => `
+      <div class="font">
+        <p class="font__label">${label}</p>
+        <p class="font__name" style="font-family: ${family}; font-weight: ${weight}">Ahmed Pasha Faisal</p>
+        <p class="font__head" style="font-family: ${family}; font-weight: ${weight}">Featured · All games</p>
+        <p>Blast yourself across one giant level with a bazooka. No jumps. Just recoil, traps and bad decisions.</p>
+      </div>`).join('');
+
+    const themeBar = document.getElementById('theme');
+    themeBar.addEventListener('click', (e) => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      document.documentElement.dataset.theme = btn.dataset.themeSet;
+      themeBar.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', b === btn));
+    });
+  </script>
+</body>
+</html>

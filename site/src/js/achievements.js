@@ -14,7 +14,7 @@ const TABS = data.categories.length + 1; // + "All"
 export const LIST = [
   { id: 'enter', title: 'Press Start', text: 'Pressed the big button.' },
   { id: 'idea10', title: 'Bright Idea', text: 'Caught 10 ideas with the car.' },
-  { id: 'storm', title: 'Brainstorm', text: 'Caught a whole wave of ideas.' },
+  { id: 'storm', title: 'Brainstorm', text: 'Caught every idea but one.' },
   { id: 'flip', title: 'Card Shark', text: 'Flipped 5 cards.' },
   { id: 'tabs', title: 'Window Shopper', text: 'Tried every tab.' },
   { id: 'bottom', title: 'Rock Bottom', text: 'Scrolled to the very end.' },

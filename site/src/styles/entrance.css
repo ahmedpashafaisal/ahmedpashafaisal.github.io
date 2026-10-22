@@ -185,7 +185,8 @@ html.pre-entry {
   opacity: calc(1 - var(--p, 0) * 0.9);
 }
 
-/* "Drive me to an idea" bubble over the car (hero3d.js moves it; pops in when the car rests) */
+/* "Drive me to an idea" bubble over the car (hero3d.js moves it; pops in when
+   the car rests). The same bubble shouts "Hey! Come back!" at the runaway idea. */
 .car-bubble {
   position: absolute;
   left: 0;
