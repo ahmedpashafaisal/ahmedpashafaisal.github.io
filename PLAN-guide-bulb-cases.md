@@ -25,10 +25,40 @@ Plan: [PLAN-guide-bulb.md](PLAN-guide-bulb.md).
 - Route-round-walls code (`route`, corner waypoints) becomes unused: remove it.
 - Screen follows whenever the visitor drives (keys, click, tap), anywhere.
 - Click or tap drives anywhere except `a, button, input, select, textarea, label, summary, [role="button"]`, game covers and banner pictures (D1: drag on text selects).
-- Keys: WASD always; arrows after the first drive (D2). Only while the car is on screen.
+- Keys: WASD always; arrows on the landing as today, below it only after the first drive (D2). Only while the car is on screen.
 - Canvas `pointer-events: none` always; one document listener for clicks.
 - Landing round (catch 5, runaway dodges) works as today on top of this.
 - Done when: drive top to bottom and back with keys, screen follows both ways; landing round unchanged; clicks on buttons and covers still work.
+
+#### G1 as built (23 Oct)
+| Part | What |
+|---|---|
+| Layer | `.game-layer` in `body`: fx canvas, 3D canvas, bubble. z 15, clicks pass through |
+| Pinned to the page | Layer is part of the page, moved back over the screen each frame (`place()`) |
+| Why not fixed | A fixed layer lags a frame behind the scroll: car would wobble on the page |
+| Page length | Layer never reaches past the footer, so the page never grows |
+| Car area | Whole page, clear of the bottom button bar. No walls |
+| Bulb area | Landing only (`land`), as before |
+| Screen follows | Keys, held mouse, clicks, taps. Only while the car is on screen and moving up or down |
+| Landing exception | The screen waits until the car leaves the landing: the round never moves the page |
+| Held mouse | Target stays on the page (a target tied to the screen made the page scroll on and on) |
+| Clicks | Blocked: links, buttons, form parts, pictures, banner media, HUD, scroll car |
+| Text | Click drives; drag selects |
+| Keys | WASD while the car is on screen. Arrows: landing, or after the first drive |
+| Car left down the page | Drives back in to the landing when you return there (S3b, until G4) |
+| Runaway | As S3b: stops at Featured, All games, footer, then home (G2 replaces) |
+| Sleep | Loop sleeps when nothing moves on screen; scroll or input wakes it |
+| `rest.js` | `landingHolds()` reads `.entrance`, not the canvas |
+| Removed | Chase mode (`out`, `goOut`, `goHome`, `car-out`), route round walls |
+
+#### G1 tests
+| Suite | Result |
+|---|---|
+| `g1.mjs` (new): layer, landing round, page drive, clicks, keys, phone, skimmer, sleep, dark, first visit | 45/45, 3 runs |
+| `s3a-g1.mjs` (S3a, 2 checks moved to the page frame) | 14/14 |
+| `s1.mjs` (shelves) | 33/33 |
+| Console errors | 0 |
+| Weight, 3D chunk gzip | 143.2 → 142.2 KB |
 
 ### G2: one guide bulb on the home page
 - One runaway object for the whole page; drawn in 3D (D3).

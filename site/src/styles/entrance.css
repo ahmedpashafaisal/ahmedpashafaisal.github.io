@@ -185,24 +185,23 @@ html.pre-entry {
   opacity: calc(1 - var(--p, 0) * 0.9);
 }
 
-/* Chase mode (hero3d.js): the car can follow the runaway down the page, so
-   its canvases and bubble cover the screen, over the page and under the
-   corner buttons; clicks pass through */
-.car-out .hero-3d,
-.car-out .hero-fx {
-  position: fixed;
+/* Game layer (hero3d.js): the car, the bulbs and the bubble on the whole
+   home page, over the page and under the corner buttons; clicks pass
+   through. It belongs to the page (so it scrolls with it) and hero3d.js
+   moves it back over the screen every frame and sets its height. */
+.game-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
   z-index: 15;
-  opacity: 1;
+  overflow: hidden;
   pointer-events: none;
 }
 
-.car-out .hero-fx {
-  z-index: 14;
-}
-
-.car-out .car-bubble {
-  position: fixed;
-  z-index: 16;
+.game-layer .hero-3d,
+.game-layer .hero-fx {
+  opacity: 1;
 }
 
 /* "Drive me to an idea" bubble over the car (hero3d.js moves it; pops in when

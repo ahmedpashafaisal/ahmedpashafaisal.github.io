@@ -68,14 +68,14 @@ Older decisions and story: [PLAYBOOK-runaway-idea.md](PLAYBOOK-runaway-idea.md).
 
 Details per step: [PLAN-guide-bulb-cases.md](PLAN-guide-bulb-cases.md#steps-in-detail).
 
-## Open decisions (ask Ahmed before the step)
-| # | Question | My pick | Why | Before |
+## Decisions (Ahmed, 23 Oct: "all picks, D5 keep")
+| # | Question | Decided | Why | Before |
 |---|---|---|---|---|
 | D1 | Click on text: drive, or keep text selection? | Click drives, drag selects | Both work | G1 |
-| D2 | Arrow keys before the visitor has driven? | Scroll until first drive; WASD always drives | Keyboard readers keep scrolling | G1 |
-| D3 | Bulb drawn in 3D or as the SVG twin on the home page? | 3D everywhere on the home page; SVG on other pages | One bulb by construction | G2 |
-| D4 | Bulb spots | Headings, building sites, footer, landing spots | Guides to real content | G2 |
-| D5 | Lines when it hops ahead | Keep "Not again!", "Wait up!", "Hey! Come back!" as drafts | Ahmed rewrites | G2 |
+| D2 | Arrow keys before the visitor has driven? | Landing: arrows drive (as S3a). Below it: arrows scroll until the first drive. WASD always drives | Keyboard readers keep scrolling; approved landing beat kept | G1 |
+| D3 | Bulb drawn in 3D or as the SVG twin on the home page? | 3D on the whole home page; SVG on other pages | One bulb by construction | G2 |
+| D4 | Bulb spots | Landing spots, headings, building sites, footer line | Guides to real content. Watch: long gaps on phones (covers could be spots) | G2 |
+| D5 | Lines when it hops ahead | Keep "Not again!", "Wait up!", "Hey! Come back!" as drafts | Ahmed rewrites later | G2 |
 
 ## Working rules (unchanged)
 - One step at a time: say what it creates, wait for "go", build, test, report.

@@ -65,7 +65,7 @@ const landingRunaway = () => {
 
 // The landing game owns the rest while it fills most of the screen
 export function landingHolds() {
-  const c = document.querySelector('.hero-3d');
+  const c = document.querySelector('.entrance');
   return !!c && c.getBoundingClientRect().bottom > innerHeight * 0.35;
 }
 

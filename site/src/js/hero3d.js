@@ -1,11 +1,19 @@
-// Landing mini-game in three.js: the red toy car (seen from above, slightly
+// Home page mini-game in three.js: the red toy car (seen from above, slightly
 // tilted) sits on the landing with a "Drive me to an idea" bubble (until the
-// first catch, or until the runaway first shows itself). Click anywhere on the landing and the car drives there and
-// parks (turning, drifting, leaving tyre marks and a smoke trail); hold and
-// move and it follows. WASD or the arrow keys drive it the way they point.
+// first catch, or until the runaway first shows itself). Click or tap
+// anywhere on the page (not a link, button, game cover or picture) and the
+// car drives there and parks (turning, drifting, leaving tyre marks and a
+// smoke trail); on empty space, hold and move and it follows (on text a
+// click drives, a drag still selects). WASD drive it the way they point; the
+// arrows too on the landing, and below it once the visitor has driven.
 // It catches the ideas (lightbulbs) that pop up on fixed spots around the
-// name. The name, the line and the button are walls: the car drives round
-// them and bounces off if it clips one.
+// name. The car drives over everything on the page, the landing included.
+//
+// One game layer: the canvases cover the screen from the first visit on, and
+// belong to the page (they scroll with it, so the car stays put on the page
+// even mid-scroll, and move back over the screen every frame). The car can go
+// anywhere from the top of the page to the bottom; the screen scrolls along
+// while the visitor drives it.
 //
 // The runaway idea: there is one round of 6 (4 or 2 when the screen is too
 // short for the rest). Catch them in any order; the
@@ -15,13 +23,10 @@
 // dodges, or once the chase stops, it hops off down the page to the Featured
 // heading ("Hey! Come back!"). A visitor who scrolls without playing sees a
 // random bulb wake up and hop off the same way.
-// Chase mode: from then on the canvases cover the screen (fixed, clicks pass
-// through) and the landing's bottom edge is open, so the car can follow it
-// down the page; the screen scrolls along while the car is driven. Come close
-// and it hops on to the next stop (All games heading, the footer, then back
-// to the landing); stop chasing whenever you like. Seen from the landing
-// while it waits off screen, it comes back by itself ("There you are!").
-// Once it and the car are both back on the landing, chase mode ends.
+// The car can follow it down the page. Come close and it hops on to the next
+// stop (All games heading, the footer, then back to the landing); stop
+// chasing whenever you like. Seen from the landing while it waits off
+// screen, it comes back by itself ("There you are!").
 // Rest when you rest: the visitor stops (no input for REST_MS) and the
 // runaway sneaks up on the parked car, closer than a chase ever gets it; the
 // car reaching for it sets it off only at the last moment ("So close!").
@@ -65,16 +70,12 @@ const TURN_SLOW = 0.12; // share of TURN kept when nearly still: no spinning on 
 const SHARP = 0.7; // rad off the pointer: slow down so the turn stays tight
 const STOP_R = 0.75; // car lengths: cursor this close = parked (no steering, no gas)
 const BUBBLE_REST_MS = 1200; // car still this long: "Drive me to an idea" comes back
-const WALL_PAD = 10;
+const WALL_PAD = 10; // px round the landing's text and buttons: bulbs keep off it
 const BOUNCE = 0.45;
-const SOFT_HIT = 260; // px/s into a wall: slower slides along it, faster bounces off (with the thump)
-// Driving round the walls (autopilot to a clicked spot)
-const ROUTE_PAD = 1.15; // car radii: a path keeps this far from walls (contact is at 1)
-const CORNER_GAP = 26; // px past the car's radius: where corner waypoints sit
-const BRAKE = 1800; // px/s²: braking it plans for before a corner
-const CORNER_V = 240; // px/s through a right-angle corner (straight on: full speed)
-const LOOK = 0.9; // car lengths before a corner: starts turning toward the next waypoint
-const GOAL_GAP = 12; // px: a spot next to a wall or the edge parks this far off it
+const SOFT_HIT = 260; // px/s into the edge: slower slides along it, faster bounces off (with the thump)
+const BRAKE = 1800; // px/s²: braking it plans for before the edge
+const CORNER_V = 240; // px/s it may still have when it reaches the edge
+const GOAL_GAP = 12; // px: a spot next to the edge parks this far off it
 const HIT_STOP_MS = 55;
 const SHAKE_MS = 200;
 const WAVE = 6;
@@ -85,7 +86,7 @@ const BOTTOM = 84; // keep clear of the bottom corner buttons
 const RETURN_MS = 6000; // the runaway comes back this long after hopping off
 const DODGE_LINES = ['What the…!', 'Hold still!', 'Seriously?!']; // the car, at dodge 1, 2, 3
 const CHASE_LINES = ['Not again!', 'Wait up!', 'Hey! Come back!']; // the car, as the runaway flees on down the page
-const CAM_LO = 0.3; // chasing on the page: the screen scrolls to keep the car
+const CAM_LO = 0.3; // driving: the screen scrolls to keep the car
 const CAM_HI = 0.68; // ...between these shares of its height
 const STOP_GAP = 70; // px from a heading's text to the runaway waiting beside it
 const HEADLIGHT = 'rgba(236, 255, 190, 0.2)'; // dark mode: light on the ground, at the headlights
@@ -244,6 +245,15 @@ const angleTo = (a, b) => Math.atan2(Math.sin(b - a), Math.cos(b - a));
 /* ---------- scene ---------- */
 
 export function initHero(canvas, { onCollect, onWave } = {}) {
+  const html = document.documentElement;
+  const host = canvas.parentElement; // the landing
+  // The game layer: over the page, under the corner buttons, clicks pass
+  // through. Its canvases are moved into it (below), out of the landing.
+  const layer = document.createElement('div');
+  layer.className = 'game-layer';
+  layer.setAttribute('aria-hidden', 'true');
+  document.body.append(layer);
+  const foot = document.querySelector('.site-foot');
   const renderer = new WebGLRenderer({ canvas, antialias: true, alpha: true });
   renderer.setClearColor(0x000000, 0);
   const scene = new Scene();
@@ -274,7 +284,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   const fxCanvas = document.createElement('canvas');
   fxCanvas.className = 'hero-fx';
   fxCanvas.setAttribute('aria-hidden', 'true');
-  canvas.before(fxCanvas);
+  layer.append(fxCanvas, canvas);
   const fx = fxCanvas.getContext('2d');
   const marks = [[], []]; // per rear wheel: {x, y, t, a, gap}
   const puffs = []; // {x, y, vx, vy, t, life, r}
@@ -308,9 +318,11 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   // Pointer target: on = button or finger held (target follows it);
   // go = drive to the target until the car parks there (also after release)
   const grab = { x: 0, y: 0, on: false, id: -1, go: false, goUntil: 0, auto: false };
-  let walls = []; // {l, t, r, b} in canvas px
+  let walls = []; // the landing's text and buttons, {l, t, r, b} in canvas px: bulbs keep off them
   let homeWalls = []; // the same at rest (scrolled to the top, no parallax): where bulbs go
-  let area = { l: 0, t: 0, r: 1, b: 1 };
+  let area = { l: 0, t: 0, r: 1, b: 1 }; // where the car can go: the whole page
+  let land = { l: 0, t: 0, r: 1, b: 1 }; // the landing's play area: where its bulbs go
+  let hostR = host.getBoundingClientRect(); // the landing on the screen
   let ideas = [];
   let waveBusy = false;
   let chain = 0;
@@ -328,22 +340,31 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   let howTo = true; // "Drive me to an idea" until the first catch or the runaway's first move
   let caught = 0;
   let returnAt = 0; // when the runaway comes back after hopping off
-  // Chase mode: canvases fixed over the screen, canvas px = screen px, and
-  // everything on the page moves up as the page scrolls down (lastScroll)
-  let out = false;
-  let lastScroll = 0;
+  // The layer sits off px down the page (the scroll, or less at the very
+  // bottom); canvas px = screen px give or take that difference
+  let off = 0;
   let camAt = 0; // the screen last scrolled along with the car
   let dark = false;
   let played = false; // the visitor has driven the car: a skimmer gets no chase
-  const html = document.documentElement;
-  const host = canvas.parentElement; // the landing
   const visits = Math.max(1, readStats().visits || 1);
   const dodgeR = Math.max(DODGE_MIN_R, DODGE_R - (visits - 1) * DODGE_STEP);
   const carR = () => carLen * 0.42;
-  const solid = () => walls.filter((w) => w.solid);
+  const pageH = () => (foot ? foot.getBoundingClientRect().bottom + scrollY : html.scrollHeight);
+
+  // Back over the screen: the layer moves down the page with the scroll (never
+  // past the page's end, so it never makes the page longer) and everything on
+  // it moves up by as much, so it all keeps its place on the page
+  function place() {
+    const to = Math.max(0, Math.min(scrollY, pageH() - H));
+    if (to === off) return;
+    shiftAll(0, off - to);
+    off = to;
+    layer.style.transform = `translateY(${off}px)`;
+  }
 
   function measure() {
     const cr = canvas.getBoundingClientRect();
+    hostR = host.getBoundingClientRect();
     const rel = (el) => {
       const r = el.getBoundingClientRect();
       return { l: r.left - cr.left - WALL_PAD, t: r.top - cr.top - WALL_PAD, r: r.right - cr.left + WALL_PAD, b: r.bottom - cr.top + WALL_PAD };
@@ -359,30 +380,23 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     };
     const els = [
       ...host.querySelectorAll('.entrance__name, .entrance__line, .entrance__btn'),
-      // Corner buttons, while they sit in their corners over the landing
-      // (in chase mode they stay put on the screen while the page moves: not walls)
-      ...(out ? [] : [...document.querySelectorAll('.sound-toggle, .mail-btn, .theme-toggle, .site-pill')].filter((el) => !el.closest('.hud'))),
+      // Corner buttons, where they sit over the landing at rest
+      ...[...document.querySelectorAll('.sound-toggle, .mail-btn, .theme-toggle, .site-pill')].filter((el) => !el.closest('.hud')),
     ];
     walls = els.map(rel);
     homeWalls = els.map((el, i) => home(el, walls[i]));
     const roadW = document.querySelector('.scrollcar') ? 40 : 0;
-    // Chase mode: from the landing's top to the bottom of the page
-    const hr = host.getBoundingClientRect();
-    area = out
-      ? { l: EDGE, t: hr.top + EDGE, r: W - EDGE - roadW, b: html.scrollHeight - scrollY - EDGE }
-      : { l: EDGE, t: EDGE, r: W - EDGE - roadW, b: H - BOTTOM };
-    // A wall without a comfortable gap on either side (the name on a phone or
-    // a mid-size window) would cut the play area in two, or leave a slot the
-    // car only scrapes through: the car drives under it instead (canvas is
-    // behind the text)
-    const fit = carR() * 2 + 48;
-    for (const w of walls) w.solid = w.l - area.l >= fit || area.r - w.r >= fit;
+    // The car: from the top of the page to the bottom. Its bulbs: the landing.
+    // Both clear of the bottom corner buttons.
+    const top = hostR.top - cr.top;
+    area = { l: EDGE, t: top + EDGE, r: W - EDGE - roadW, b: pageH() - scrollY - cr.top - BOTTOM };
+    land = { l: EDGE, t: top + EDGE, r: W - EDGE - roadW, b: hostR.bottom - cr.top - BOTTOM };
   }
 
-  // keep: a switch in or out of chase mode (same page, new canvas size): the
-  // bulbs stay where they are
-  function layout(keep = false) {
+  function layout() {
     const wasW = W;
+    // As tall as the screen (a phone's address bar showing or hiding resizes it)
+    layer.style.height = `${innerHeight}px`;
     W = canvas.clientWidth;
     H = canvas.clientHeight;
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -397,39 +411,41 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     const b = toWorld(W / 2 + 50, H / 2, new Vector3());
     unit = a.distanceTo(b) / 100;
     carLen = W < 600 ? 58 : 76;
+    place();
     measure();
     if (!entered) {
       car.x = W * 0.5;
-      car.y = area.b - 40;
+      car.y = land.b - 40;
     }
     // Window got wider or narrower: the name re-flowed, so bulbs move to the
     // spots of the new layout, top to bottom. A height-only change (a phone's
     // address bar hiding while scrolling) keeps them where they are. No bulb is
     // ever dropped: with fewer spots than bulbs, the rest stay put inside the
-    // play area. A hopping or escaping runaway finishes its hop first.
-    if (ideas.length && Math.abs(W - wasW) > 1 && !keep) {
+    // landing. A hopping or escaping runaway finishes its hop first.
+    if (ideas.length && Math.abs(W - wasW) > 1) {
       const list = spots().sort((p, q) => p[1] - q[1]);
       const live = ideas.filter((it) => !it.gone && !it.hop && !it.escaping && it.stop === undefined).sort((p, q) => p.hy - q.hy);
       live.forEach((it, k) => {
         const sp = list[k];
         if (sp) [it.hx, it.hy, it.mirror] = sp;
         else {
-          it.hx = MathUtils.clamp(it.hx, area.l + 40, area.r - 40);
-          it.hy = MathUtils.clamp(it.hy, area.t + 40, area.b - 40);
+          it.hx = MathUtils.clamp(it.hx, land.l + 40, land.r - 40);
+          it.hy = MathUtils.clamp(it.hy, land.t + 40, land.b - 40);
         }
         it.x = it.hx;
         it.y = it.hy;
         it.vx = it.vy = 0;
       });
     }
-    // and the car stays inside the play area
+    // and the car stays on the page
     car.x = MathUtils.clamp(car.x, area.l + carR(), area.r - carR());
     car.y = MathUtils.clamp(car.y, area.t + carR(), area.b - carR());
   }
 
   /* ideas */
+  // A free spot for a bulb: on the landing, off its text and buttons
   const free = (x, y, gap, ws = walls) =>
-    x > area.l + gap && x < area.r - gap && y > area.t + gap && y < area.b - gap &&
+    x > land.l + gap && x < land.r - gap && y > land.t + gap && y < land.b - gap &&
     ws.every((w) => x < w.l - gap || x > w.r + gap || y < w.t - gap || y > w.b + gap);
 
   // Ideas sit on fixed spots around the name, in 3 mirrored pairs, so every
@@ -570,10 +586,10 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   }
 
   // Done dodging, chase stopped, cornered, or the visitor scrolled: it hops
-  // off the landing down to the Featured heading (chase mode: the car may
-  // follow) and the car shouts after it. A skimmer who never drove, or a page
-  // without chase stops: off the bottom edge, and after a while it comes back
-  // on its own (comeBack)
+  // off the landing down to the Featured heading (the car may follow) and the
+  // car shouts after it. A skimmer who never drove, or a page without chase
+  // stops: off the landing's bottom edge, and after a while it comes back on
+  // its own (comeBack)
   function escape(now) {
     const it = runaway;
     if (!it || it.escaping || it.stop !== undefined) return;
@@ -581,14 +597,13 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
       runawayDone = true;
       openEyes(it, now);
       shout('Hey! Come back!', now);
-      goOut();
       flee(it, now, 0);
       return;
     }
     it.escaping = true;
     runawayDone = true;
     openEyes(it, now);
-    it.hop = { x0: it.x, y0: it.y, x1: it.x + (it.x > W / 2 ? 60 : -60), y1: H + 140, t0: now, ms: ESCAPE_MS, lift: 120 };
+    it.hop = { x0: it.x, y0: it.y, x1: it.x + (it.x > W / 2 ? 60 : -60), y1: land.b + BOTTOM + 140, t0: now, ms: ESCAPE_MS, lift: 120 };
     it.winkUntil = now + ESCAPE_MS;
     shout('Hey! Come back!', now);
     returnAt = now + ESCAPE_MS + RETURN_MS;
@@ -601,7 +616,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     wake();
   }
 
-  /* chase mode */
+  /* the chase down the page */
 
   // Stops down the home page: beside the Featured and All games headings'
   // text, then the footer line (above the text when there is no room beside)
@@ -615,8 +630,8 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     return [Math.min(r.left + r.width / 2 + 40, cr.right - 60) - cr.left, r.top - 46 - cr.top];
   }
 
-  // Everything in canvas px moves together: switching the canvas between the
-  // landing and the screen, or the page scrolling under a fixed canvas
+  // Everything in canvas px moves together: the layer moving back over the
+  // screen (place)
   function shiftAll(dx, dy) {
     car.x += dx;
     car.y += dy;
@@ -636,26 +651,6 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     }
     for (const list of marks) for (const p of list) (p.x += dx), (p.y += dy);
     for (const p of [...puffs, ...rings]) (p.x += dx), (p.y += dy);
-  }
-  function goOut() {
-    if (out) return;
-    const r = host.getBoundingClientRect();
-    out = true;
-    html.classList.add('car-out');
-    if (bubble) document.body.append(bubble);
-    lastScroll = scrollY;
-    shiftAll(r.left, r.top);
-    layout(true);
-    wake();
-  }
-  function goHome() {
-    if (!out) return;
-    const r = host.getBoundingClientRect();
-    out = false;
-    html.classList.remove('car-out', 'runaway-shown');
-    if (bubble) host.append(bubble);
-    shiftAll(-r.left, -r.top);
-    layout(true);
   }
 
   // The runaway hops to stop k and waits there (the hop ends on the stop
@@ -685,15 +680,11 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     wake();
   }
 
-  // Chase mode, per frame: follow the page's scroll, re-measure (the walls
-  // move on the screen), bring the car back to a visitor who returned to the
-  // landing without it, and end chase mode once the runaway and the car are
-  // both back on the landing
-  function chaseFrame(now) {
-    if (scrollY !== lastScroll) {
-      shiftAll(0, lastScroll - scrollY);
-      lastScroll = scrollY;
-    }
+  // Per frame: the layer back over the screen, re-measure (the landing moves
+  // on the screen), and the car back to a visitor who returned to the landing
+  // without it
+  function pageFrame(now) {
+    place();
     measure();
     if (camAt && now - camAt > 400) {
       camAt = 0;
@@ -701,23 +692,18 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     }
     // Left parked down the page: it drives back in from the bottom edge of
     // the screen to the bottom of the landing
-    if (onLanding() && !carOnScreen() && !held.size && !grab.on && !grab.go) {
-      const r = host.getBoundingClientRect();
+    if (onLanding() && car.y > H + carR() && !held.size && !grab.on && !grab.go) {
       Object.assign(car, { x: W / 2, y: H + carR() + 10, vx: 0, vy: 0, h: -Math.PI / 2 });
-      driveTo(W / 2, Math.min(H, r.bottom) - BOTTOM - carR() - carLen * STOP_R - 20, false, -1, true);
+      driveTo(W / 2, Math.min(H, land.b + BOTTOM) - BOTTOM - carR() - carLen * STOP_R - 20, false, -1, true);
     }
     const it = runaway;
-    // Tells shelfbulb.js and rest.js the runaway is on the screen out on the
-    // page, so theirs keep away: one runaway on the screen at a time
-    html.classList.toggle('runaway-shown', !!it && it.y > -60 && it.y < H + 60);
-    if (it && it.stop === undefined && !it.hop) {
-      const r = host.getBoundingClientRect();
-      if (car.y > r.top + EDGE && car.y < r.bottom - BOTTOM) goHome(); // the landing then nudges it fully inside
-    }
+    // Tells shelfbulb.js and rest.js the runaway is on the screen, so theirs
+    // keep away: one runaway on the screen at a time
+    html.classList.toggle('runaway-shown', !!it && !it.gone && it.pop > 0.02 && it.y > -60 && it.y < H + 60);
   }
 
-  // ...and back: it hops up from the bottom edge onto a free spot, eyes
-  // open, and the chase can start again
+  // ...and back: it hops up from the landing's bottom edge onto a free spot,
+  // eyes open, and the chase can start again
   function comeBack(now) {
     // rest.js's runaway is on screen (visitor resting beside the page): wait
     if (document.querySelector('.rest-layer .bulb')) {
@@ -734,11 +720,12 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     const [x, y, mirror] = open[Math.floor(Math.random() * open.length)];
     const g = bulbModel();
     scene.add(g);
-    const it = { g, x, y: H + 80, hx: x, hy: y, vx: 0, vy: 0, pop: 1, popV: 0, delay: now, phase: Math.random() * 6, mirror, gone: false, waiting: false };
+    const y0 = land.b + BOTTOM + 80;
+    const it = { g, x, y: y0, hx: x, hy: y, vx: 0, vy: 0, pop: 1, popV: 0, delay: now, phase: Math.random() * 6, mirror, gone: false, waiting: false };
     ideas.push(it);
     makeRunaway(it);
     openEyes(it, now);
-    it.hop = { x0: x, y0: H + 80, x1: x, y1: y, t0: now, ms: ESCAPE_MS, lift: 120 };
+    it.hop = { x0: x, y0, x1: x, y1: y, t0: now, ms: ESCAPE_MS, lift: 120 };
     shout('There you are!', now);
     wake();
   }
@@ -877,7 +864,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     }
   }
 
-  // Touching a wall or the edge (normal nx, ny pointing away from it): a slow
+  // Touching the edge of the page (normal nx, ny pointing away from it): a slow
   // touch slides along it (no flip, no thump), a hard hit bounces off nose first
   function hit(nx, ny, now) {
     const vn = car.vx * nx + car.vy * ny;
@@ -910,35 +897,43 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     puffs.push({ x, y, vx, vy, t: performance.now(), life: SMOKE_LIFE * (0.8 + Math.random() * 0.4), r });
   }
 
-  /* input: click the landing (not a link or button) and the car drives to
-     that spot and parks, even after you let go. Hold and move and it
-     follows. Touch works the same: tap, or tap and drag. */
+  /* input: click or tap anywhere on the page (not a link, button, game cover
+     or picture) and the car drives to that spot and parks, even after you
+     let go. Mouse on empty space: hold and move and it follows. On text a
+     click drives and a drag still selects. Touch: a tap (not the start of a
+     scroll) sends it there. */
   const GO_MS = 6000; // a target the car cannot reach is dropped after this
-  const local = (e) => {
+  const local = (x, y) => {
     const r = canvas.getBoundingClientRect();
-    return [e.clientX - r.left, e.clientY - r.top];
+    return [x - r.left, y - r.top];
   };
-  host.addEventListener('pointerdown', (e) => {
-    if (!entered || e.button > 0 || e.target.closest('a, button, input, .entrance__name')) return;
-    const [x, y] = local(e);
-    if (x < area.l || x > area.r || y < area.t || y > area.b) return;
-    if (e.pointerType === 'mouse') e.preventDefault(); // no text selection while driving
-    grab.x = x;
-    grab.y = y;
-    grab.on = true;
-    grab.id = e.pointerId;
-    grab.go = true;
-    grab.goUntil = Infinity;
-    grab.auto = false;
+  const blocked = (t) => !!t.closest?.('a, button, input, textarea, select, label, summary, [role="button"], [contenteditable], img, picture, video, iframe, .banner__media, .hud, .scrollcar, .lightbox, dialog');
+  const texty = (t) => [...(t.childNodes || [])].some((n) => n.nodeType === 3 && n.textContent.trim());
+  let downType = '';
+  // auto: the car drives itself (back to the landing): the screen does not follow
+  const driveTo = (x, y, hold, id, auto = false) => {
+    Object.assign(grab, { x, y, on: hold, id, go: true, goUntil: hold ? Infinity : performance.now() + GO_MS, auto });
     // The player acted: a bulb that popped up under the parked car is fair game now
-    ideas.forEach((it) => (it.waiting = false));
-    pushed(performance.now());
+    if (!auto) ideas.forEach((it) => (it.waiting = false));
+    pushed(performance.now(), auto);
+  };
+  document.addEventListener('pointerdown', (e) => {
+    downType = e.pointerType;
+    if (!entered || e.pointerType !== 'mouse' || e.button > 0 || blocked(e.target) || texty(e.target)) return;
+    e.preventDefault(); // no text selection while driving
+    driveTo(...local(e.clientX, e.clientY), true, e.pointerId);
+  });
+  document.addEventListener('click', (e) => {
+    if (!entered || !e.detail || blocked(e.target)) return;
+    // Mouse: empty space drove on press; on text only a click, not a drag that selected it
+    if (downType === 'mouse' && (!texty(e.target) || !getSelection().isCollapsed)) return;
+    driveTo(...local(e.clientX, e.clientY), false, -1);
   });
   window.addEventListener(
     'pointermove',
     (e) => {
       if (!grab.on || e.pointerId !== grab.id) return;
-      [grab.x, grab.y] = local(e);
+      [grab.x, grab.y] = local(e.clientX, e.clientY);
     },
     { passive: true },
   );
@@ -951,30 +946,10 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   window.addEventListener('pointercancel', release);
   window.addEventListener('blur', () => release());
 
-  // Chase mode: click an empty bit of the page (not a link, button, picture,
-  // text or game) and the car drives there; hold and move and it follows.
-  // Touch: a tap (not the start of a scroll) sends it there.
-  const empty = (t) => !t.closest?.('a, button, input, textarea, select, label, summary, [role="button"], img, video, iframe, h1, h2, h3, p, li, figure, .banner, .shelf__item, .shelf__slot, .entrance, .hud, .scrollcar');
-  let downType = '';
-  // auto: the car drives itself (back to the landing): the screen does not follow
-  const driveTo = (x, y, hold, id, auto = false) => {
-    Object.assign(grab, { x, y, on: hold, id, go: true, goUntil: hold ? Infinity : performance.now() + GO_MS, auto });
-    pushed(performance.now());
-  };
-  document.addEventListener('pointerdown', (e) => {
-    downType = e.pointerType;
-    if (!out || e.pointerType !== 'mouse' || e.button > 0 || !empty(e.target)) return;
-    e.preventDefault();
-    driveTo(e.clientX, e.clientY, true, e.pointerId);
-  });
-  document.addEventListener('click', (e) => {
-    if (out && downType !== 'mouse' && empty(e.target)) driveTo(e.clientX, e.clientY, false, -1);
-  });
-
-  /* input: keys. WASD or the arrows drive the car the way they point on the
-     screen (up = up the page; two keys = a diagonal) while the landing fills
-     the middle of the screen (chase mode: while the car is on the screen).
-     The arrows then drive instead of scrolling. */
+  /* input: keys. WASD drive the car the way they point on the screen (up = up
+     the page; two keys = a diagonal) while the car is on the screen. The
+     arrows too on the landing, and below it once the visitor has driven; they
+     then drive instead of scrolling (before that, keyboard readers scroll). */
   const held = new Set();
   const onLanding = () => {
     const r = host.getBoundingClientRect();
@@ -983,7 +958,8 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   const carOnScreen = () => car.x > 0 && car.x < W && car.y > 0 && car.y < H;
   window.addEventListener('keydown', (e) => {
     if (!entered || !KEY_DIRS[e.code] || e.ctrlKey || e.metaKey || e.altKey) return;
-    if (e.target.closest?.('input, textarea, select, [contenteditable]') || (!held.size && !(out ? carOnScreen() : onLanding()))) return;
+    if (e.target.closest?.('input, textarea, select, [contenteditable]')) return;
+    if (!held.size && !(carOnScreen() && (e.code.startsWith('Key') || played || onLanding()))) return;
     e.preventDefault();
     if (!held.size) ideas.forEach((it) => (it.waiting = false));
     held.add(e.code);
@@ -1004,93 +980,15 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     return x || y ? Math.atan2(y, x) : null;
   };
 
-  function pushed(now) {
-    played = true;
+  function pushed(now, auto = false) {
+    if (!auto) played = true;
     car.restAt = now;
     if (!shoutUntil) bubble?.classList.remove('is-on');
     wake();
   }
 
-  /* routing while dragging: a wall between the car and the pointer? Take the
-     shortest path over the wall corners (padded by the car size), recomputed
-     every frame, and head for its first corner. Same geometry, same path: no
-     dithering, and the car never stays pinned behind the name. */
-  const hits = (ax, ay, bx, by, w, pad) => {
-    // segment vs padded box (slab test)
-    let t0 = 0;
-    let t1 = 1;
-    for (const [a, d, lo, hi] of [[ax, bx - ax, w.l - pad, w.r + pad], [ay, by - ay, w.t - pad, w.b + pad]]) {
-      if (Math.abs(d) < 1e-6) {
-        if (a < lo || a > hi) return false;
-        continue;
-      }
-      let u = (lo - a) / d;
-      let v = (hi - a) / d;
-      if (u > v) [u, v] = [v, u];
-      t0 = Math.max(t0, u);
-      t1 = Math.min(t1, v);
-      if (t0 > t1) return false;
-    }
-    return true;
-  };
-  function route(goal) {
-    const pad = carR() * ROUTE_PAD;
-    const ws = solid();
-    const start = { x: car.x, y: car.y };
-    // From the car itself use half the pad: a car touching a wall sits inside the full pad
-    const clear = (a, b) => ws.every((w) => !hits(a.x, a.y, b.x, b.y, w, a === start ? pad * 0.5 : pad));
-    if (clear(start, goal)) return { x: goal.x, y: goal.y, len: Math.hypot(goal.x - car.x, goal.y - car.y), next: null };
-    const m = carR() + CORNER_GAP;
-    const r = carR();
-    const nodes = [start];
-    for (const w of ws) {
-      for (const [cx, cy] of [[w.l - m, w.t - m], [w.r + m, w.t - m], [w.l - m, w.b + m], [w.r + m, w.b + m]]) {
-        // A corner past the play-area edge (narrow window) moves inside it,
-        // so the gap between the name and the edge still counts as a way round
-        const x = MathUtils.clamp(cx, area.l + r, area.r - r);
-        const y = MathUtils.clamp(cy, area.t + r, area.b - r);
-        if (ws.every((o) => x < o.l - pad || x > o.r + pad || y < o.t - pad || y > o.b + pad)) nodes.push({ x, y });
-      }
-    }
-    nodes.push(goal);
-    // Dijkstra over a tiny graph (under 30 nodes)
-    const n = nodes.length;
-    const dist = new Array(n).fill(Infinity);
-    const prev = new Array(n).fill(-1);
-    const done = new Array(n).fill(false);
-    dist[0] = 0;
-    for (;;) {
-      let u = -1;
-      for (let i = 0; i < n; i++) if (!done[i] && dist[i] < Infinity && (u < 0 || dist[i] < dist[u])) u = i;
-      if (u < 0 || u === n - 1) break;
-      done[u] = true;
-      for (let v = 1; v < n; v++) {
-        if (done[v]) continue;
-        const d = dist[u] + Math.hypot(nodes[v].x - nodes[u].x, nodes[v].y - nodes[u].y);
-        if (d < dist[v] && clear(nodes[u], nodes[v])) {
-          dist[v] = d;
-          prev[v] = u;
-        }
-      }
-    }
-    // No way to the goal (boxed in, or a gap too narrow on this screen): head
-    // for the reachable corner nearest to it instead of ramming the wall
-    let end = n - 1;
-    if (dist[end] === Infinity) {
-      end = -1;
-      for (let i = 1; i < n - 1; i++) {
-        if (dist[i] === Infinity) continue;
-        if (end < 0 || Math.hypot(nodes[i].x - goal.x, nodes[i].y - goal.y) < Math.hypot(nodes[end].x - goal.x, nodes[end].y - goal.y)) end = i;
-      }
-      if (end < 0) return { x: car.x, y: car.y, len: 0, next: null };
-    }
-    const path = [];
-    for (let v = end; v > 0; v = prev[v]) path.unshift(nodes[v]);
-    return { x: path[0].x, y: path[0].y, len: dist[end], next: path[1] || null };
-  }
-
-  // Free run (px) from the car along a direction before it would touch a
-  // solid wall or the play-area edge
+  // Free run (px) from the car along a direction before it would touch the
+  // edge of the page
   function runTo(dx, dy) {
     const r = carR();
     let t = Infinity;
@@ -1098,29 +996,13 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     if (dx < 0) t = Math.min(t, (area.l + r - car.x) / dx);
     if (dy > 0) t = Math.min(t, (area.b - r - car.y) / dy);
     if (dy < 0) t = Math.min(t, (area.t + r - car.y) / dy);
-    for (const w of solid()) {
-      let t0 = 0;
-      let t1 = Infinity;
-      for (const [a, d, lo, hi] of [[car.x, dx, w.l - r, w.r + r], [car.y, dy, w.t - r, w.b + r]]) {
-        if (Math.abs(d) < 1e-6) {
-          if (a < lo || a > hi) t0 = Infinity;
-          continue;
-        }
-        let u = (lo - a) / d;
-        let v = (hi - a) / d;
-        if (u > v) [u, v] = [v, u];
-        t0 = Math.max(t0, u);
-        t1 = Math.min(t1, v);
-      }
-      if (t0 <= t1 && t0 < t) t = t0;
-    }
     return Math.max(0, t);
   }
 
   // Gas or brake toward speed sp along the heading only (sideways slip is
   // left to the grip: drift), never faster than it can slow to a soft touch
-  // before the wall or edge it is moving toward (a target flipped behind it,
-  // a drift, a corner cut). Returns the forward speed before the change.
+  // before the edge it is moving toward (a target flipped behind it, a
+  // drift). Returns the forward speed before the change.
   function gas(sp, dt) {
     const hx = Math.cos(car.h);
     const hy = Math.sin(car.h);
@@ -1134,22 +1016,10 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     return fwd;
   }
 
-  // Pointer on a wall: aim for its nearest edge instead
+  // Target past the edge of the page: aim just inside it instead
   function dragGoal() {
     const r = carR() + GOAL_GAP;
-    let x = MathUtils.clamp(grab.x, area.l + r, area.r - r);
-    let y = MathUtils.clamp(grab.y, area.t + r, area.b - r);
-    for (const w of solid()) {
-      if (x > w.l && x < w.r && y > w.t && y < w.b) {
-        const d = [x - w.l, w.r - x, y - w.t, w.b - y];
-        const m = Math.min(...d);
-        if (m === d[0]) x = w.l - r;
-        else if (m === d[1]) x = w.r + r;
-        else if (m === d[2]) y = w.t - r;
-        else y = w.b + r;
-      }
-    }
-    return { x, y };
+    return { x: MathUtils.clamp(grab.x, area.l + r, area.r - r), y: MathUtils.clamp(grab.y, area.t + r, area.b - r) };
   }
 
   /* physics step */
@@ -1159,7 +1029,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
 
     // Dragging: the car chases the pointer with a stiff spring on its speed,
     // so it still turns, drifts and bumps like a car instead of sticking to it
-    // Driving: steer toward the target (round the walls) and give gas along
+    // Driving: steer toward the target (straight over the page) and give gas along
     // the heading, so a target behind it makes it swing round and drive
     // forward, never back. Steering scales with speed: a nearly still car
     // cannot turn, so it never spins on the spot. Inside the park zone round
@@ -1167,7 +1037,6 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     if (grab.go && !grab.on && now > grab.goUntil) grab.go = false;
     const aim = keyAim();
     const driving = grab.on || grab.go || aim !== null;
-    let rounding = false; // on a path round a wall: less drift
     if (aim !== null) {
       // Keys: turn toward where they point and give gas; facing away, it
       // rolls on slowly while it swings round (it cannot turn standing still)
@@ -1178,50 +1047,28 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
       gas(maxV * KEY_GAS * Math.max(0.35, Math.cos(Math.min(Math.abs(turn), Math.PI / 2))), dt);
       car.restAt = now;
     } else if (driving) {
-      const wp = route(dragGoal());
-      rounding = !!wp.next;
-      // Aim: the waypoint, easing toward the next one as the corner nears,
-      // so the turn starts before the corner instead of at it
-      let ax = wp.x;
-      let ay = wp.y;
-      const toWp = Math.hypot(wp.x - car.x, wp.y - car.y);
-      if (wp.next) {
-        const sx = wp.next.x - wp.x;
-        const sy = wp.next.y - wp.y;
-        const sl = Math.hypot(sx, sy) || 1;
-        const k = MathUtils.clamp(1 - toWp / (carLen * LOOK), 0, 1) * Math.min(carLen * 0.6, sl);
-        ax += (sx / sl) * k;
-        ay += (sy / sl) * k;
-      }
-      const dx = ax - car.x;
-      const dy = ay - car.y;
+      const goal = dragGoal();
+      const dx = goal.x - car.x;
+      const dy = goal.y - car.y;
       const near = Math.hypot(dx, dy);
       const park = carLen * STOP_R;
-      const hx0 = Math.cos(car.h);
-      const hy0 = Math.sin(car.h);
-      const fwd0 = car.vx * hx0 + car.vy * hy0;
+      const fwd0 = car.vx * Math.cos(car.h) + car.vy * Math.sin(car.h);
       let sp = 0;
-      if (wp.len > park) {
+      if (near > park) {
         const turn = angleTo(car.h, Math.atan2(dy, dx));
         const rate = TURN * MathUtils.clamp(Math.abs(fwd0) / 160, TURN_SLOW, 1);
         car.h += MathUtils.clamp(turn, -rate * dt, rate * dt);
-        sp = Math.min(maxV, (wp.len - park) * FOLLOW + 60); // whole path length: no braking at corners
+        sp = Math.min(maxV, (near - park) * FOLLOW + 60);
         // Sharp turn: slow to a speed whose turning circle fits, so it
         // pivots onto the cursor instead of circling it
         if (Math.abs(turn) > SHARP) sp = Math.min(sp, Math.max(140, TURN * near * 0.45));
         // Facing away: keep rolling forward slowly while it turns round
         sp *= Math.max(0.35, Math.cos(Math.min(Math.abs(turn), Math.PI / 2)));
-        // Corner ahead: brake in time to take it at a speed that fits the bend
-        if (wp.next) {
-          const bend = Math.abs(angleTo(Math.atan2(wp.y - car.y, wp.x - car.x), Math.atan2(wp.next.y - wp.y, wp.next.x - wp.x)));
-          const vc = MathUtils.lerp(maxV, CORNER_V, Math.min(1, bend / (Math.PI / 2)));
-          sp = Math.min(sp, Math.sqrt(vc * vc + 2 * BRAKE * Math.max(0, toWp - carLen * 0.3)));
-        }
       }
       const fwd = gas(sp, dt);
       car.restAt = now;
       // Parked on a released target: the trip is done
-      if (!grab.on && wp.len <= park && Math.abs(fwd) < 15) grab.go = false;
+      if (!grab.on && near <= park && Math.abs(fwd) < 15) grab.go = false;
     }
 
     const fx = Math.cos(car.h);
@@ -1232,7 +1079,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     // rolls straight on and stops; leftover drift dies out through the grip.
     speed *= Math.exp(-ROLL * dt);
     if (!driving && Math.abs(speed) < 6) speed = 0; // rolled to a stop (never while the engine pulls)
-    side *= Math.exp(-(j ? (driving ? (rounding ? GRIP * 2 : GRIP) : GRIP * 2.5) : GRIP * 3) * dt); // released: tyres grip, drift ends fast
+    side *= Math.exp(-(j ? (driving ? GRIP : GRIP * 2.5) : GRIP * 3) * dt); // released: tyres grip, drift ends fast
     const vNow = Math.hypot(speed, side);
     if (vNow > maxV) {
       speed *= maxV / vNow;
@@ -1248,13 +1095,19 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     car.roll = MathUtils.lerp(car.roll, MathUtils.clamp(side / 260, -1, 1) * 0.35, 1 - Math.exp(-10 * dt));
     if (j) trail(now, speed, side);
 
-    // Chase mode: the screen scrolls along while the car is driven (never for
-    // a parked car), keeping it between CAM_LO and CAM_HI of the height. The
-    // car then moves up the canvas with the page (chaseFrame).
-    if (out && driving && !(grab.go && grab.auto && !held.size)) {
-      const over = car.y > H * CAM_HI ? car.y - H * CAM_HI : car.y < H * CAM_LO ? car.y - H * CAM_LO : 0;
+    // The screen scrolls along while the visitor drives the car on the screen
+    // (never for a parked car, a trip the car drives by itself, or a car
+    // coming in from off the screen), keeping it between CAM_LO and CAM_HI of
+    // the height as it moves up or down. Over the landing the car first has
+    // the whole landing, so the round there never moves the page. The car then
+    // moves up the canvas with the page (place).
+    if (driving && !(grab.go && grab.auto && !held.size) && carOnScreen()) {
+      const h = innerHeight;
+      const y = car.y + off - scrollY; // on the screen
+      const hi = Math.max(h * CAM_HI, hostR.bottom - BOTTOM);
+      const over = y > hi && car.vy > 0 ? y - hi : y < h * CAM_LO && car.vy < 0 ? y - h * CAM_LO : 0;
       const to = MathUtils.clamp(Math.round(scrollY + over * Math.min(1, 9 * dt)), 0, html.scrollHeight - innerHeight);
-      if (to !== Math.round(scrollY)) {
+      if (over && to !== Math.round(scrollY)) {
         html.classList.add('car-cam'); // tells snap.js to leave the page where the car takes it
         camAt = now;
         window.scrollTo({ top: to, behavior: 'instant' });
@@ -1268,26 +1121,8 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
       if (!shoutUntil) bubble?.classList.remove('is-on');
     } else if (bubble && entered && howTo && !shoutUntil && now - car.restAt > BUBBLE_REST_MS) bubble.classList.add('is-on');
 
-    // Collisions: walls (keep out) and the play area (keep in)
+    // Collisions: the edges of the page (keep in)
     const r = carR();
-    for (const w of solid()) {
-      const qx = MathUtils.clamp(car.x, w.l, w.r);
-      const qy = MathUtils.clamp(car.y, w.t, w.b);
-      let nx = car.x - qx;
-      let ny = car.y - qy;
-      const d = Math.hypot(nx, ny);
-      if (d >= r) continue;
-      if (d < 1e-3) {
-        nx = 0;
-        ny = car.y < (w.t + w.b) / 2 ? -1 : 1;
-      } else {
-        nx /= d;
-        ny /= d;
-      }
-      car.x = qx + nx * r;
-      car.y = qy + ny * r;
-      hit(nx, ny, now);
-    }
     const edges = [
       [car.x - r - area.l, 1, 0],
       [area.r - (car.x + r), -1, 0],
@@ -1307,7 +1142,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
       const dx = car.x - it.x;
       const dy = car.y - it.y;
       const d = Math.hypot(dx, dy);
-      // Chase mode, the runaway at a stop on the page: the car coming close
+      // The runaway at a stop on the page: the car coming close
       // sends it on to the next one; seen from the landing while it waits off
       // screen, it comes back by itself after a while
       if (it === runaway && it.stop !== undefined) {
@@ -1376,9 +1211,9 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
       it.x += it.vx * dt;
       it.y += it.vy * dt;
     }
-    // The runaway has been gone a while: it comes back (only runs while the
+    // The runaway has been gone a while: it comes back (only while the
     // landing is on screen, so a visitor who scrolls back up sees it return)
-    if (runawayDone && !runaway && returnAt && now > returnAt) comeBack(now);
+    if (runawayDone && !runaway && returnAt && now > returnAt && hostR.bottom > 0 && hostR.top < innerHeight) comeBack(now);
   }
 
   /* 2D layer: headlights, marks, smoke, rings */
@@ -1578,9 +1413,8 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     }
 
     drawFx(now, dt);
-    // Tells rest.js a runaway is on the landing, so it keeps its own away
-    // (chase mode: the canvas covers the screen, so only while it is on it)
-    canvas.toggleAttribute('data-runaway', !!runaway && !runaway.gone && (!out || html.classList.contains('runaway-shown')));
+    // Tells rest.js the runaway is on the screen, so it keeps its own away
+    canvas.toggleAttribute('data-runaway', !!runaway && !runaway.gone && html.classList.contains('runaway-shown'));
 
     const shakeT = (now - shakeStart) / SHAKE_MS;
     camera.position.copy(camBase);
@@ -1615,36 +1449,29 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   /* loop: sleeps when nothing moves and nothing is animating */
   let raf = 0;
   let last = 0;
-  let inView = true;
-  let measuredAt = 0;
   function frame(t) {
     const dt = Math.min((t - last) / 1000, 1 / 30);
     last = t;
-    if (out) chaseFrame(t);
-    else if (t - measuredAt > 250) {
-      measure(); // walls move with the landing's parallax
-      measuredAt = t;
-    }
+    pageFrame(t);
     if (t >= frozenUntil) step(dt, t);
     draw(t, dt);
-    // Chase mode: the canvas always covers the screen, so instead the loop
-    // sleeps while nothing of the game is on it (car, runaway, smoke), the car
-    // is still and the landing is out of view; a scroll or any input wakes it
+    // Sleeps while nothing of the game moves on the screen: the landing out
+    // of view, no runaway on the screen, no smoke or tyre marks, the car
+    // still and done bouncing. The layer scrolls with the page meanwhile, so
+    // everything on it stays put on the page; a scroll or any input wakes it.
+    const settled = Math.abs(car.pop - car.popTarget) < 0.002 && Math.abs(car.popV) < 0.01 && Math.abs(car.squash) < 0.002 && Math.abs(car.squashV) < 0.01 && Math.abs(car.roll) < 0.002;
     const idle =
-      out && !carOnScreen() && !(runaway && (runaway.hop || (runaway.y > -80 && runaway.y < H + 80))) && !onLanding() &&
-      !puffs.length && !rings.length && !held.size && !grab.go && Math.hypot(car.vx, car.vy) < 1;
-    raf = inView && !document.hidden && !idle ? requestAnimationFrame(frame) : 0;
+      !(hostR.bottom > 0 && hostR.top < innerHeight) && !(runaway && (runaway.hop || (runaway.y > -80 && runaway.y < H + 80))) &&
+      !puffs.length && !rings.length && !marks[0].length && !marks[1].length && !held.size && !grab.go && !camAt && !shoutUntil &&
+      Math.hypot(car.vx, car.vy) < 1 && settled;
+    raf = !document.hidden && !idle ? requestAnimationFrame(frame) : 0;
   }
-  window.addEventListener('scroll', () => out && wake(), { passive: true });
+  window.addEventListener('scroll', () => wake(), { passive: true });
   function wake() {
-    if (raf || !inView || document.hidden) return;
+    if (raf || document.hidden) return;
     last = performance.now();
     raf = requestAnimationFrame(frame);
   }
-  new IntersectionObserver(([entry]) => {
-    inView = entry.isIntersecting;
-    wake();
-  }).observe(canvas);
   document.addEventListener('visibilitychange', wake);
   window.addEventListener('resize', () => {
     layout();
@@ -1656,7 +1483,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
 
   // Test hook: ?debug exposes the game state (headless tests only)
   if (new URLSearchParams(location.search).has('debug')) {
-    window.__landing = { car, ideas: () => ideas, walls: () => walls, area: () => area, canvas, fxCounts: () => [marks[0].length + marks[1].length, puffs.length, rings.length], goal: () => dragGoal(), runaway: () => runaway, firstRound: () => firstRound, howTo: () => howTo, caught: () => caught, returnAt: () => returnAt, out: () => out, stopPos: (k) => stopPos(k), dodgeR };
+    window.__landing = { car, ideas: () => ideas, walls: () => walls, area: () => area, canvas, fxCounts: () => [marks[0].length + marks[1].length, puffs.length, rings.length], goal: () => dragGoal(), runaway: () => runaway, firstRound: () => firstRound, howTo: () => howTo, caught: () => caught, returnAt: () => returnAt, off: () => off, land: () => land, layer, grab, played: () => played, asleep: () => !raf, stopPos: (k) => stopPos(k), dodgeR };
   }
 
   return {
@@ -1667,7 +1494,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
       // Start on the centre line (the name's and the bulbs' mirror axis), at
       // the bottom of the play area
       car.x = W / 2;
-      car.y = area.b - carR() - 10;
+      car.y = land.b - carR() - 10;
       car.h = -Math.PI / 2;
       if (juicy()) car.popV = 6;
       setTimeout(spawnWave, 350);
@@ -1677,7 +1504,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
         bubble.className = 'car-bubble';
         bubble.setAttribute('aria-hidden', 'true');
         bubble.innerHTML = '<span>Drive me to an idea</span>';
-        canvas.parentElement.append(bubble);
+        layer.append(bubble);
       }
       car.restAt = performance.now() - BUBBLE_REST_MS + 900; // bubble pops up just after the car lands
       wake();
