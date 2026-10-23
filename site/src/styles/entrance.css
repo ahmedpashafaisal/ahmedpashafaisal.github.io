@@ -185,6 +185,26 @@ html.pre-entry {
   opacity: calc(1 - var(--p, 0) * 0.9);
 }
 
+/* Chase mode (hero3d.js): the car can follow the runaway down the page, so
+   its canvases and bubble cover the screen, over the page and under the
+   corner buttons; clicks pass through */
+.car-out .hero-3d,
+.car-out .hero-fx {
+  position: fixed;
+  z-index: 15;
+  opacity: 1;
+  pointer-events: none;
+}
+
+.car-out .hero-fx {
+  z-index: 14;
+}
+
+.car-out .car-bubble {
+  position: fixed;
+  z-index: 16;
+}
+
 /* "Drive me to an idea" bubble over the car (hero3d.js moves it; pops in when
    the car rests). The same bubble shouts "Hey! Come back!" at the runaway idea. */
 .car-bubble {

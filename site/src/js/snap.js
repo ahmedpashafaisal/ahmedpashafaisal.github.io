@@ -46,7 +46,8 @@ export function initSnap() {
   let settleUntil = 0;
   let launchUntil = 0;
   window.addEventListener('entrance:windup', () => (launchUntil = performance.now() + LAUNCH_MS));
-  const busy = () => snapping || performance.now() < launchUntil;
+  // car-cam: the screen is scrolling along with the chasing car (hero3d.js)
+  const busy = () => snapping || performance.now() < launchUntil || html.classList.contains('car-cam');
 
   function glide(y) {
     if (!juicy()) return window.scrollTo(0, y);

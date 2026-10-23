@@ -26,6 +26,9 @@ const LINES = ['Almost done.', "Don't look yet!", 'Five more minutes.', 'It work
 
 const pick = (list) => list[Math.floor(Math.random() * list.length)];
 const fine = () => matchMedia('(hover: hover) and (pointer: fine)').matches;
+// The landing's runaway is on the screen, out on the page (hero3d.js chase
+// mode): this one hides and waits
+const away = () => document.documentElement.classList.contains('runaway-shown');
 
 // Ink bubble over the bulb (its own line)
 function say(holder, text) {
@@ -148,7 +151,7 @@ export function initShelfBulb(root) {
       lastY = scrollY;
       if (scrolled < HOP_PX) return;
       scrolled = 0;
-      if (busy || hopping || where.kind !== 'slot' || !juicy()) return;
+      if (busy || hopping || away() || where.kind !== 'slot' || !juicy()) return;
       const r = holder.getBoundingClientRect();
       if (r.bottom > 0 && r.top < innerHeight && inRow(where.el)) work();
     },
@@ -157,7 +160,7 @@ export function initShelfBulb(root) {
 
   // Reach for the bulb in its slot
   const reachSlot = async (slot) => {
-    if (busy || where.kind !== 'slot' || where.el !== slot) return;
+    if (busy || away() || where.kind !== 'slot' || where.el !== slot) return;
     busy = true;
     say(holder, 'Nope, not a game yet.');
     await play(b, 'laugh');
@@ -176,7 +179,7 @@ export function initShelfBulb(root) {
   // Point at the cover it sits on: one hop along
   root.querySelectorAll('.shelf__item').forEach((item) =>
     item.addEventListener('pointerenter', async (e) => {
-      if (busy || e.pointerType !== 'mouse' || where.kind !== 'perch' || where.el !== item) return;
+      if (busy || away() || e.pointerType !== 'mouse' || where.kind !== 'perch' || where.el !== item) return;
       busy = true;
       shout('Hold still!', e.clientX, e.clientY);
       const shelf = where.shelf;

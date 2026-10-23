@@ -136,6 +136,7 @@ export function initRest() {
     html.classList.contains('pre-entry') ||
     html.classList.contains('wipe-in') ||
     !!document.querySelector('.lightbox:not([hidden])') ||
+    html.classList.contains('runaway-shown') || // the landing's runaway is on the screen, out on the page (hero3d.js)
     shelfHolds() ||
     landingRunaway() ||
     landingHolds();

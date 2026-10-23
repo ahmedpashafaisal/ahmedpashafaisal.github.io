@@ -31,7 +31,10 @@ A livelier, more custom, fun site built from Ahmed's own idea, with no heavier l
 | Car after the landing | 23 Oct: ink car on the shelves removed; scrollbar car stays. One 3D car follows you section to section, drives to a spot and parks; some reference on every page; phones when light enough |
 | Car look | 23 Oct: "too flat"; game or toy look. Picked S2 option A in red (toy car in code, about 2 KB): "Red A car looks interesting"; red maybe as subtle accents (open) |
 | Car keys | 23 Oct: drivable with WASD and the arrow keys (S3a: screen directions, landing only for now) |
-| Chase into the page | 23 Oct: after 5 catches, chasing the 6th down the page auto-scrolls and the car stays visible (S3b) |
+| Chase into the page | 23 Oct: after 5 catches, chasing the 6th down the page auto-scrolls and the car stays visible. The idea leads to the Featured heading; the visitor decides whether to go on; chased again it runs to the next section ("maximum player agency") |
+| Chase details (my defaults, S3b) | Only after the visitor has driven (a skimmer keeps the old hop-off); stops: Featured heading, All games heading, footer, then back to the landing; screen follows only while driving; one runaway on screen; car left down the page drives back to the landing by itself |
+| Night | 23 Oct: today's light stays; dark mode gets a subtle headlight glow on the ground |
+| Red accents | 23 Oct: yes, red as subtle accents elsewhere on the site (later step) |
 | Car control in sections | My plain pick, not yet confirmed: no steering; click = honk, bounce, shout |
 | Empty slots | 23 Oct: under construction (broken or growing), universal signs, yellow-black; bulb hops with page scroll "as if it is working on it", with lines; reach = runs away as before |
 | Scope | Re-skin in waves, live after each |
