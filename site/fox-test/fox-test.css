@@ -1,0 +1,69 @@
+/* Fox test (dev only). */
+body {
+  margin: 0;
+  padding: 1.5rem 1rem 3rem;
+  background: #223b2b;
+  color: #f2ede2;
+  font-family: var(--font-body);
+}
+
+.fx-head h1,
+.fx-sub {
+  margin: 0 0 0.4rem;
+  font: 800 1.6rem/1.1 var(--font-display);
+}
+
+.fx-head p {
+  margin: 0 0 1.25rem;
+  opacity: 0.85;
+}
+
+.fx-sub {
+  margin-top: 2rem;
+}
+
+.fx-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  gap: 1rem;
+}
+
+.fx-card {
+  margin: 0;
+  overflow: hidden;
+  border: 2px solid #1d1b18;
+  border-radius: 14px;
+  background: #c8a979;
+}
+
+.fx-card canvas {
+  display: block;
+  width: 100%;
+}
+
+.fx-card figcaption {
+  padding: 0.5rem 0.75rem 0.6rem;
+  background: #fffdf8;
+  color: #1d1b18;
+  font-size: 0.9rem;
+}
+
+.fx-card figcaption b {
+  font-family: var(--font-display);
+}
+
+.fx-poses {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  gap: 0.5rem;
+  padding: 1rem 0.5rem;
+}
+
+/* Three poses share the card width; each keeps its shape */
+.fx-poses img {
+  width: 31%;
+  height: 170px;
+  object-fit: contain;
+  object-position: 50% 100%;
+}

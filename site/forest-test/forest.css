@@ -1,0 +1,210 @@
+/* Forest test (dev only). */
+[hidden] {
+  display: none !important;
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  overflow: hidden;
+  background: #233d2c;
+  color: var(--ink);
+}
+
+.forest {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Night extras live in the page, not the canvas, so the canvas can sleep:
+   the campfire's flickering glow and the fireflies */
+.forest-night {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.campfire-glow {
+  position: absolute;
+  width: var(--r);
+  height: var(--r);
+  margin: calc(var(--r) / -2) 0 0 calc(var(--r) / -2);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(255 176 84 / 0.55), rgb(255 150 60 / 0.22) 45%, transparent);
+  mix-blend-mode: screen;
+  animation: flicker 2.6s ease-in-out infinite;
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 0.9; transform: scale(1); }
+  23% { opacity: 1; transform: scale(1.04); }
+  41% { opacity: 0.78; transform: scale(0.97); }
+  67% { opacity: 0.95; transform: scale(1.02); }
+}
+
+.firefly {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #fff3a8;
+  box-shadow: 0 0 6px 2px rgb(255 236 120 / 0.7);
+  animation:
+    drift var(--d, 9s) ease-in-out infinite alternate,
+    blink var(--b, 3s) ease-in-out infinite;
+}
+
+@keyframes drift {
+  to { transform: translate(var(--dx, 20px), var(--dy, -14px)); }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .campfire-glow,
+  .firefly {
+    animation: none;
+  }
+}
+
+.ft-bar {
+  position: fixed;
+  z-index: 10;
+  top: 0.75rem;
+  left: 50%;
+  translate: -50% 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1rem;
+  width: max-content;
+  max-width: calc(100vw - 2rem);
+  padding: 0.5rem 0.75rem;
+  border: 2px solid #1d1b18;
+  border-radius: 14px;
+  background: #fffdf8;
+  color: #1d1b18;
+  font: 500 0.85rem/1 var(--font-body);
+  box-shadow: 0 3px 0 #1d1b18;
+}
+
+.ft-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.ft-group b {
+  margin-right: 0.15rem;
+}
+
+.ft-bar button {
+  padding: 0.35rem 0.6rem;
+  border: 1.5px solid #1d1b18;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.ft-bar button[aria-pressed="true"] {
+  background: var(--accent);
+}
+
+/* The text block sits in the middle of the clearing */
+.ft-clearing {
+  position: relative;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 1.1rem;
+  height: 100svh;
+  padding: 0 1.5rem;
+  text-align: center;
+  pointer-events: none;
+}
+
+.ft-clearing > * {
+  pointer-events: auto;
+}
+
+/* forest.js shrinks --name-size until the name sits inside the clearing */
+.ft-name {
+  margin: 0;
+  font: 800 var(--name-size, clamp(2.4rem, 6vw, 5.4rem))/1 var(--font-display);
+  letter-spacing: -0.025em;
+  color: var(--ink);
+}
+
+.ft-line {
+  margin: 0;
+  max-width: 40ch;
+  font-size: clamp(1rem, 1.8vw, 1.3rem);
+  color: var(--ink);
+}
+
+.ft-line > span:not(.ft-sep) {
+  white-space: nowrap;
+}
+
+.ft-sep {
+  margin: 0 0.15em 0 0.45em;
+  font-weight: 800;
+}
+
+/* Button colour options (toolbar "Button"); outline and hard shadow stay */
+[data-kit="amber"] .ft-btn {
+  --accent: #f2a541;
+  --accent-deep: #d9862a;
+  --on-accent: #1d1b18;
+}
+
+[data-kit="wood"] .ft-btn {
+  --accent: #8a5a35;
+  --accent-deep: #6f4527;
+  --on-accent: #fbf3e4;
+}
+
+[data-kit="parchment"] .ft-btn {
+  --accent: #f4ead6;
+  --accent-deep: #e3d4b5;
+  --on-accent: #1d1b18;
+}
+
+.ft-note {
+  position: fixed;
+  bottom: 0.75rem;
+  right: 0.75rem;
+  margin: 0;
+  padding: 0.3rem 0.6rem;
+  border-radius: 8px;
+  background: rgb(255 253 248 / 0.85);
+  color: #1d1b18;
+  font: 500 0.75rem/1.2 var(--font-body);
+}
+
+@media (max-width: 640px) {
+  .ft-name {
+    font-size: var(--name-size, clamp(2.4rem, 11vw, 3.4rem));
+  }
+
+  .ft-line > span:not(.ft-sep) {
+    display: block;
+  }
+
+  .ft-sep {
+    display: none;
+  }
+
+  .ft-note {
+    left: 0.75rem;
+    text-align: center;
+  }
+}

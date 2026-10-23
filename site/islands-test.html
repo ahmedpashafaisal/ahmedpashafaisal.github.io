@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Islands wireframe</title>
+  <!-- Dev only (npm run dev → /islands-test.html). Not a build input, never deployed.
+       "All games" as islands, one per category: layout only, no art. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400..700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <header class="iw-intro">
+    <h1>Islands wireframe</h1>
+    <p>Layout only: grey shapes stand in for the forest art. Names are real. One game is shown selected.</p>
+  </header>
+
+  <section class="iw-block" aria-labelledby="iw-desk">
+    <h2 id="iw-desk">Desktop</h2>
+    <div class="iw-games-head">
+      <p class="iw-games-title">All games</p>
+      <p class="iw-games-sub">Click a cabin: the car drives there.</p>
+    </div>
+    <div class="iw-frame iw-frame--desk" data-map="desk"></div>
+  </section>
+
+  <section class="iw-block" aria-labelledby="iw-key">
+    <h2 id="iw-key">Key</h2>
+    <ol class="iw-key">
+      <li><b>Island sign = category.</b> Island size follows its number of games. Click the sign: the car drives to that island.</li>
+      <li><b>Cabin = game.</b> Name always visible. Click: the car drives there and the card opens.</li>
+      <li><b>Landmark = featured game.</b> Wildlings, Magic Mineral, Storm Alert.</li>
+      <li><b>Card.</b> Screenshot, one line, role, "Open game" (straight to the game page), store links.</li>
+      <li><b>Ford.</b> Dotted line in the water: the car splashes through.</li>
+      <li><b>Empty plot.</b> Bulb beat, decided later.</li>
+      <li><b>Start.</b> The car waits here. Scroll stays normal: the map scrolls with the page.</li>
+    </ol>
+  </section>
+
+  <section class="iw-block" aria-labelledby="iw-phone">
+    <h2 id="iw-phone">Phone</h2>
+    <div class="iw-phones">
+      <figure>
+        <div class="iw-frame iw-frame--phone" data-map="phone"></div>
+        <figcaption>Whole map: islands stacked, same order.</figcaption>
+      </figure>
+      <figure>
+        <div class="iw-frame iw-frame--screen" data-map="screen"></div>
+        <figcaption>After a tap: card slides up from the bottom.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <script type="module" src="./islands-test/wire.js"></script>
+</body>
+</html>

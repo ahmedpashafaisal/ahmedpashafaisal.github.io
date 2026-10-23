@@ -1,0 +1,206 @@
+/* Forest style test (dev only). */
+[hidden] {
+  display: none !important;
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  background: #1a3328;
+  color: var(--ink);
+}
+
+.ft-bar {
+  position: fixed;
+  z-index: 10;
+  top: 0.75rem;
+  left: 50%;
+  translate: -50% 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1rem;
+  width: max-content;
+  max-width: calc(100vw - 2rem);
+  padding: 0.5rem 0.75rem;
+  border: 2px solid #1d1b18;
+  border-radius: 14px;
+  background: #fffdf8;
+  color: #1d1b18;
+  font: 500 0.85rem/1 var(--font-body);
+  box-shadow: 0 3px 0 #1d1b18;
+}
+
+.ft-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.ft-group b {
+  margin-right: 0.15rem;
+}
+
+.ft-bar button {
+  padding: 0.35rem 0.6rem;
+  border: 1.5px solid #1d1b18;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.ft-bar button[aria-pressed="true"] {
+  background: var(--accent);
+}
+
+.ft-bar button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* One at a time: the picture fills the screen, text sits on the clearing */
+.ft-one {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 100svh;
+  overflow: hidden;
+}
+
+.ft-scene {
+  position: absolute;
+  inset: 0;
+  background: center / cover no-repeat;
+}
+
+.ft-clearing {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 1.1rem;
+  padding: 0 1.5rem;
+  text-align: center;
+}
+
+.ft-name {
+  margin: 0;
+  /* Kie clearings came out about 40% of the picture's width, so the name
+     is sized to fit inside one at desktop widths */
+  font: 800 clamp(2.4rem, 4.4vw, 4rem)/1 var(--font-display);
+  letter-spacing: -0.025em;
+  color: var(--ink);
+}
+
+.ft-line {
+  margin: 0;
+  max-width: 40ch;
+  font-size: clamp(1rem, 1.8vw, 1.3rem);
+  color: var(--ink);
+}
+
+.ft-line > span:not(.ft-sep) {
+  white-space: nowrap;
+}
+
+.ft-sep {
+  margin: 0 0.15em 0 0.45em;
+  font-weight: 800;
+}
+
+.ft-missing {
+  position: absolute;
+  bottom: 3rem;
+  margin: 0;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  background: #fffdf8;
+  color: #1d1b18;
+  font: 600 0.9rem/1 var(--font-body);
+}
+
+.ft-note {
+  position: absolute;
+  bottom: 0.75rem;
+  right: 0.75rem;
+  margin: 0;
+  padding: 0.3rem 0.6rem;
+  border-radius: 8px;
+  background: rgb(255 253 248 / 0.85);
+  color: #1d1b18;
+  font: 500 0.75rem/1.2 var(--font-body);
+}
+
+/* All side by side: one row per style, day 1, day 2, night */
+.ft-all {
+  display: grid;
+  gap: 2rem;
+  padding: 6rem 1rem 2rem;
+  color: #f2ede2;
+  font-family: var(--font-body);
+}
+
+.ft-row h2 {
+  margin: 0 0 0.6rem;
+  font: 700 1.3rem/1 var(--font-display);
+}
+
+.ft-cells {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+.ft-cell {
+  margin: 0;
+}
+
+.ft-cell img,
+.ft-cell .ft-empty {
+  display: block;
+  width: 100%;
+  aspect-ratio: 2752 / 1536;
+  border-radius: 10px;
+  object-fit: cover;
+  cursor: zoom-in;
+}
+
+.ft-cell .ft-empty {
+  display: grid;
+  place-items: center;
+  background: rgb(255 255 255 / 0.06);
+  cursor: default;
+}
+
+.ft-cell figcaption {
+  margin-top: 0.35rem;
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+/* Phones: the picture fills the height, so forest shows above and below
+   the clearing; the roles stack */
+@media (max-width: 640px) {
+  .ft-bar {
+    top: 0.5rem;
+    gap: 0.4rem 0.6rem;
+    font-size: 0.78rem;
+  }
+
+  .ft-line > span:not(.ft-sep) {
+    display: block;
+  }
+
+  .ft-sep {
+    display: none;
+  }
+
+  .ft-cells {
+    grid-template-columns: 1fr;
+  }
+
+  .ft-all {
+    padding-top: 9rem;
+  }
+}

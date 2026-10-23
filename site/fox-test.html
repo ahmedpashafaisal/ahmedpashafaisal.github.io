@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fox test</title>
+  <!-- Dev only (npm run dev → /fox-test.html). Not a build input, never deployed.
+       Forest world step 3a: six bean fox options from Kie (fox-test/*.webp), each
+       next to the forest's trees at the size they would have on this screen, then
+       up close. Pick one look; it gets rebuilt in code in step 3b. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400..700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <header class="fx-head">
+    <h1>Fox test</h1>
+    <p>Six options. Top: real size next to the trees on this screen. Bottom: up close. Stand, sit, hop.</p>
+  </header>
+  <section class="fx-grid fx-real" aria-label="Real size"></section>
+  <h2 class="fx-sub">Up close</h2>
+  <section class="fx-grid fx-close" aria-label="Up close"></section>
+
+  <script type="module">
+    import './src/styles/tokens.css';
+    import './src/styles/base.css';
+    import './fox-test/fox-test.css';
+    import './fox-test/fox-test.js';
+  </script>
+</body>
+</html>

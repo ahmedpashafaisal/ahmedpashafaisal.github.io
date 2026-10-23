@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Forest style test</title>
+  <!-- Dev only (npm run dev → /forest-style-test.html). Not a build input, never deployed.
+       Forest world step 1: three art styles from Kie (flat, cel shaded, inked),
+       day and night, with real text and a button on the clearing.
+       Raw images and prompts: refs/forest-style/. Fonts and button are placeholders. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400..700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="ft-bar" role="toolbar" aria-label="Test options">
+    <span class="ft-group"><b>Style</b>
+      <button data-k="style" data-v="a">Flat</button><button data-k="style" data-v="b">Cel shaded</button><button data-k="style" data-v="c">Inked</button></span>
+    <span class="ft-group"><b>Time</b>
+      <button data-k="time" data-v="day">Day</button><button data-k="time" data-v="night">Night</button></span>
+    <span class="ft-group ft-take"><b>Try</b>
+      <button data-k="take" data-v="1">1</button><button data-k="take" data-v="2">2</button></span>
+    <span class="ft-group"><b>View</b>
+      <button data-k="view" data-v="one">One</button><button data-k="view" data-v="all">All side by side</button></span>
+  </div>
+
+  <main class="ft-one" aria-label="One style at a time">
+    <div class="ft-scene"></div>
+    <div class="ft-clearing">
+      <h1 class="ft-name">Ahmed Pasha Faisal</h1>
+      <p class="ft-line"><span>Game Producer</span><span class="ft-sep" aria-hidden="true">·</span> <span>Game Designer</span><span class="ft-sep" aria-hidden="true">·</span> <span>Narrative Designer</span></p>
+      <button class="juicy-btn ft-btn" type="button">See games</button>
+    </div>
+    <p class="ft-missing" hidden>Not made yet</p>
+    <p class="ft-note">Fonts and button: today's site, placeholders only</p>
+  </main>
+
+  <section class="ft-all" aria-label="All styles side by side" hidden></section>
+
+  <script type="module">
+    import './src/styles/tokens.css';
+    import './src/styles/base.css';
+    import './src/styles/button.css';
+    import './src/styles/theme.css';
+    import './forest-style-test/style.css';
+    import './forest-style-test/test.js';
+  </script>
+</body>
+</html>

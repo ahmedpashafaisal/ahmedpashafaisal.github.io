@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Car look test</title>
+  <!-- Dev only (npm run dev → /car-test.html). Not a build input, never deployed.
+       Step S2: today's car next to a toy car in code and three Kenney models
+       (car-test/models, CC0), each at real landing size, parked, close up. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400..700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <canvas class="dot-grid" aria-hidden="true"></canvas>
+
+  <div class="ct-bar" role="toolbar" aria-label="Test options">
+    <span class="ct-group"><b>Colour (A)</b>
+      <button data-k="colour" data-v="ink" data-c="#1d1b18">Ink</button><button data-k="colour" data-v="red" data-c="#e8473c">Red</button><button data-k="colour" data-v="blue" data-c="#3d72e3">Blue</button><button data-k="colour" data-v="yellow" data-c="#ffc81e">Yellow</button><button data-k="colour" data-v="orange" data-c="#ff7a1a">Orange</button><button data-k="colour" data-v="lime" data-c="#caff00">Lime</button></span>
+    <span class="ct-group"><b>Light</b>
+      <button data-k="light" data-v="today">Today</button><button data-k="light" data-v="deeper">Deeper</button></span>
+    <span class="ct-group"><b>Size</b>
+      <button data-k="size" data-v="desktop">Desktop</button><button data-k="size" data-v="phone">Phone</button></span>
+    <span class="ct-group"><b>Page</b>
+      <button data-k="theme" data-v="light">Light</button><button data-k="theme" data-v="dark">Dark</button></span>
+  </div>
+
+  <header class="ct-intro">
+    <h1>Car look test</h1>
+    <p>Which car should drive the site? Each card shows it three ways: on the landing at its real size, parked in a section, and close up.</p>
+  </header>
+
+  <main class="ct-list"></main>
+
+  <script type="module">
+    import './src/styles/tokens.css';
+    import './src/styles/base.css';
+    import './src/styles/theme.css';
+    import './car-test/car-test.css';
+    import { initDotGrid } from './src/js/dotgrid.js';
+    initDotGrid(document.querySelector('.dot-grid'));
+    import('./car-test/car-test.js');
+  </script>
+</body>
+</html>
