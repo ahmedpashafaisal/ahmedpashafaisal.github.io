@@ -9,7 +9,9 @@
 // bubble: "So close!"); scroll, type or stay busy elsewhere and it tiptoes
 // away. At most once per COOLDOWN_MS. Still for long: it nods off.
 // The landing game has its own version (hero3d.js: the 3D runaway creeps up on
-// the parked car), so this one waits while the landing fills the screen.
+// the parked car), so this one waits while the landing fills the screen. On
+// the home page with the 3D guide (html.has-guide) it stays off: the guide
+// rests with the visitor instead.
 // The bulb (js/bulb.js and its CSS) loads on the first rest, not before.
 import { reducedMotion } from './motion.js';
 import { sfx } from './sound.js';
@@ -133,6 +135,7 @@ export function initRest() {
 
   const blocked = () =>
     document.hidden ||
+    html.classList.contains('has-guide') ||
     html.classList.contains('pre-entry') ||
     html.classList.contains('wipe-in') ||
     !!document.querySelector('.lightbox:not([hidden])') ||

@@ -261,6 +261,61 @@ html.pre-entry {
   .car-bubble.is-on span { animation: none; }
 }
 
+/* The guide bulb's own lines (hero3d.js moves it): an ink bubble, like the
+   shelf bulb's (the car's lines use .car-bubble) */
+.guide-say {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.guide-say span {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  translate: -50% 0;
+  scale: 0;
+  transform-origin: 50% 100%;
+  padding: 0.3rem 0.65rem;
+  border-radius: 10px;
+  background: var(--ink);
+  color: var(--bg);
+  font: 800 0.8rem/1.2 var(--font-display);
+  white-space: nowrap;
+  transition: scale 180ms ease-in;
+}
+
+.guide-say span::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -6px;
+  border: 6px solid transparent;
+  border-top-color: var(--ink);
+}
+
+.guide-say.is-on span {
+  scale: 1;
+  transition: scale 420ms var(--ease-spring);
+}
+
+/* No room above it (top of the screen): the line hangs under it */
+.guide-say.is-below span {
+  top: 0;
+  bottom: auto;
+  transform-origin: 50% 0;
+}
+
+.guide-say.is-below span::after {
+  top: auto;
+  bottom: 100%;
+  border-top-color: transparent;
+  border-bottom-color: var(--ink);
+}
+
 
 
 .featured > * {

@@ -9,7 +9,8 @@
 //   lift: covers lift and tilt toward the mouse, glint, squash on press;
 //   peek: rest the mouse on a cover and it fades through 3 screenshots;
 //   open: a click grows the cover into the game page (grow.js).
-// The runaway bulb (shelfbulb.js) loads once the shelves come near.
+// The runaway bulb (shelfbulb.js) loads once the shelves come near, unless
+// the 3D guide (hero3d.js) does its beats here (html.has-guide).
 import data from '../data/games.json';
 import { byCategory, primaryCat } from './order.js';
 import { juicy } from './motion.js';
@@ -268,6 +269,7 @@ export function initShelves(root) {
     ([en]) => {
       if (!en.isIntersecting) return;
       near.disconnect();
+      if (document.documentElement.classList.contains('has-guide')) return;
       import('./shelfbulb.js').then((m) => m.initShelfBulb(root));
     },
     { rootMargin: '100% 0px' },

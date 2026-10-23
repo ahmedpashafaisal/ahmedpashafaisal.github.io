@@ -3,9 +3,9 @@ Read first in every session. Plan: [PLAYBOOK-runaway-idea.md](PLAYBOOK-runaway-i
 Rule: a finished step's Status is `✅ DONE`. Green check on every done row, never plain DONE.
 
 ## RESUME HERE (23 Oct 2026, late night)
-- **Next: G3** (shelf beats moved onto the guide). G1 ✅ committed `3404b0c`. G2 committed without a feel check: Ahmed checks G2 and G3 together after G3. Neither pushed.
-- G3 starts from: S1 30/33 (phone work-in-site beat steps aside for the guide), `shelfbulb.js` and `rest.js` still live on the home page. Details: [PLAN-guide-bulb-cases.md](PLAN-guide-bulb-cases.md#g3-shelf-beats-moved-onto-the-guide).
-- Tests to rebuild if the scratchpad is gone: `g1`, `g2`, `s3a`, `s1` suites (list in the cases file).
+- **Next: Ahmed's feel check of G2 + G3** on http://localhost:5173 (`npm run dev`). Both committed (G3 on 23 Oct, late night). G1 ✅ `3404b0c`. Nothing pushed since `a92ae9c`.
+- G3 as built, tests, known gaps: [PLAN-guide-bulb-cases.md](PLAN-guide-bulb-cases.md#g3-as-built-23-oct).
+- Tests to rebuild if the scratchpad is gone: `g1`, `g2`, `g3`, `s3a`, `s1` suites (list in the cases file).
 - **Start with [PLAN-guide-bulb.md](PLAN-guide-bulb.md)** (the bulb as the site's guide; steps G0 to G6). Bugs and corner cases: [PLAN-guide-bulb-cases.md](PLAN-guide-bulb-cases.md).
 - Branch `lively` (from `main`). Pushed up to `a92ae9c`; `52e7cb5` (D3) and the L1 commit after it are local only. Live site untouched: deploy runs only on `main`. Ask Ahmed before each commit and push.
 - Done: 1–5c. Bulb twin + 20 motions + runaway eyes (`src/js/bulb.js`, `src/styles/bulb.css`); landing joke in `src/js/hero3d.js`; resting in `src/js/rest.js` + `src/styles/rest.css`.
@@ -50,7 +50,7 @@ Rule: a finished step's Status is `✅ DONE`. Green check on every done row, nev
 | G0 | Commit S3b as work in progress | ✅ DONE | Ahmed: "commit S3b" | 23 Oct |
 | G1 | One game layer, car anywhere | ✅ DONE | 45/45 × 3, S3a 14/14, S1 33/33, 0 errors, 3D chunk −1 KB gzip. [As built + tests](PLAN-guide-bulb-cases.md#g1-as-built-23-oct). Ahmed tested on a tunnel link: "Okay commit" | 23 Oct |
 | G2 | One guide bulb on the home page | COMMITTED, feel check pending (with G3) | G2 25/25, G1 45/45, S1 30/33 (phone shelf beat: G3), 0 errors, +0.8 KB gzip. [As built + tests](PLAN-guide-bulb-cases.md#g2-as-built-23-oct) | |
-| G3 | Shelf beats moved onto the guide | TODO | [details](PLAN-guide-bulb-cases.md#g3-shelf-beats-moved-onto-the-guide) | |
+| G3 | Shelf beats moved onto the guide | COMMITTED, feel check pending (with G2) | Reading A (Ahmed: "Go A"). Round 2 ("now it just keeps dodging"; "a guide wouldn't go back"): forward only, out of sight, back after 6 s, follows back up. Round 3 ("not running away anymore" at the bottom; "everytime it just appears on the linkedin link"): side exit at the page end; fresh free place and random edge on every return; parked car counts; phone peek. Final build, first pass: G3 60/60, g2 25/25, g1 45/45, S3a 14/14, S1 without WebGL 33/33, 0 errors; repeats were running at commit time. 3D chunk +2.8 KB gzip. [As built + tests](PLAN-guide-bulb-cases.md#g3-as-built-23-oct) | |
 | G4 | Car comes to you and parks | TODO | [details](PLAN-guide-bulb-cases.md#g4-car-comes-to-you-and-parks-old-s3c) | |
 | G5 | Other pages: same bulb, car reference | Later | [details](PLAN-guide-bulb-cases.md#g5-other-pages-later) | |
 | G6 | Red accents | TODO | [details](PLAN-guide-bulb-cases.md#g6-red-accents) | |

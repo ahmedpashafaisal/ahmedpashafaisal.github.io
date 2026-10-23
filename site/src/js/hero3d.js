@@ -27,9 +27,24 @@
 // visitor, one hop ahead. It waits on spots in page order (the landing's,
 // beside the headings, in the building sites, beside the footer line). The
 // car (if it moved lately) or else the mouse pointer coming close sends it
-// one spot on in the way they are heading ("Not again!", "Wait up!"); with
-// nothing ahead it dodges where it is. Scroll away from it and it hops back
-// in from that edge once the scroll rests. It never goes back by itself.
+// on ahead ("Not again!", "Wait up!"): always down the page (a guide never
+// leads back), to the first spot below the screen, so it is gone from view;
+// with nothing below (the end of the page) it hops off the side of the
+// screen, away from the chaser. Stay put and it sneaks back in after BACK_MS
+// ("There you are!"); go back up the page and it follows once the scroll
+// rests; scroll down past it and it catches up from the top edge. Each time
+// it comes back to a fresh free place on the screen (off text, links,
+// pictures and cards, away from the car), from a random edge. It never goes
+// back by itself.
+// On the shelves it does the beats of S1 (it is the only bulb on the home
+// page: shelfbulb.js and rest.js stand down, html.has-guide). In a building
+// site it works: a small hop per WORK_PX of scroll, dust, now and then a line
+// in its own bubble. Reach for it there: "Nope, not a game yet.", a laugh,
+// and the mouse pointer sends it onto a cover on the next shelf ahead (the
+// car: the next spot ahead). Point at that cover: the car shouts "Hold
+// still!" and it hops one cover along, after the last game into the
+// building site. Slide the shelf it stands on: once the slide stops, it hops
+// to the far cover in view.
 // Rest when you rest: the visitor stops (no input for REST_MS) and the
 // runaway sneaks up on the parked car (or the pointer), closer than a chase
 // ever gets it; reaching for it sets it off only at the last moment ("So
@@ -95,6 +110,21 @@ const STOP_GAP = 70; // px from a heading's text to the guide waiting beside it
 const CHASER_MS = 5000; // the guide runs from the car if it moved this recently, else from the mouse pointer
 const POINTER_R = 90; // ...hopping on when the moving pointer comes this close
 const SETTLE_MS = 400; // the visitor scrolled away from it: it hops back in once the scroll rests this long
+const BACK_MS = 6000; // dodged off the screen and the visitor stays put: it sneaks back in after this long
+const RAYS_UP = 52; // px from the bulb's middle to the tip of its rays
+const PEEK = 24; // px from the screen's side edge to the middle of a bulb peeking in
+// The guide on the shelves (the beats of S1). Placeholder words: Ahmed rewrites
+const WORK_PX = 120; // page scroll per working hop in a building site
+const WORK_MS = 380;
+const WORK_KEYS = [[0, 0, 1, 1], [0.42, 16, 0.92, 1.1], [0.72, 0, 1.16, 0.84], [1, 0, 1, 1]]; // share of the hop, lift px, width, height
+const WORK_LINE = 6; // working hops per line, the first on the 3rd hop
+const WORK_LINES = ['Almost done.', "Don't look yet!", 'Five more minutes.', 'It worked yesterday.', 'Nearly there.'];
+const LAUGH_MS = 900; // reached for in its building site: "Nope, not a game yet." and a laugh, then it hops
+const SAY_MS = 1600; // the bulb's own line stays up this long
+const SLIDE_START = 40; // px a shelf slides under it before it hops ahead...
+const SLIDE_SETTLE_MS = 160; // ...once the slide has stopped this long
+const FEET = 34; // px from the bulb's middle to its feet (it squashes from there)
+const SITE_SIZE = 0.7; // phones: its size in a building site (the picture is small there)
 const HEADLIGHT = 'rgba(236, 255, 190, 0.2)'; // dark mode: light on the ground, at the headlights
 const HEADLIGHT_LEN = 2.2; // ...reaching this many car lengths ahead
 const DODGE_R = 150; // runaway hops away when the car is this close (first visit)
@@ -229,7 +259,7 @@ export function bulbModel() {
     r.rotation.z = -a;
     return r;
   });
-  return group(
+  const g = group(
     glow,
     part(BULB.glass, LIME, { pos: [0, 0.12, 0], scale: [1, 1.05, 1] }),
     part(BULB.neck, LIME, { pos: [0, -0.1, 0], line: 1.04 }),
@@ -242,6 +272,8 @@ export function bulbModel() {
     shine,
     ...rays,
   );
+  g.userData.rays = rays; // the guide's laugh flicks them
+  return g;
 }
 
 const elasticOut = (t) => (t <= 0 ? 0 : t >= 1 ? 1 : Math.pow(2, -10 * t) * Math.sin((t * 10 - 0.75) * ((2 * Math.PI) / 3)) + 1);
@@ -503,7 +535,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   function makeRunaway(it) {
     if (runaway && runaway !== it && !runaway.gone) return;
     runaway = it;
-    Object.assign(it, { waiting: false, eyes: null, wokeAt: 0, blinkAt: 0, winkUntil: 0, hop: null, nextDodge: 0, dodges: 0, lastDodge: 0, guide: false, spot: null, inAt: 0, flees: 0 });
+    Object.assign(it, { waiting: false, eyes: null, wokeAt: 0, blinkAt: 0, winkUntil: 0, hop: null, nextDodge: 0, dodges: 0, lastDodge: 0, guide: false, spot: null, inAt: 0, flees: 0, why: '', side: 1, leftAt: 0, backAt: 0, rail: null, work: null, works: 0, line: '', laugh: 0, reach: null, drawY: 0, size: 1 });
   }
   // ...when its eyes pop open (draw() springs them in)
   function openEyes(it, now) {
@@ -558,7 +590,11 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   // point (spot null)
   function hopTo(it, spot, x, y, now, ms, lift) {
     it.hop = { x0: it.x, y0: it.y, x1: x, y1: y, t0: now, ms, lift };
-    Object.assign(it, { spot, hx: x, hy: y, vx: 0, vy: 0, winkUntil: now + 700, inAt: now });
+    Object.assign(it, { spot, hx: x, hy: y, vx: 0, vy: 0, winkUntil: now + 700, inAt: now, work: null });
+    // On a sliding shelf (a cover or its building site): where the slide
+    // stood when it arrived
+    const row = spot?.el?.closest('.shelf--rail .shelf__row');
+    it.rail = row ? { row, x0: row.scrollLeft } : null;
     wake();
   }
   const farHop = (dy) => MathUtils.clamp(500 + Math.abs(dy) * 0.45, 700, 1400);
@@ -587,6 +623,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     if (!ok) return;
     openEyes(it, now);
     hopTo(it, null, x, y, now, 320, 14);
+    it.why = 'creep';
     it.crept = true;
     it.nextCreep = now + CREEP_MS;
   }
@@ -596,8 +633,16 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     const p = local(pointer.cx, pointer.cy);
     return onScreen(...p) ? p : null;
   };
+  // Out of sight below: under the bottom button bar (over the game layer)
+  // or past the screen's bottom edge
+  let hud = null;
+  const hidden = (y) => {
+    hud ||= document.querySelector('.hud');
+    const t = hud ? Math.min(hud.getBoundingClientRect().top, innerHeight) : innerHeight;
+    return y - RAYS_UP > t - canvas.getBoundingClientRect().top;
+  };
   // Inside the screen, clear of the edges and the bottom corner buttons
-  const onScreen = (x, y) => x > area.l + 40 && x < area.r - 40 && y > 60 && y < Math.min(H, area.b) - BOTTOM;
+  const onScreen = (x, y) => x > area.l + 40 && x < area.r - 40 && y > 60 && y < Math.min(H - BOTTOM, area.b);
 
   // The car (the visitor) talks back: one line in its bubble for SHOUT_MS
   function shout(text, now) {
@@ -620,6 +665,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     shout('Hey! Come back!', now);
     const next = guideSpots(it).find((s) => s.spot.el);
     if (next) hopTo(it, next.spot, next.x, next.y, now, farHop(next.y - it.y), 150);
+    it.why = 'escape';
     it.nextDodge = now + DODGE_MS * 2;
     sfx.thump();
   }
@@ -629,28 +675,53 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   // Where it waits, in page order: the landing's spots, beside (or above)
   // each heading, in each building site in view, beside the footer line
   const HEADS = '#featured-title, .banner__title, #games-title, .shelf__name, .site-foot__note';
-  const BLOCK = '.banner__media, .banner__actions, img, button'; // never on a picture or a button
   const range = document.createRange();
-  // Beside a text (or above it when there is no room), in canvas px; side
-  // keeps a spot on the side it was given
-  function textSpot(el, cr, side) {
+  // What a bulb keeps off in a part of the page: its text, links, buttons
+  // and pictures (any size), and its cards and covers (a box with a
+  // background, a border or a shadow, not the part's own backdrop), as
+  // canvas-px boxes
+  const BUSY = 'a, button, input, textarea, select, img, picture, video, svg, iframe, [role="button"]';
+  function busyIn(scope, cr) {
+    const out = [];
+    const sr = scope.getBoundingClientRect();
+    const add = (r) => r.width && r.height && out.push({ l: r.left - cr.left, t: r.top - cr.top, r: r.right - cr.left, b: r.bottom - cr.top });
+    const texts = document.createTreeWalker(scope, NodeFilter.SHOW_TEXT);
+    for (let n = texts.nextNode(); n; n = texts.nextNode()) {
+      if (!n.textContent.trim()) continue;
+      range.selectNodeContents(n);
+      for (const r of range.getClientRects()) add(r);
+    }
+    for (const el of scope.querySelectorAll('*:not(svg *)')) {
+      const r = el.getBoundingClientRect();
+      if (!r.width) continue;
+      if (el.matches(BUSY)) add(r);
+      else if (r.width * r.height < sr.width * sr.height * 0.6) {
+        const cs = getComputedStyle(el);
+        if (!/rgba\(0, 0, 0, 0\)|transparent/.test(cs.backgroundColor) || parseFloat(cs.borderTopWidth) > 0 || cs.boxShadow !== 'none') add(r);
+      }
+    }
+    return out;
+  }
+  // The bulb's box (rays to feet) at x, y clear of every busy box
+  const boxFree = (x, y, rects, pad = 8) => rects.every((r) => x + 34 + pad < r.l || x - 34 - pad > r.r || y + FEET + pad < r.t || y - RAYS_UP - pad > r.b);
+  // Beside a text (dx further on), or above it, in canvas px
+  function textSpot(el, cr, side, dx = 0) {
     range.selectNodeContents(el);
     const r = range.getBoundingClientRect();
     if (!r.width) return null;
-    const bx = r.right + STOP_GAP;
-    const by = r.top + r.height / 2;
-    const ax = Math.min(r.left + r.width / 2 + 40, cr.right - 60);
-    const ay = r.top - 46;
-    if (side === 'beside' || (!side && bx + 40 - cr.left <= area.r && clearAt(el, bx, by))) return [bx - cr.left, by - cr.top, 'beside'];
-    if (side === 'above' || (!side && clearAt(el, ax, ay))) return [ax - cr.left, ay - cr.top, 'above'];
-    return null;
+    if (side === 'above') return [Math.min(r.left + r.width / 2 + 40, cr.right - 60) - cr.left, r.top - 46 - cr.top];
+    return [r.right + STOP_GAP + dx - cr.left, r.top + r.height / 2 - cr.top];
   }
-  function clearAt(el, sx, sy) {
-    const scope = el.closest('.banner, .shelf, section, footer') || document.body;
-    return [...scope.querySelectorAll(BLOCK)].every((b) => {
-      const r = b.getBoundingClientRect();
-      return sx + 30 < r.left || sx - 30 > r.right || sy + 34 < r.top || sy - 34 > r.bottom;
-    });
+  // A heading's spot, off everything near it: beside it (a little further
+  // on when something is in the way), else above it; or null
+  function headSpot(el, cr, rects) {
+    for (const dx of [0, 40, 80, 120]) {
+      const p = textSpot(el, cr, 'beside', dx);
+      if (!p || p[0] + 40 > area.r) break;
+      if (boxFree(p[0], p[1], rects)) return { el, side: 'beside', dx, x: p[0], y: p[1] };
+    }
+    const p = textSpot(el, cr, 'above');
+    return p && boxFree(p[0], p[1], rects) ? { el, side: 'above', dx: 0, x: p[0], y: p[1] } : null;
   }
   // Standing in a building site's picture (S1: its feet 60% down), while its
   // shelf shows it (a sliding shelf can move it out of view)
@@ -661,9 +732,16 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     if (!r.width || x < row.left + 30 || x > row.right - 30) return null;
     return [x - cr.left, r.top + r.height * 0.6 - 26 - cr.top];
   }
-  // Never lower than the car can get below it (the car keeps above the
-  // bottom corner buttons), so it can always be chased back up
-  const low = (p) => p && [p[0], Math.min(p[1], area.b - 80), p[2]];
+  // Perched on a game's cover (S1): standing on its top edge near the right
+  // corner, while its shelf shows it. Never one of the spots it hops between:
+  // only the shelf beats send it here.
+  function perchSpot(el, cr) {
+    const r = (el.querySelector('.shelf__cover') || el).getBoundingClientRect();
+    const row = el.parentElement.getBoundingClientRect();
+    const x = r.right - 42;
+    if (!r.width || x < row.left + 20 || x > row.right - 20) return null;
+    return [x - cr.left, r.top + 6 - FEET - cr.top];
+  }
   // Every spot now, as {spot, x, y} in canvas px, top of the page first
   // (landing spots taken by a bulb of the round are left out)
   function guideSpots(it) {
@@ -673,12 +751,15 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     spots()
       .sort((p, q) => p[1] - q[1])
       .forEach(([x, y], k) => live.every((o) => Math.hypot(o.hx - x, o.hy - y) > 70) && out.push({ spot: { k }, x, y }));
+    const busy = new Map(); // per part of the page, measured once per call
     for (const el of document.querySelectorAll(HEADS)) {
-      const p = low(textSpot(el, cr));
-      if (p) out.push({ spot: { el, side: p[2] }, x: p[0], y: p[1] });
+      const scope = el.closest('.banner, .shelf, section, footer') || document.body;
+      if (!busy.has(scope)) busy.set(scope, busyIn(scope, cr));
+      const h = headSpot(el, cr, busy.get(scope));
+      if (h) out.push({ spot: { el, side: h.side, dx: h.dx }, x: h.x, y: h.y });
     }
     for (const el of document.querySelectorAll('.shelf__slot')) {
-      const p = low(slotSpot(el, cr));
+      const p = slotSpot(el, cr);
       if (p) out.push({ spot: { el, slot: true }, x: p[0], y: p[1] });
     }
     return out.sort((p, q) => p.y - q.y);
@@ -687,7 +768,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   function spotPos(s) {
     if (!s.el) return spots().sort((p, q) => p[1] - q[1])[s.k] || null;
     const cr = canvas.getBoundingClientRect();
-    return low(s.slot ? slotSpot(s.el, cr) : textSpot(s.el, cr, s.side));
+    return s.slot ? slotSpot(s.el, cr) : s.perch ? perchSpot(s.el, cr) : textSpot(s.el, cr, s.side, s.dx);
   }
 
   // Who it runs from: the car if it moved in the last CHASER_MS and is on the
@@ -720,12 +801,15 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   let lastY = scrollY;
   let fromY = scrollY;
   let settleT = 0;
+  let worked = 0; // page scrolled since the last working hop
+  let backT = 0; // wakes the loop (asleep while nothing shows) for the sneak back in
   window.addEventListener(
     'scroll',
     () => {
       const now = performance.now();
       if (now - scrollAt > SETTLE_MS) fromY = lastY;
       if (Math.abs(scrollY - fromY) > 4) scrollDir = scrollY > fromY ? 1 : -1;
+      worked += Math.abs(scrollY - lastY);
       lastY = scrollY;
       scrollAt = now;
       clearTimeout(settleT);
@@ -734,21 +818,22 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     { passive: true },
   );
 
-  // Chased: one hop to the next spot ahead in the chaser's direction (the
-  // nearest on the screen, else the next one off it), never next to the
-  // chaser. Nothing ahead (the top or the end of the page): a short dodge
-  // where it is.
+  // Chased: one hop on ahead, always down the page (a guide never leads
+  // back), never next to the chaser: to the first spot below the screen, so
+  // it is gone from view (near the end of the page: the last spot below it
+  // on the screen). Nothing below (the end of the page): it hops off the side
+  // of the screen, away from the chaser, at the same height.
   function ahead(it, now, c, line) {
-    const dir = Math.abs(c.vy) > 40 ? Math.sign(c.vy) : scrollDir;
-    const list = guideSpots(it)
-      .filter((s) => (s.y - it.y) * dir > 40 && Math.hypot(s.x - c.x, s.y - c.y) > c.r + 40)
-      .sort((p, q) => (p.y - q.y) * dir);
-    const next = list.find((s) => onScreen(s.x, s.y)) || list[0];
-    if (next) hopTo(it, next.spot, next.x, next.y, now, farHop(next.y - it.y), 150);
-    else {
-      const p = farSpot(it, c.x, c.y, (x, y) => (y < land.b + 20 ? free(x, y, 40) : onScreen(x, y)));
-      if (!p) return;
-      hopTo(it, null, p[0], p[1], now, HOP_MS, 46);
+    const list = guideSpots(it).filter((s) => s.y - it.y > 40 && Math.hypot(s.x - c.x, s.y - c.y) > c.r + 40 && Math.hypot(s.x - car.x, s.y - car.y) > dodgeR + 40);
+    const next = list.find((s) => hidden(s.y)) || list.at(-1);
+    if (next) {
+      hopTo(it, next.spot, next.x, next.y, now, farHop(next.y - it.y), 150);
+      it.why = 'ahead';
+    } else {
+      it.side = c.x < it.x ? 1 : -1;
+      const x = it.side > 0 ? W + 70 : -70;
+      hopTo(it, null, x, it.y, now, MathUtils.clamp(400 + Math.abs(x - it.x) * 0.6, 600, 1100), 60);
+      it.why = 'side';
     }
     openEyes(it, now);
     it.crept = false;
@@ -757,19 +842,234 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     sfx.thump();
   }
 
-  // The visitor scrolled away from it: once the scroll rests it hops back in
-  // from the edge it left, onto the spot nearest that edge on the screen
+  // Where it comes back to (fresh each time, never predictable): a random
+  // free place in the part of the page filling most of the screen (the
+  // landing, a banner, a shelf, the footer), off everything there, on the
+  // screen, away from the car (parked or not), the pointer and the other
+  // ideas, and not where it came back last time. None there: anywhere free
+  // on the screen. None at all (phones: no room beside the page): a spot on
+  // the screen, or a peek in from a side edge at a row with the least of the
+  // page under the part that shows (rest.js's phone peek), at random.
+  const PARTS = '.entrance, .banner, .shelf, .site-foot';
+  let lastBack = null; // page px
+  let lastEdge = -1;
+  const any = (list) => list[Math.floor(Math.random() * list.length)];
+  function backPlace(it, now) {
+    const cr = canvas.getBoundingClientRect();
+    const barT = (hud ? Math.min(hud.getBoundingClientRect().top, innerHeight) : innerHeight) - cr.top;
+    const parts = [...document.querySelectorAll(PARTS)]
+      .map((el) => {
+        const r = el.getBoundingClientRect();
+        return { el, r, h: Math.min(r.bottom, innerHeight) - Math.max(r.top, 0) };
+      })
+      .filter((p) => p.h > 60)
+      .sort((p, q) => q.h - p.h);
+    const ptr = pointer.t && now - pointer.t < CHASER_MS ? local(pointer.cx, pointer.cy) : null;
+    const live = ideas.filter((o) => !o.gone && o !== it);
+    const ok = (x, y) =>
+      Math.hypot(x - car.x, y - car.y) > dodgeR + carR() + 30 && (!ptr || Math.hypot(x - ptr[0], y - ptr[1]) > POINTER_R + 60) &&
+      live.every((o) => Math.hypot(o.hx - x, o.hy - y) > 90) && (!lastBack || Math.hypot(x - lastBack.x, y + off - lastBack.py) > 220) &&
+      (y > land.b + 20 || free(x, y, 40));
+    const grid = (ps, extra = []) => {
+      const rects = [...ps.flatMap((p) => busyIn(p.el, cr)), ...extra];
+      const top = Math.max(60 + RAYS_UP, Math.min(...ps.map((p) => p.r.top)) - cr.top + RAYS_UP);
+      const bot = Math.min(barT - FEET - 10, Math.max(...ps.map((p) => p.r.bottom)) - cr.top - FEET);
+      const out = [];
+      for (let y = top; y <= bot; y += 40) for (let x = area.l + 40; x <= area.r - 40; x += 40) if (boxFree(x, y, rects) && ok(x, y)) out.push({ spot: null, x, y });
+      return out;
+    };
+    let list = parts.length ? grid(parts.slice(0, 1)) : [];
+    if (!list.length && parts.length) {
+      // the whole screen: every part on it, and the headings between them
+      const heads = [...document.querySelectorAll(HEADS)].map((el) => {
+        const r = el.getBoundingClientRect();
+        return { l: r.left - cr.left, t: r.top - cr.top, r: r.right - cr.left, b: r.bottom - cr.top };
+      });
+      list = grid(parts, heads);
+    }
+    if (!list.length) {
+      const rects = parts.flatMap((p) => busyIn(p.el, cr));
+      const peeks = [];
+      for (const side of [-1, 1]) {
+        const x = side < 0 ? PEEK : W - PEEK;
+        const [vl, vr] = side < 0 ? [0, PEEK + 34] : [W - PEEK - 34, W]; // the part that shows
+        for (let y = 60 + RAYS_UP; y <= barT - FEET - 10; y += 40) {
+          if (!ok(x, y)) continue;
+          const under = rects.reduce((a, r) => a + Math.max(0, Math.min(vr, r.r) - Math.max(vl, r.l)) * Math.max(0, Math.min(y + FEET, r.b) - Math.max(y - RAYS_UP, r.t)), 0);
+          peeks.push({ spot: null, x, y, under });
+        }
+      }
+      const least = Math.min(...peeks.map((q) => q.under));
+      list = [...guideSpots(it).filter((q) => onScreen(q.x, q.y) && ok(q.x, q.y)), ...peeks.filter((q) => q.under <= least + 400)];
+    }
+    return list.length ? any(list) : null;
+  }
+  // Distance from point p to the segment a-b (the hop's path)
+  const segDist = (px, py, [ax, ay], [bx, by]) => {
+    const dx = bx - ax;
+    const dy = by - ay;
+    const k = MathUtils.clamp(((px - ax) * dx + (py - ay) * dy) / (dx * dx + dy * dy || 1), 0, 1);
+    return Math.hypot(px - ax - dx * k, py - ay - dy * k);
+  };
+
+  // Back on the screen, at a fresh place (backPlace). From the top edge (the
+  // visitor scrolled down past it): it catches up. Else it sneaks in, slow
+  // and low, from the left, the right or the bottom edge, never the way it
+  // came last time, never across the car. Nowhere to go: it tries again a
+  // little later.
   function hopIn(it, now, fromTop) {
+    const to = backPlace(it, now);
+    if (!to) {
+      it.backAt = now + 2000;
+      return;
+    }
     it.inAt = now;
-    const c = chaser(now);
-    const list = guideSpots(it).filter((s) => onScreen(s.x, s.y) && (!c || Math.hypot(s.x - c.x, s.y - c.y) > c.r + 40));
-    if (!list.length) return;
-    const s = fromTop ? list[0] : list[list.length - 1];
-    it.x = s.x;
-    it.y = fromTop ? -60 : H + 60;
-    hopTo(it, s.spot, s.x, s.y, now, 900, 120);
+    let from = [to.x, -60];
+    if (!fromTop) {
+      const edges = [[-70, to.y], [W + 70, to.y], [to.x, H + 60]]
+        .map((p, k) => ({ p, k, r: Math.random() }))
+        .filter((e) => e.k !== lastEdge)
+        .sort((p, q) => p.r - q.r);
+      const e = edges.find((q) => segDist(car.x, car.y, q.p, [to.x, to.y]) > carR() + 50) || edges[0];
+      from = e.p;
+      lastEdge = e.k;
+    }
+    [it.x, it.y] = from;
+    hopTo(it, to.spot, to.x, to.y, now, fromTop ? 900 : 1300, fromTop ? 120 : 50);
+    it.why = fromTop ? 'in-top' : ['in-left', 'in-right', 'in-bottom'][lastEdge];
+    lastBack = { x: to.x, py: to.y + off };
+    it.nextDodge = now + DODGE_MS * 2;
     if (carOnScreen()) shout('There you are!', now);
     sfx.thump();
+  }
+
+  /* the guide on the shelves (the beats of S1): it works in a building site,
+     laughs when reached for there, perches on covers, rides a slide */
+
+  // A cover or building site wholly in view on its shelf (a sliding shelf may be slid along)
+  const inRow = (el) => {
+    const row = el.parentElement.getBoundingClientRect();
+    const r = el.getBoundingClientRect();
+    return r.left >= row.left - 2 && r.right <= row.right + 2;
+  };
+  // The mouse pointer on the cover it perches on, or on its building site
+  const pointerOn = (s) => {
+    if (!s?.el || !(s.slot || s.perch)) return false;
+    const r = s.el.getBoundingClientRect();
+    return pointer.cx > r.left && pointer.cx < r.right && pointer.cy > r.top && pointer.cy < r.bottom;
+  };
+
+  // Reached for: the shelf beats, else one hop ahead
+  function reached(it, now, c) {
+    if (it.spot?.slot) return reachSite(it, now, c);
+    if (it.spot?.perch && !c.car) return alongShelf(it, now, c);
+    ahead(it, now, c);
+  }
+
+  // One hop onto a cover or into a building site; false when it is out of view
+  function hopOnto(it, el, now) {
+    const slot = el.classList.contains('shelf__slot');
+    const p = (slot ? slotSpot : perchSpot)(el, canvas.getBoundingClientRect());
+    if (!p) return false;
+    openEyes(it, now);
+    hopTo(it, slot ? { el, slot } : { el, perch: true }, p[0], p[1], now, farHop(p[1] - it.y), 110);
+    it.why = 'shelf';
+    it.crept = false;
+    it.nextDodge = now + DODGE_MS * 2;
+    sfx.boing();
+    return true;
+  }
+
+  // Working: stretch up, squash on landing with dust (drawRunaway), and now
+  // and then a line
+  function work(it, now) {
+    it.work = { t0: now, dust: false };
+    if (++it.works % WORK_LINE !== 3) return;
+    const list = WORK_LINES.filter((l) => l !== it.line);
+    it.line = list[Math.floor(Math.random() * list.length)];
+    bulbSay(it.line, now);
+  }
+
+  // In its building site: "Nope, not a game yet." and a laugh, then off it goes
+  function reachSite(it, now, c) {
+    openEyes(it, now);
+    it.laugh = now;
+    it.work = null;
+    it.reach = { c, shelf: it.spot.el.closest('.shelf') };
+    bulbSay('Nope, not a game yet.', now);
+  }
+  // ...the mouse pointer sends it onto the first cover in view on the next
+  // shelf down; the car (or no shelf below): one hop ahead
+  function offSite(it, now) {
+    it.laugh = 0;
+    const c = chaser(now) || it.reach.c;
+    if (!c.car) {
+      const shelves = [...document.querySelectorAll('.shelf')];
+      const next = shelves[shelves.indexOf(it.reach.shelf) + 1];
+      const items = next ? [...next.querySelectorAll('.shelf__item')] : [];
+      const cover = items.find(inRow) || items[0];
+      if (cover && hopOnto(it, cover, now)) return;
+    }
+    ahead(it, now, c);
+  }
+
+  // Perched: the pointer on its cover makes the car shout "Hold still!" at
+  // the pointer, and it hops one cover along (after the shelf's last game:
+  // into its building site; nowhere along: one hop ahead)
+  function alongShelf(it, now, c) {
+    pointerShout('Hold still!');
+    const next = it.spot.el.nextElementSibling;
+    if (!next || !hopOnto(it, next, now)) ahead(it, now, c);
+  }
+
+  // Slid the shelf it stands on (a cover or its building site): once the
+  // slide stops, it hops to the far cover in view, ahead of the slide (at the
+  // end of the shelf: its building site)
+  for (const shelf of document.querySelectorAll('.shelf--rail')) {
+    const row = shelf.querySelector('.shelf__row');
+    let t = 0;
+    const look = () => {
+      const it = runaway;
+      if (!it?.guide || it.rail?.row !== row) return;
+      if (it.hop || it.laugh) return void (t = setTimeout(look, SLIDE_SETTLE_MS)); // mid-hop: look again after
+      const d = row.scrollLeft - it.rail.x0;
+      if (Math.abs(d) < SLIDE_START) return;
+      const seen = [...row.children].filter(inRow);
+      const next = d > 0 ? seen.at(-1) : seen[0];
+      if (next && next !== it.spot?.el) hopOnto(it, next, performance.now());
+    };
+    shelf.addEventListener('shelf:slide', () => {
+      clearTimeout(t);
+      t = setTimeout(look, SLIDE_SETTLE_MS);
+    });
+  }
+
+  // The car's line at the mouse pointer (the visitor reaching for a cover)
+  function pointerShout(text) {
+    const s = document.createElement('span');
+    s.className = 'car-bubble shelf-shout';
+    s.append(Object.assign(document.createElement('span'), { textContent: text }));
+    s.style.left = `${MathUtils.clamp(pointer.cx, 70, innerWidth - 70)}px`;
+    s.style.top = `${Math.max(pointer.cy - 18, 44)}px`;
+    document.body.append(s);
+    void s.offsetWidth;
+    s.classList.add('is-on');
+    setTimeout(() => {
+      s.classList.remove('is-on');
+      setTimeout(() => s.remove(), 250);
+    }, 1400);
+  }
+
+  // The guide's own lines, in an ink bubble over it (draw() keeps it there)
+  const sayEl = document.createElement('span');
+  sayEl.className = 'guide-say';
+  sayEl.append(document.createElement('span'));
+  layer.append(sayEl);
+  let sayUntil = 0;
+  function bulbSay(text, now) {
+    sayEl.firstChild.textContent = text;
+    sayEl.classList.add('is-on');
+    sayUntil = now + SAY_MS;
   }
 
   // Per frame: waits on its spot, hops ahead when chased, back in after a
@@ -778,7 +1078,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     if (it.spot) {
       const p = spotPos(it.spot);
       if (p) [it.hx, it.hy] = p;
-      else it.spot = null; // its building site slid away: it stays where it is
+      else it.spot = null; // its cover or building site slid away: it stays where it is, until the slide stops
     }
     if (it.hop) {
       it.hop.x1 = it.hx;
@@ -791,17 +1091,43 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     }
     it.x = it.hx;
     it.y = it.hy;
+    if (it.laugh) {
+      if (now - it.laugh >= LAUGH_MS) offSite(it, now);
+      return;
+    }
+    // Working in its building site: a small hop per WORK_PX of page scroll,
+    // up or down, while it is on the screen
+    if (!it.spot?.slot) worked = 0;
+    else if (worked >= WORK_PX) {
+      worked = 0;
+      if (!it.work && juicy() && it.y > 0 && it.y < H) work(it, now);
+    }
     const c = chaser(now);
     const d = c ? Math.hypot(c.x - it.x, c.y - it.y) : Infinity;
     if (it.crept) {
       // Crept up while the visitor rested: only reaching for it sets it off
       if (c?.moving && d < NEAR_R) return ahead(it, now, c, 'So close!');
       if (c?.moving && d > CREEP_GAP + 60) it.crept = false;
-    } else if (c?.moving && d < c.r && now >= it.nextDodge) return ahead(it, now, c);
+    } else if (c?.moving && now >= it.nextDodge && (d < c.r || (!c.car && pointerOn(it.spot)))) return reached(it, now, c);
     const above = it.y < -40;
-    const below = it.y > H + 40;
-    if (((above && scrollDir > 0) || (below && scrollDir < 0)) && now - scrollAt > SETTLE_MS && it.inAt < scrollAt) return hopIn(it, now, above);
-    if (!above && !below) creep(it, now);
+    const below = hidden(it.y);
+    const aside = it.x < -40 || it.x > W + 40; // off the side, at the end of the page
+    if (!below && !aside) it.leftAt = 0;
+    else if (!it.leftAt) it.leftAt = now;
+    const rested = now - scrollAt > SETTLE_MS && it.inAt < scrollAt;
+    // The visitor scrolled down past it: it catches up from the top edge
+    if (above && scrollDir > 0 && rested && now >= it.backAt) return hopIn(it, now, true);
+    // The visitor went back up: it follows from the bottom edge
+    if (below && scrollDir < 0 && rested && now >= it.backAt) return hopIn(it, now, false);
+    // It went on ahead, out of sight, and the visitor stays put: after
+    // BACK_MS it sneaks back in
+    if (below || aside) {
+      const at = Math.max(Math.max(it.leftAt, scrollAt) + BACK_MS, it.backAt);
+      if (now >= at) return hopIn(it, now, false);
+      clearTimeout(backT);
+      backT = setTimeout(wake, at - now + 60);
+    }
+    if (!above && !below && !aside) creep(it, now);
   }
 
   // Everything in canvas px moves together: the layer moving back over the
@@ -1428,10 +1754,15 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   // Runaway: hop arc (stretched in the air, squashed at take-off and
   // landing); once awake, eyes that spring open, blink every few seconds and
   // wink after each dodge
-  function drawRunaway(it, now, j, bob, bs) {
+  function drawRunaway(it, now, j, bob, bs, dt) {
+    // Phones: smaller while it stands in a building site
+    const size = it.spot?.slot && W < 600 ? SITE_SIZE : 1;
+    it.size = j ? MathUtils.lerp(it.size, size, 1 - Math.exp(-8 * dt)) : size;
     let lift = 0;
     let sx = 1;
     let sy = 1;
+    let foot = 0; // working and laughing, it squashes from its feet
+    let flick = 1;
     if (it.hop && j) {
       const k = Math.min(1, (now - it.hop.t0) / it.hop.ms);
       const s = Math.sin(k * Math.PI);
@@ -1439,15 +1770,44 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
       lift = s * it.hop.lift;
       sx = 1 - s * 0.12 + (ground ? 0.12 : 0);
       sy = 1 + s * 0.16 - (ground ? 0.14 : 0);
+    } else if (it.work && j && now - it.work.t0 < WORK_MS) {
+      // Working hop: up stretched, down onto a squash (dust), back to shape
+      const k = (now - it.work.t0) / WORK_MS;
+      const i = k < WORK_KEYS[1][0] ? 0 : k < WORK_KEYS[2][0] ? 1 : 2;
+      const [k0, l0, x0, y0] = WORK_KEYS[i];
+      const [k1, l1, x1, y1] = WORK_KEYS[i + 1];
+      const t = (k - k0) / (k1 - k0);
+      const e = i === 1 ? t * t : 1 - (1 - t) * (1 - t);
+      lift = MathUtils.lerp(l0, l1, e);
+      sx = MathUtils.lerp(x0, x1, e);
+      sy = MathUtils.lerp(y0, y1, e);
+      foot = FEET * it.size * (1 - sy);
+      if (i === 2 && !it.work.dust) {
+        it.work.dust = true;
+        [-1, 1].forEach((s) => puff(it.x + s * 8, it.y + FEET * it.size - 4, s * 70, -12, 4));
+      }
+    } else if (it.work) it.work = null;
+    if (it.laugh && j) {
+      // Laugh: three giggles, rays flicking, a little shake
+      const k = Math.min(1, (now - it.laugh) / LAUGH_MS);
+      const g = Math.sin(k * Math.PI * 6.6) * (1 - k * 0.4);
+      lift = Math.max(0, g) * 5;
+      sx = 1 - g * 0.05;
+      sy = 1 + g * 0.05;
+      foot = FEET * it.size * (1 - sy);
+      flick = 1 + Math.max(0, g) * 0.55;
+      it.g.rotation.z += Math.sin(k * Math.PI * 10) * 0.08 * (1 - k);
     }
-    toWorld(it.x, it.y + bob - lift, wp);
+    for (const r of it.g.userData.rays) r.scale.y = flick;
+    it.drawY = it.y + bob - lift + foot;
+    toWorld(it.x, it.drawY, wp);
     it.g.position.copy(wp);
-    const base = bs * Math.max(it.pop, 0);
+    const base = bs * it.size * Math.max(it.pop, 0);
     it.g.scale.set(base * sx, base * sy, base);
     if (!it.eyes) return;
     const open = j ? elasticOut(Math.min(1, (now - it.wokeAt) / 450)) : 1;
     if (now > it.blinkAt + 130) it.blinkAt = now + 2600 + Math.random() * 2400;
-    const blink = j && now > it.blinkAt ? 0.12 : 1;
+    const blink = it.laugh ? 0.3 : j && now > it.blinkAt ? 0.12 : 1; // laughing: eyes squeezed
     it.eyes[0].scale.set(0.03 * open, 0.042 * open * blink, 0.012);
     it.eyes[1].scale.set(0.03 * open, 0.042 * open * (now < it.winkUntil ? 0.15 : blink), 0.012);
   }
@@ -1491,7 +1851,21 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
       it.g.position.copy(wp);
       it.g.scale.setScalar(bs * Math.max(it.pop, 0) * grow);
       it.g.rotation.z = j ? Math.sin(time * 1.3 + it.phase) * 0.15 * it.mirror : 0;
-      if (it === runaway) drawRunaway(it, now, j, bob, bs);
+      if (it === runaway) drawRunaway(it, now, j, bob, bs, dt);
+    }
+    // The guide's line rides over it (under it at the top of the screen),
+    // kept on the screen
+    if (sayUntil && (now > sayUntil || !runaway || runaway.gone)) {
+      sayEl.classList.remove('is-on');
+      sayUntil = 0;
+    }
+    if (sayUntil) {
+      const span = sayEl.firstChild;
+      const w = span.offsetWidth / 2 + 8;
+      const up = 58 * runaway.size; // over its rays
+      const below = runaway.drawY - up - span.offsetHeight < 8;
+      sayEl.classList.toggle('is-below', below);
+      sayEl.style.transform = `translate(${MathUtils.clamp(runaway.x, w, W - w).toFixed(1)}px, ${(below ? runaway.drawY + FEET * runaway.size + 12 : runaway.drawY - up).toFixed(1)}px)`;
     }
     // Shout over (before the first catch: back to the how-to-play line)
     if (shoutUntil && now > shoutUntil) {
@@ -1563,8 +1937,8 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     // everything on it stays put on the page; a scroll or any input wakes it.
     const settled = Math.abs(car.pop - car.popTarget) < 0.002 && Math.abs(car.popV) < 0.01 && Math.abs(car.squash) < 0.002 && Math.abs(car.squashV) < 0.01 && Math.abs(car.roll) < 0.002;
     const idle =
-      !(hostR.bottom > 0 && hostR.top < innerHeight) && !(runaway && (runaway.hop || (runaway.y > -80 && runaway.y < H + 80))) &&
-      !puffs.length && !rings.length && !marks[0].length && !marks[1].length && !held.size && !grab.go && !camAt && !shoutUntil &&
+      !(hostR.bottom > 0 && hostR.top < innerHeight) && !(runaway && (runaway.hop || (runaway.y > -80 && runaway.y < H + 80 && runaway.x > -80 && runaway.x < W + 80))) &&
+      !puffs.length && !rings.length && !marks[0].length && !marks[1].length && !held.size && !grab.go && !camAt && !shoutUntil && !sayUntil &&
       Math.hypot(car.vx, car.vy) < 1 && settled;
     raf = !document.hidden && !idle ? requestAnimationFrame(frame) : 0;
   }
@@ -1585,7 +1959,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
 
   // Test hook: ?debug exposes the game state (headless tests only)
   if (new URLSearchParams(location.search).has('debug')) {
-    window.__landing = { car, ideas: () => ideas, walls: () => walls, area: () => area, canvas, fxCounts: () => [marks[0].length + marks[1].length, puffs.length, rings.length], goal: () => dragGoal(), runaway: () => runaway, firstRound: () => firstRound, howTo: () => howTo, caught: () => caught, off: () => off, land: () => land, layer, grab, played: () => played, asleep: () => !raf, spots: () => guideSpots(runaway), scrollRest: () => ({ scrollAt, scrollDir, raf }), dodgeR };
+    window.__landing = { car, ideas: () => ideas, walls: () => walls, area: () => area, canvas, fxCounts: () => [marks[0].length + marks[1].length, puffs.length, rings.length], goal: () => dragGoal(), runaway: () => runaway, firstRound: () => firstRound, howTo: () => howTo, caught: () => caught, off: () => off, land: () => land, layer, grab, played: () => played, asleep: () => !raf, spots: () => guideSpots(runaway), said: () => (sayUntil ? sayEl.textContent : ''), guideTo: (el) => runaway?.guide && hopOnto(runaway, el, performance.now()) && (runaway.why = 'test'), backPlace: () => backPlace(runaway, performance.now()), scrollRest: () => ({ scrollAt, scrollDir, raf }), dodgeR };
   }
 
   return {

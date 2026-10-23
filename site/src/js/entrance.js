@@ -51,6 +51,7 @@ export function initEntrance(root) {
   // three.js loads after first paint so the text shows at once
   let hero = null;
   if (canvas && hasWebGL()) {
+    html.classList.add('has-guide'); // the 3D runaway is the page's only bulb: shelfbulb.js and rest.js stand down
     import('./hero3d.js').then(({ initHero }) => {
       hero = initHero(canvas, {
         onCollect: () => act('idea'),

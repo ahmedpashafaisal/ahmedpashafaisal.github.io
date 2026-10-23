@@ -8,7 +8,8 @@
 //     still!" and it hops one cover along; after a shelf's last game it goes
 //     into that shelf's empty slot. Slide the shelf it sits on and, once the
 //     slide stops, it hops to the far cover in view, ahead of the slide.
-// Loaded by shelves.js when the shelves come near; rest.js keeps its own
+// Loaded by shelves.js when the shelves come near, only without the 3D guide
+// (no WebGL: hero3d.js does these beats otherwise); rest.js keeps its own
 // runaway away while this one is on screen.
 import { makeBulb, play } from './bulb.js';
 import '../styles/bulb.css';

@@ -14,7 +14,8 @@ Older decisions and story: [PLAYBOOK-runaway-idea.md](PLAYBOOK-runaway-idea.md).
 | This plan | Replaces the rest of S3b and S3c |
 | G1 game layer | ✅ Done, commit `3404b0c` |
 | G2 guide bulb | Committed, feel check with G3 |
-| Next | G3 shelf beats onto the guide |
+| G3 shelf beats | Built (reading A), not committed, feel check with G2 |
+| Next | Ahmed's G2 + G3 feel check, then G4 |
 
 ## Ahmed's words (23 Oct, feedback on S3b)
 - "let the car drive over the elements in the landing page / home section as well"
@@ -27,13 +28,22 @@ Older decisions and story: [PLAYBOOK-runaway-idea.md](PLAYBOOK-runaway-idea.md).
 - "if a player visits all the pages it should be able to catch the bulb or the bulb will come to the player. But that is a later discussion"
 - "we need to have a consistent story and narrative first"
 
+## Ahmed's words (23 Oct, feedback on G3)
+- "before it used to dodge and go away from the screen and sneak in after a while, now it just keeps dodging"
+- "it goes back up sometimes, a guide wouldn't go back, would it?"
+- Then "go" on: forward only, out of sight, back in after 6 s, follows from below when the visitor goes back up.
+- "At the very bottom, the bulb is not running away anymore" (then "go" on the side exit).
+- "So everytime it just appears on the linkedin link? Before it used to do all kinds of other stuff in random places, now it is predictable" and "if I put the car there, it still goes there" (then "Go" on fresh places).
+
 ## Story (one line each)
 - The car is the visitor.
 - The bulb is the idea that got away.
 - It is also the site's guide: always near the visitor, one hop ahead.
 - There is only one bulb, on every part of every page.
 - It never runs back to the top on its own.
-- Get close and it hops ahead, toward the next thing worth seeing.
+- Get close and it hops ahead, toward the next thing worth seeing: always down the page, out of sight.
+- Stay put and it sneaks back in after a while ("There you are!").
+- Go back up the page and it follows you from below; it never leads you back.
 - Rest and it creeps closer ("So close!").
 - The ending (catch it after visiting every page) is a later talk.
 
@@ -42,7 +52,13 @@ Older decisions and story: [PLAYBOOK-runaway-idea.md](PLAYBOOK-runaway-idea.md).
 |---|---|
 | One bulb | Never two on screen. One state for the whole site |
 | Near the visitor | Near the car if the car moved lately; else near the cursor; on touch, on screen |
-| One hop ahead | It hops ahead of the visitor's direction, staying on screen |
+| Forward only | Every dodge goes down the page, whichever way the car or mouse moves |
+| Out of sight | A dodge lands on the first spot below the screen (or under the bottom bar) |
+| Sneaks back | Visitor stays put: back in after 6 s |
+| Follows back up | Visitor goes up the page: once the scroll rests it sneaks back in |
+| Fresh each time | Comes back to a random free place (off text, links, pictures, cards), from a random edge, never the last place or edge |
+| Car always counts | Parked or moving: never lands by the car, never hops across it |
+| End of the page | Nothing below: off the side of the screen, away from the chaser |
 | No way back | Never returns to the top by itself |
 | End of page | Nothing further ahead: dodges where it is |
 | Car = visitor | Car drivable anywhere on the home page; screen follows while driving |

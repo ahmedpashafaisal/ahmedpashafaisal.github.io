@@ -110,6 +110,78 @@ Plan: [PLAN-guide-bulb.md](PLAN-guide-bulb.md).
 - Perch on a cover, slide hop: as S1, but the 3D bulb at the DOM anchor.
 - `shelfbulb.js` retired on the home page. `rest.js` off on the home page (the guide rests instead); kept for other pages.
 - Done when: never two bulbs; the car driving into it makes it hop.
+- Ahmed picked reading A (23 Oct, "Go A"): S1 chain kept on the shelves; covers are not guide spots (D4 unchanged).
+
+#### G3 as built (23 Oct)
+| Part | What |
+|---|---|
+| One bulb | `html.has-guide` (set in `entrance.js` when WebGL works): `shelfbulb.js` never loads, `rest.js` stays off |
+| No WebGL | Old shelf bulb and resting bulb as before |
+| Work | In a building site, on screen: small hop per 120 px of scroll, up or down; stretch, squash, 2 dust puffs |
+| Work lines | 3rd hop, then every 6th: "Almost done." and the rest (drafts) |
+| Own bubble | Ink bubble over the bulb (`.guide-say`); hangs under it at the top of the screen |
+| Reach in a site | Car or pointer close, or pointer on the site: "Nope, not a game yet.", laugh (3 giggles, eyes squeezed, rays flick) |
+| Then (mouse) | Perches on the first cover in view on the next shelf ahead |
+| Then (car, touch) | Next spot ahead, as G2 |
+| Ahead after the laugh | The way the visitor was heading when they reached (fix: the car swung round during the laugh, so it hopped back and the chase looped) |
+| Perch | Top edge of the cover, near the right corner |
+| Point at its cover | Car shouts "Hold still!" at the pointer; one cover along; after the last game into the site |
+| Nowhere along | One-game shelf, or next cover out of view: next spot ahead |
+| Car at a perch | Next spot ahead (the car does not walk it along) |
+| Slide | Shelf it stands on slides 40 px or more: once the slide stops, it hops to the far cover in view (the end: its site) |
+| Phones | In a site it shrinks to 0.7 (the picture is small), as S1 |
+
+#### G3 tests
+| Suite | Result |
+|---|---|
+| `g3.mjs` (new): one bulb, work, lines, dust, reach, laugh, perch, "Hold still!", along a shelf into its site, slide on, slide to the end, slide back, car chase, phone tap, reduced motion, dark, no WebGL | 38/38, 3 runs |
+| `g2.mjs` (idle check now allows a creep toward the car) | 25, 25, 24 of 25 |
+| `g1.mjs` | 45/45 |
+| `s3a-g1.mjs` | 14/14 |
+| `s1.mjs` without WebGL (old shelf bulb) | 33/33 |
+| Console errors | 0 |
+| Weight, gzip | 3D chunk 142.98 → 144.51 KB; CSS +0.1 KB; shelf bulb chunk (1.9 KB) no longer loads on the home page |
+
+#### G3 round 2 (23 Oct, Ahmed's feedback: "now it just keeps dodging"; "a guide wouldn't go back")
+| Part | What |
+|---|---|
+| Forward only | `ahead()`: next spots below only; the chaser's direction no longer counts. After the laugh: the next shelf down |
+| Out of sight | First spot below the screen or under the bottom bar (`.hud`, z 30, over the game layer); near the end, the last spot below it |
+| End of the page | Nothing below: hops off the side of the screen, away from the chaser, at the same height; after 6 s sneaks back in from that side onto the lowest spot on the screen (the footer line). Ahmed: "At the very bottom, the bulb is not running away anymore" (the never-up dodge had no room), then "go" on the side exit |
+| On screen (fix) | `onScreen()` counted the bottom bar twice (`Math.min(H, area.b) - BOTTOM`, and `area.b` already leaves it out): now `Math.min(H - BOTTOM, area.b)` |
+| Sneaks back | Out of sight below, visitor stays put 6 s (`BACK_MS`): slow, low hop in from the bottom edge onto the spot just below the car or pointer; "There you are!" |
+| Catches up | Visitor scrolled down past it: in from the top edge, as G2 |
+| Follows back up | Visitor scrolled up, it is below: once the scroll rests, sneaks in from the bottom edge |
+| Fixes the g2 miss | A guide under the bottom bar now counts as out of sight, so it sneaks back in |
+| Side effect | From PC / Steam's site the mouse sends it down to Storm Alert (one game, no site); the Mobile shelf's covers are reached from its own site (slide to the end) |
+
+#### G3 round 2 tests (frozen build in the scratchpad, `BASE=http://127.0.0.1:4173`)
+| Suite | Result |
+|---|---|
+| `g3.mjs`: + forward part (reached from below still goes down, out of sight, back after about 6 s, follows back up), never-up check per part (hops recorded in the page) | 50/50, 3 runs |
+| `g2.mjs`: "chased up" replaced by "drive back up: never hops up ahead of the car; back at the top it has followed onto the screen" | 25/25, 3 runs |
+| `g1.mjs` | 45/45, 2 runs |
+| `s3a-g1.mjs` | 14, 13, 14 of 14 (known flake: click park 81 px) |
+| `s1.mjs` without WebGL | 33/33, 2 runs |
+| Weight, 3D chunk gzip | 142.98 → 144.67 KB |
+
+#### G3 round 3 (23 Oct, Ahmed: "So everytime it just appears on the linkedin link? ... now it is predictable"; "if I put the car there, it still goes there")
+| Part | What |
+|---|---|
+| Fresh place | `backPlace()`: random free place in the part filling most of the screen (landing, banner, shelf, footer); else anywhere free on the screen; else a spot on the screen |
+| Free | `busyIn()`: text, links, buttons, pictures (any size), and cards or covers (background, border, shadow), kept off by 8 px |
+| Not again | Never within 220 px of the last place it came back to |
+| Way in | Left, right or bottom edge at random (top: catching up after a scroll down), never the last edge, never across the car |
+| Car always counts | Return places keep `dodgeR` + the car's size + 30 px from the car, parked or not; dodge targets too |
+| Heading spots | Same free test: beside, a little further on when something is in the way, else above, else none (the footer line no longer lands on LinkedIn) |
+| `low()` | Removed: it kept spots above the car so the guide could be chased back up; forward only makes that unneeded |
+| Phones | Often no free place (lists fill the width): then a spot on the screen, or a peek in from a side edge (24 px in) at a row with the least page under it, picked at random (rest.js's phone peek) |
+| Test hooks | `__landing.guideTo(el)` puts the guide on a site or cover; `__landing.backPlace()` (`?debug` only) |
+| Known | A tap far down the page: the car drives 6 s and can stop short (G4); tests tap again, as a visitor would |
+
+#### G3 known (not fixed)
+- Perched on the last cover of the sliding shelf, the bulb's glow overlaps the shelf's arrow buttons (as S1); clicks still reach them.
+- Phone: a tap far down the page sends the car only 6 s, so it can stop above the screen (G4: car comes to you).
 
 ### G4: car comes to you and parks (old S3c)
 - Visitor scrolls without driving, car off screen: car drives in from the nearest edge and parks near the bulb or the section heading.
