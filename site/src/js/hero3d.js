@@ -1,8 +1,8 @@
-// Landing mini-game in three.js: the ink toy car (seen from above, slightly
+// Landing mini-game in three.js: the red toy car (seen from above, slightly
 // tilted) sits on the landing with a "Drive me to an idea" bubble (until the
 // first catch, or until the runaway first shows itself). Click anywhere on the landing and the car drives there and
 // parks (turning, drifting, leaving tyre marks and a smoke trail); hold and
-// move and it follows. It catches the ideas (lightbulbs) that pop up on fixed
+// move and it follows. WASD or the arrow keys drive it the way they point. It catches the ideas (lightbulbs) that pop up on fixed
 // spots around the name. The name, the line and the button are walls: the
 // car drives round them and bounces off if it clips one.
 //
@@ -28,6 +28,7 @@
 import {
   BackSide, BoxGeometry, CircleGeometry, ConeGeometry, CylinderGeometry, DataTexture, DirectionalLight, Group, HemisphereLight, MathUtils, Mesh, MeshBasicMaterial, MeshToonMaterial, NearestFilter, PerspectiveCamera, Plane, Raycaster, RedFormat, Scene, SphereGeometry, TorusGeometry, Vector2, Vector3, WebGLRenderer,
 } from 'three';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { readStats } from './achievements.js';
 import { burst } from './burst.js';
 import { sendShock } from './dotgrid.js';
@@ -39,6 +40,9 @@ const INK = 0x1d1b18;
 const LIME = 0xcaff00;
 const SURFACE = 0xfffdf8;
 const INK_SOFT = 0x5c5750;
+const RED = 0xe8473c; // the car's body
+const GLASS = 0x2b333d;
+const TYRE = 0x2a2723;
 
 /* ---------- tuning (pixels, seconds) ---------- */
 const MAX_SPEED = 900;
@@ -47,6 +51,9 @@ const GRIP = 4; // sideways slip decay: lower = more drift
 const ROLL = 2.2; // rolling friction: speed decay per second (a throw rolls about speed / 2.2 px)
 const FOLLOW = 3.2; // driving: speed toward the cursor per px of distance (slows on arrival)
 const FOLLOW_GRIP = 6; // driving: how fast the engine reaches that speed
+const KEY_GAS = 0.7; // keys: top speed, share of MAX_SPEED
+// Keys: the way each one points on screen (WASD by position, so ZQSD on AZERTY)
+const KEY_DIRS = { KeyW: [0, -1], ArrowUp: [0, -1], KeyS: [0, 1], ArrowDown: [0, 1], KeyA: [-1, 0], ArrowLeft: [-1, 0], KeyD: [1, 0], ArrowRight: [1, 0] };
 const TURN_SLOW = 0.12; // share of TURN kept when nearly still: no spinning on the spot
 const SHARP = 0.7; // rad off the pointer: slow down so the turn stays tight
 const STOP_R = 0.75; // car lengths: cursor this close = parked (no steering, no gas)
@@ -100,9 +107,6 @@ export const toon = (color) => {
   if (!mats.has(color)) mats.set(color, new MeshToonMaterial({ color, gradientMap }));
   return mats.get(color);
 };
-// Car body follows the theme (ink in light mode, light ink in dark mode)
-const carBodyMat = new MeshToonMaterial({ color: INK, gradientMap });
-
 export function part(geo, color, { pos = [0, 0, 0], scale = [1, 1, 1], rot = [0, 0, 0], line = 1.07 } = {}) {
   const g = new Group();
   const outline = new Mesh(geo, outlineMat);
@@ -119,18 +123,33 @@ const group = (...children) => {
   return g;
 };
 
-// Toy car: 0.9 long along +x (front), roof along +y
+// Toy car (step S2, "A" in red): 0.9 long along +x (front), roof along +y.
+// Rounded red body, dark glass, red roof; cream twin stripes on the bonnet,
+// roof and boot (what the camera sees from above); chunky tyres with cream
+// hubs, grey bumpers, lime headlights, red tail lights. Red in both themes.
+const flat = (geo, color, pos, rot = [0, 0, 0]) => {
+  const m = new Mesh(geo, toon(color));
+  m.position.set(...pos);
+  m.rotation.set(...rot);
+  return m;
+};
 export function carModel() {
-  const wheel = (x, z) =>
-    part(new CylinderGeometry(0.13, 0.13, 0.1, 20), INK_SOFT, { pos: [x, -0.2, z], rot: [Math.PI / 2, 0, 0], line: 1 });
-  const light = (z) => part(new BoxGeometry(0.04, 0.08, 0.12), LIME, { pos: [0.46, 0.0, z], line: 1 });
-  const body = part(new BoxGeometry(0.9, 0.28, 0.5), INK, { pos: [0, -0.04, 0] });
-  body.children[1].material = carBodyMat;
+  const rounded = (w, h, d, r) => new RoundedBoxGeometry(w, h, d, 3, r);
+  const stripes = (len, x, y) => [-1, 1].map((s) => flat(new BoxGeometry(len, 0.012, 0.06), SURFACE, [x, y, s * 0.065]));
+  const wheel = (x, z) => [
+    part(new CylinderGeometry(0.14, 0.14, 0.12, 24), TYRE, { pos: [x, -0.17, z], rot: [Math.PI / 2, 0, 0], line: 1.06 }),
+    flat(new CylinderGeometry(0.07, 0.07, 0.125, 16), SURFACE, [x, -0.17, z], [Math.PI / 2, 0, 0]),
+  ];
+  const bumper = (x) => part(rounded(0.07, 0.08, 0.5, 0.03), 0x8a847a, { pos: [x, -0.13, 0], line: 1.06 });
   return group(
-    body,
-    part(new BoxGeometry(0.48, 0.24, 0.44), SURFACE, { pos: [-0.06, 0.22, 0] }),
-    wheel(0.28, 0.25), wheel(-0.28, 0.25), wheel(0.28, -0.25), wheel(-0.28, -0.25),
-    light(0.15), light(-0.15),
+    part(rounded(0.92, 0.24, 0.52, 0.09), RED, { pos: [0, -0.05, 0], line: 1.06 }),
+    part(rounded(0.5, 0.2, 0.44, 0.08), GLASS, { pos: [-0.06, 0.15, 0], line: 1.06 }),
+    part(rounded(0.4, 0.07, 0.42, 0.035), RED, { pos: [-0.08, 0.26, 0], line: 1.06 }),
+    ...stripes(0.3, 0.3, 0.072), ...stripes(0.36, -0.08, 0.297), ...stripes(0.12, -0.39, 0.072),
+    ...wheel(0.29, 0.24), ...wheel(-0.29, 0.24), ...wheel(0.29, -0.24), ...wheel(-0.29, -0.24),
+    bumper(0.47), bumper(-0.47),
+    ...[-1, 1].map((s) => part(new CylinderGeometry(0.05, 0.05, 0.03, 16), LIME, { pos: [0.465, -0.02, s * 0.16], rot: [0, 0, Math.PI / 2], line: 1.06 })),
+    ...[-1, 1].map((s) => flat(new BoxGeometry(0.02, 0.05, 0.1), 0xff5a4e, [-0.465, -0.02, s * 0.16])),
   );
 }
 
@@ -779,6 +798,37 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   window.addEventListener('pointercancel', release);
   window.addEventListener('blur', () => release());
 
+  /* input: keys. WASD or the arrows drive the car the way they point on the
+     screen (up = up the page; two keys = a diagonal) while the landing fills
+     the middle of the screen. The arrows then drive instead of scrolling. */
+  const held = new Set();
+  const onLanding = () => {
+    const r = host.getBoundingClientRect();
+    return r.top < innerHeight / 2 && r.bottom > innerHeight / 2;
+  };
+  window.addEventListener('keydown', (e) => {
+    if (!entered || !KEY_DIRS[e.code] || e.ctrlKey || e.metaKey || e.altKey) return;
+    if (e.target.closest?.('input, textarea, select, [contenteditable]') || (!held.size && !onLanding())) return;
+    e.preventDefault();
+    if (!held.size) ideas.forEach((it) => (it.waiting = false));
+    held.add(e.code);
+    grab.on = false;
+    grab.go = false;
+    pushed(performance.now());
+  });
+  window.addEventListener('keyup', (e) => held.delete(e.code));
+  window.addEventListener('blur', () => held.clear());
+  // Heading the held keys ask for, or null (none, or opposite keys)
+  const keyAim = () => {
+    let x = 0;
+    let y = 0;
+    held.forEach((code) => {
+      x += KEY_DIRS[code][0];
+      y += KEY_DIRS[code][1];
+    });
+    return x || y ? Math.atan2(y, x) : null;
+  };
+
   function pushed(now) {
     car.restAt = now;
     if (!shoutUntil) bubble?.classList.remove('is-on');
@@ -891,6 +941,23 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     return Math.max(0, t);
   }
 
+  // Gas or brake toward speed sp along the heading only (sideways slip is
+  // left to the grip: drift), never faster than it can slow to a soft touch
+  // before the wall or edge it is moving toward (a target flipped behind it,
+  // a drift, a corner cut). Returns the forward speed before the change.
+  function gas(sp, dt) {
+    const hx = Math.cos(car.h);
+    const hy = Math.sin(car.h);
+    const v0 = Math.hypot(car.vx, car.vy);
+    const run = v0 > 1 ? runTo(car.vx / v0, car.vy / v0) : runTo(hx, hy);
+    const v = Math.min(sp, Math.sqrt(CORNER_V * CORNER_V + 2 * BRAKE * run));
+    const fwd = car.vx * hx + car.vy * hy;
+    const dv = (v - fwd) * (1 - Math.exp(-(v > fwd ? FOLLOW_GRIP : FOLLOW_GRIP * 1.6) * dt));
+    car.vx += hx * dv;
+    car.vy += hy * dv;
+    return fwd;
+  }
+
   // Pointer on a wall: aim for its nearest edge instead
   function dragGoal() {
     const r = carR() + GOAL_GAP;
@@ -922,9 +989,19 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     // cannot turn, so it never spins on the spot. Inside the park zone round
     // the target it neither steers nor drives, it brakes and parks.
     if (grab.go && !grab.on && now > grab.goUntil) grab.go = false;
-    const driving = grab.on || grab.go;
+    const aim = keyAim();
+    const driving = grab.on || grab.go || aim !== null;
     let rounding = false; // on a path round a wall: less drift
-    if (driving) {
+    if (aim !== null) {
+      // Keys: turn toward where they point and give gas; facing away, it
+      // rolls on slowly while it swings round (it cannot turn standing still)
+      const turn = angleTo(car.h, aim);
+      const fwd0 = car.vx * Math.cos(car.h) + car.vy * Math.sin(car.h);
+      const rate = TURN * MathUtils.clamp(Math.abs(fwd0) / 160, TURN_SLOW, 1);
+      car.h += MathUtils.clamp(turn, -rate * dt, rate * dt);
+      gas(maxV * KEY_GAS * Math.max(0.35, Math.cos(Math.min(Math.abs(turn), Math.PI / 2))), dt);
+      car.restAt = now;
+    } else if (driving) {
       const wp = route(dragGoal());
       rounding = !!wp.next;
       // Aim: the waypoint, easing toward the next one as the corner nears,
@@ -965,18 +1042,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
           sp = Math.min(sp, Math.sqrt(vc * vc + 2 * BRAKE * Math.max(0, toWp - carLen * 0.3)));
         }
       }
-      // Never faster than it can slow to a soft touch before the wall or edge
-      // it is moving toward (a target flipped behind it, a drift, a corner cut)
-      const v0 = Math.hypot(car.vx, car.vy);
-      const run = v0 > 1 ? runTo(car.vx / v0, car.vy / v0) : runTo(hx0, hy0);
-      sp = Math.min(sp, Math.sqrt(CORNER_V * CORNER_V + 2 * BRAKE * run));
-      const hx = Math.cos(car.h);
-      const hy = Math.sin(car.h);
-      const fwd = car.vx * hx + car.vy * hy;
-      // Gas or brake along the heading only; sideways slip is left to the grip (drift)
-      const dv = (sp - fwd) * (1 - Math.exp(-(sp > fwd ? FOLLOW_GRIP : FOLLOW_GRIP * 1.6) * dt));
-      car.vx += hx * dv;
-      car.vy += hy * dv;
+      const fwd = gas(sp, dt);
       car.restAt = now;
       // Parked on a released target: the trip is done
       if (!grab.on && wp.len <= park && Math.abs(fwd) < 15) grab.go = false;
@@ -1299,15 +1365,14 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     if (juicy()) for (let i = 0; i < 6; i++) puff(car.x - fx * carLen * 0.4, car.y - fy * carLen * 0.4, -fx * 120 + (Math.random() - 0.5) * 90, -fy * 120 + (Math.random() - 0.5) * 90, 9);
     wake();
   });
-  const paintCar = () => {
+  const paint = () => {
     const dark = document.documentElement.dataset.theme === 'dark';
-    carBodyMat.color.set(dark ? 0xf2ede2 : INK);
     rayMat.color.set(dark ? 0xf2ede2 : INK);
     readColours();
   };
-  paintCar();
+  paint();
   window.addEventListener('themechange', () => {
-    paintCar();
+    paint();
     wake();
   });
 

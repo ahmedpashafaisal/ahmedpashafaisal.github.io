@@ -29,7 +29,9 @@ A livelier, more custom, fun site built from Ahmed's own idea, with no heavier l
 | Bulb elsewhere | SVG twin of the 3D bulb (~3 KB); poses via CSS |
 | Handwriting | Parked; lines in speech bubbles (car-bubble style) |
 | Car after the landing | 23 Oct: ink car on the shelves removed; scrollbar car stays. One 3D car follows you section to section, drives to a spot and parks; some reference on every page; phones when light enough |
-| Car look | 23 Oct: "too flat"; game or toy look; CC0 models allowed (Ahmed downloads) |
+| Car look | 23 Oct: "too flat"; game or toy look. Picked S2 option A in red (toy car in code, about 2 KB): "Red A car looks interesting"; red maybe as subtle accents (open) |
+| Car keys | 23 Oct: drivable with WASD and the arrow keys (S3a: screen directions, landing only for now) |
+| Chase into the page | 23 Oct: after 5 catches, chasing the 6th down the page auto-scrolls and the car stays visible (S3b) |
 | Car control in sections | My plain pick, not yet confirmed: no steering; click = honk, bounce, shout |
 | Empty slots | 23 Oct: under construction (broken or growing), universal signs, yellow-black; bulb hops with page scroll "as if it is working on it", with lines; reach = runs away as before |
 | Scope | Re-skin in waves, live after each |
