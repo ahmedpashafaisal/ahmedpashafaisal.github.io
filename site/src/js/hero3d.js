@@ -20,16 +20,20 @@
 // last one left will not be caught. When the car comes close it opens its
 // eyes and hops away (a little closer each visit, never close enough) while
 // the car reacts ("What the…!", "Hold still!", "Seriously?!"). After 3
-// dodges, or once the chase stops, it hops off down the page to the Featured
-// heading ("Hey! Come back!"). A visitor who scrolls without playing sees a
-// random bulb wake up and hop off the same way.
-// The car can follow it down the page. Come close and it hops on to the next
-// stop (All games heading, the footer, then back to the landing); stop
-// chasing whenever you like. Seen from the landing while it waits off
-// screen, it comes back by itself ("There you are!").
+// dodges, once the chase stops, or when the visitor leaves the landing, it
+// hops off down the page to the Featured heading ("Hey! Come back!"). A
+// visitor who leaves before it is picked sees a random bulb wake up and go.
+// From then on it is the guide: one bulb for the whole page, near the
+// visitor, one hop ahead. It waits on spots in page order (the landing's,
+// beside the headings, in the building sites, beside the footer line). The
+// car (if it moved lately) or else the mouse pointer coming close sends it
+// one spot on in the way they are heading ("Not again!", "Wait up!"); with
+// nothing ahead it dodges where it is. Scroll away from it and it hops back
+// in from that edge once the scroll rests. It never goes back by itself.
 // Rest when you rest: the visitor stops (no input for REST_MS) and the
-// runaway sneaks up on the parked car, closer than a chase ever gets it; the
-// car reaching for it sets it off only at the last moment ("So close!").
+// runaway sneaks up on the parked car (or the pointer), closer than a chase
+// ever gets it; reaching for it sets it off only at the last moment ("So
+// close!").
 //
 // Physics runs in canvas pixels (simple car: engine along the heading,
 // sideways grip so it drifts in fast turns; it can only turn while moving, so
@@ -45,7 +49,7 @@ import { readStats } from './achievements.js';
 import { burst } from './burst.js';
 import { sendShock } from './dotgrid.js';
 import { juicy, reducedMotion } from './motion.js';
-import { REST_MS, landingHolds, stillFor } from './rest.js';
+import { REST_MS, stillFor } from './rest.js';
 import { sfx } from './sound.js';
 
 const INK = 0x1d1b18;
@@ -83,12 +87,14 @@ const PICK_R = 46; // generous pickup radius
 const MAGNET_R = 110; // ideas drift toward a car this close
 const EDGE = 16; // play area inset from the canvas edges
 const BOTTOM = 84; // keep clear of the bottom corner buttons
-const RETURN_MS = 6000; // the runaway comes back this long after hopping off
 const DODGE_LINES = ['What the…!', 'Hold still!', 'Seriously?!']; // the car, at dodge 1, 2, 3
-const CHASE_LINES = ['Not again!', 'Wait up!', 'Hey! Come back!']; // the car, as the runaway flees on down the page
+const CHASE_LINES = ['Not again!', 'Wait up!', 'Hey! Come back!']; // the car, as the guide hops on ahead
 const CAM_LO = 0.3; // driving: the screen scrolls to keep the car
 const CAM_HI = 0.68; // ...between these shares of its height
-const STOP_GAP = 70; // px from a heading's text to the runaway waiting beside it
+const STOP_GAP = 70; // px from a heading's text to the guide waiting beside it
+const CHASER_MS = 5000; // the guide runs from the car if it moved this recently, else from the mouse pointer
+const POINTER_R = 90; // ...hopping on when the moving pointer comes this close
+const SETTLE_MS = 400; // the visitor scrolled away from it: it hops back in once the scroll rests this long
 const HEADLIGHT = 'rgba(236, 255, 190, 0.2)'; // dark mode: light on the ground, at the headlights
 const HEADLIGHT_LEN = 2.2; // ...reaching this many car lengths ahead
 const DODGE_R = 150; // runaway hops away when the car is this close (first visit)
@@ -98,7 +104,6 @@ const DODGE_MS = 600; // shortest time between two dodges: no jitter
 const DODGES = 3; // dodges before it hops off for good
 const IDLE_ESCAPE_MS = 8000; // chase stopped this long after a dodge: it leaves
 const HOP_MS = 420; // one dodge hop
-const ESCAPE_MS = 900; // the hop off the landing
 const SHOUT_MS = 1800; // "Hey! Come back!" stays up this long
 const CREEP_GAP = 110; // resting: the runaway sneaks up to this far from the parked car...
 const CREEP_STEP = 30; // ...in hops this long...
@@ -314,7 +319,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   let carLen = 72; // px
 
   /* state */
-  const car = { x: 0, y: 0, vx: 0, vy: 0, h: -Math.PI / 2, squash: 0, squashV: 0, roll: 0, pop: 0, popV: 0, popTarget: 0, restAt: 0, braking: false };
+  const car = { x: 0, y: 0, vx: 0, vy: 0, h: -Math.PI / 2, squash: 0, squashV: 0, roll: 0, pop: 0, popV: 0, popTarget: 0, restAt: 0, movedAt: -1e9, braking: false };
   // Pointer target: on = button or finger held (target follows it);
   // go = drive to the target until the car parks there (also after release)
   const grab = { x: 0, y: 0, on: false, id: -1, go: false, goUntil: 0, auto: false };
@@ -335,11 +340,10 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   let bubble = null; // over the car: "Drive me to an idea", or the "Hey! Come back!" shout
   let runaway = null; // the bulb that will not be caught (an entry of ideas)
   let firstRound = false; // the round with a runaway in it
-  let runawayDone = false; // escaped: later rounds are normal
+  let runawayDone = false; // left the landing (the guide now): later rounds are normal
   let shoutUntil = 0;
   let howTo = true; // "Drive me to an idea" until the first catch or the runaway's first move
   let caught = 0;
-  let returnAt = 0; // when the runaway comes back after hopping off
   // The layer sits off px down the page (the scroll, or less at the very
   // bottom); canvas px = screen px give or take that difference
   let off = 0;
@@ -421,10 +425,10 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     // spots of the new layout, top to bottom. A height-only change (a phone's
     // address bar hiding while scrolling) keeps them where they are. No bulb is
     // ever dropped: with fewer spots than bulbs, the rest stay put inside the
-    // landing. A hopping or escaping runaway finishes its hop first.
+    // landing. A hopping bulb finishes its hop first; the guide keeps its spot.
     if (ideas.length && Math.abs(W - wasW) > 1) {
       const list = spots().sort((p, q) => p[1] - q[1]);
-      const live = ideas.filter((it) => !it.gone && !it.hop && !it.escaping && it.stop === undefined).sort((p, q) => p.hy - q.hy);
+      const live = ideas.filter((it) => !it.gone && !it.hop && !it.guide).sort((p, q) => p.hy - q.hy);
       live.forEach((it, k) => {
         const sp = list[k];
         if (sp) [it.hx, it.hy, it.mirror] = sp;
@@ -499,7 +503,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   function makeRunaway(it) {
     if (runaway && runaway !== it && !runaway.gone) return;
     runaway = it;
-    Object.assign(it, { waiting: false, eyes: null, wokeAt: 0, blinkAt: 0, winkUntil: 0, hop: null, nextDodge: 0, dodges: 0, lastDodge: 0 });
+    Object.assign(it, { waiting: false, eyes: null, wokeAt: 0, blinkAt: 0, winkUntil: 0, hop: null, nextDodge: 0, dodges: 0, lastDodge: 0, guide: false, spot: null, inAt: 0, flees: 0 });
   }
   // ...when its eyes pop open (draw() springs them in)
   function openEyes(it, now) {
@@ -510,36 +514,20 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     it.blinkAt = now + 2600;
   }
 
-  // Runaway hops to the free spot farthest from the car, a short arc away.
-  // Only while the car moves (a parked car never sets it off). Cornered (no
-  // hop gains real distance, e.g. on a small phone landing): it leaves instead.
+  // On the landing, before it leaves: it hops to the free spot farthest from
+  // the car, a short arc away. Only while the car moves (a parked car never
+  // sets it off). Cornered (no hop gains real distance, e.g. on a small phone
+  // landing): it leaves instead.
   function dodge(it, now, d) {
-    const R = 170;
-    let best = null;
-    let bestD = -1;
-    for (let k = 0; k < 16; k++) {
-      const a = (k / 16) * Math.PI * 2;
-      const x = it.x + Math.cos(a) * R;
-      const y = it.y + Math.sin(a) * R * 0.7;
-      if (!free(x, y, 40)) continue;
-      const d = Math.hypot(x - car.x, y - car.y);
-      if (d > bestD) {
-        bestD = d;
-        best = [x, y];
-      }
-    }
-    if (!best || bestD < d + 30) {
+    const best = farSpot(it, car.x, car.y, (x, y) => free(x, y, 40));
+    if (!best || best[2] < d + 30) {
       escape(now);
       return;
     }
     openEyes(it, now);
-    it.hop = { x0: it.x, y0: it.y, x1: best[0], y1: best[1], t0: now, ms: HOP_MS, lift: 46 };
-    it.hx = best[0];
-    it.hy = best[1];
-    it.vx = it.vy = 0;
+    hopTo(it, null, best[0], best[1], now, HOP_MS, 46);
     it.nextDodge = now + DODGE_MS;
     it.lastDodge = now;
-    it.winkUntil = now + 700;
     // A near miss after resting is not one of the 3 dodges before it leaves
     if (it.crept) {
       it.crept = false;
@@ -551,31 +539,65 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     sfx.thump();
   }
 
-  // Rest when you rest: the visitor has stopped and the car is parked, so the
-  // runaway sneaks up on it in small hops and stops just short (CREEP_GAP)
-  function creep(it, now, d) {
-    if (stillFor() < REST_MS || !landingHolds() || Math.hypot(car.vx, car.vy) > 5) return;
+  // The point a short hop from the bulb that is farthest from (cx, cy), among
+  // those ok(x, y) allows: [x, y, distance], or null
+  function farSpot(it, cx, cy, ok) {
+    let best = null;
+    for (let k = 0; k < 16; k++) {
+      const a = (k / 16) * Math.PI * 2;
+      const x = it.x + Math.cos(a) * 170;
+      const y = it.y + Math.sin(a) * 170 * 0.7;
+      if (!ok(x, y)) continue;
+      const d = Math.hypot(x - cx, y - cy);
+      if (!best || d > best[2]) best = [x, y, d];
+    }
+    return best;
+  }
+
+  // One hop, onto a spot (followed as the page moves under it) or a free
+  // point (spot null)
+  function hopTo(it, spot, x, y, now, ms, lift) {
+    it.hop = { x0: it.x, y0: it.y, x1: x, y1: y, t0: now, ms, lift };
+    Object.assign(it, { spot, hx: x, hy: y, vx: 0, vy: 0, winkUntil: now + 700, inAt: now });
+    wake();
+  }
+  const farHop = (dy) => MathUtils.clamp(500 + Math.abs(dy) * 0.45, 700, 1400);
+
+  // Rest when you rest: the visitor has stopped, so the runaway sneaks up on
+  // the car (on the screen) or else the mouse pointer, in small hops, and
+  // stops just short (CREEP_GAP). On the landing it keeps off the text.
+  function creep(it, now) {
+    if (stillFor() < REST_MS || Math.hypot(car.vx, car.vy) > 5) return;
+    const t = restTarget();
+    if (!t) return;
     it.calmAt = now; // no idle escape while the visitor rests
+    const d = Math.hypot(t[0] - it.x, t[1] - it.y);
     if (d <= CREEP_GAP + 4 || now < (it.nextCreep || 0)) return;
-    // Straight at the car, or round a wall at an angle while that still gets
-    // it closer; boxed in: it waits where it is
+    // Straight at it, or at an angle while that still gets it closer;
+    // boxed in: it waits where it is
     const step = Math.min(CREEP_STEP, d - CREEP_GAP);
-    const a0 = Math.atan2(car.y - it.y, car.x - it.x);
+    const a0 = Math.atan2(t[1] - it.y, t[0] - it.x);
     let x = 0;
     let y = 0;
     const ok = [0, 0.6, -0.6, 1.1, -1.1].some((da) => {
       x = it.x + Math.cos(a0 + da) * step;
       y = it.y + Math.sin(a0 + da) * step;
-      return free(x, y, 30) && Math.hypot(car.x - x, car.y - y) < d - 4;
+      return (y < land.b + 20 ? free(x, y, 30) : onScreen(x, y)) && Math.hypot(t[0] - x, t[1] - y) < d - 4;
     });
     if (!ok) return;
     openEyes(it, now);
+    hopTo(it, null, x, y, now, 320, 14);
     it.crept = true;
     it.nextCreep = now + CREEP_MS;
-    it.hop = { x0: it.x, y0: it.y, x1: x, y1: y, t0: now, ms: 320, lift: 14 };
-    it.hx = x;
-    it.hy = y;
   }
+  const restTarget = () => {
+    if (carOnScreen()) return [car.x, car.y];
+    if (!pointer.t) return null;
+    const p = local(pointer.cx, pointer.cy);
+    return onScreen(...p) ? p : null;
+  };
+  // Inside the screen, clear of the edges and the bottom corner buttons
+  const onScreen = (x, y) => x > area.l + 40 && x < area.r - 40 && y > 60 && y < Math.min(H, area.b) - BOTTOM;
 
   // The car (the visitor) talks back: one line in its bubble for SHOUT_MS
   function shout(text, now) {
@@ -585,49 +607,201 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     shoutUntil = now + SHOUT_MS;
   }
 
-  // Done dodging, chase stopped, cornered, or the visitor scrolled: it hops
-  // off the landing down to the Featured heading (the car may follow) and the
-  // car shouts after it. A skimmer who never drove, or a page without chase
-  // stops: off the landing's bottom edge, and after a while it comes back on
-  // its own (comeBack)
+  // Done dodging, chase stopped, cornered, or the visitor left the landing:
+  // it hops off down the page to the first spot below the landing (the
+  // Featured heading) and the car shouts after it. From then on it is the
+  // guide.
   function escape(now) {
     const it = runaway;
-    if (!it || it.escaping || it.stop !== undefined) return;
-    if (stopEls.length && played) {
-      runawayDone = true;
-      openEyes(it, now);
-      shout('Hey! Come back!', now);
-      flee(it, now, 0);
-      return;
-    }
-    it.escaping = true;
+    if (!it || it.guide) return;
     runawayDone = true;
+    it.guide = true;
     openEyes(it, now);
-    it.hop = { x0: it.x, y0: it.y, x1: it.x + (it.x > W / 2 ? 60 : -60), y1: land.b + BOTTOM + 140, t0: now, ms: ESCAPE_MS, lift: 120 };
-    it.winkUntil = now + ESCAPE_MS;
     shout('Hey! Come back!', now);
-    returnAt = now + ESCAPE_MS + RETURN_MS;
-    setTimeout(() => {
-      it.gone = true;
-      it.goneAt = performance.now();
-      it.pop = 0;
-      if (runaway === it) runaway = null;
-    }, ESCAPE_MS);
-    wake();
+    const next = guideSpots(it).find((s) => s.spot.el);
+    if (next) hopTo(it, next.spot, next.x, next.y, now, farHop(next.y - it.y), 150);
+    it.nextDodge = now + DODGE_MS * 2;
+    sfx.thump();
   }
 
-  /* the chase down the page */
+  /* the guide: one bulb for the whole home page, near the visitor, one hop ahead */
 
-  // Stops down the home page: beside the Featured and All games headings'
-  // text, then the footer line (above the text when there is no room beside)
-  const stopEls = ['#featured-title', '#games-title', '.site-foot__note'].map((s) => document.querySelector(s)).filter(Boolean);
+  // Where it waits, in page order: the landing's spots, beside (or above)
+  // each heading, in each building site in view, beside the footer line
+  const HEADS = '#featured-title, .banner__title, #games-title, .shelf__name, .site-foot__note';
+  const BLOCK = '.banner__media, .banner__actions, img, button'; // never on a picture or a button
   const range = document.createRange();
-  function stopPos(k) {
-    range.selectNodeContents(stopEls[k]);
+  // Beside a text (or above it when there is no room), in canvas px; side
+  // keeps a spot on the side it was given
+  function textSpot(el, cr, side) {
+    range.selectNodeContents(el);
     const r = range.getBoundingClientRect();
+    if (!r.width) return null;
+    const bx = r.right + STOP_GAP;
+    const by = r.top + r.height / 2;
+    const ax = Math.min(r.left + r.width / 2 + 40, cr.right - 60);
+    const ay = r.top - 46;
+    if (side === 'beside' || (!side && bx + 40 - cr.left <= area.r && clearAt(el, bx, by))) return [bx - cr.left, by - cr.top, 'beside'];
+    if (side === 'above' || (!side && clearAt(el, ax, ay))) return [ax - cr.left, ay - cr.top, 'above'];
+    return null;
+  }
+  function clearAt(el, sx, sy) {
+    const scope = el.closest('.banner, .shelf, section, footer') || document.body;
+    return [...scope.querySelectorAll(BLOCK)].every((b) => {
+      const r = b.getBoundingClientRect();
+      return sx + 30 < r.left || sx - 30 > r.right || sy + 34 < r.top || sy - 34 > r.bottom;
+    });
+  }
+  // Standing in a building site's picture (S1: its feet 60% down), while its
+  // shelf shows it (a sliding shelf can move it out of view)
+  function slotSpot(el, cr) {
+    const r = (el.querySelector('.shelf__cover') || el).getBoundingClientRect();
+    const row = (el.closest('.shelf__row') || el.parentElement).getBoundingClientRect();
+    const x = r.left + r.width / 2;
+    if (!r.width || x < row.left + 30 || x > row.right - 30) return null;
+    return [x - cr.left, r.top + r.height * 0.6 - 26 - cr.top];
+  }
+  // Never lower than the car can get below it (the car keeps above the
+  // bottom corner buttons), so it can always be chased back up
+  const low = (p) => p && [p[0], Math.min(p[1], area.b - 80), p[2]];
+  // Every spot now, as {spot, x, y} in canvas px, top of the page first
+  // (landing spots taken by a bulb of the round are left out)
+  function guideSpots(it) {
     const cr = canvas.getBoundingClientRect();
-    if (r.right + STOP_GAP + 40 <= cr.right - EDGE) return [r.right + STOP_GAP - cr.left, r.top + r.height / 2 - cr.top];
-    return [Math.min(r.left + r.width / 2 + 40, cr.right - 60) - cr.left, r.top - 46 - cr.top];
+    const out = [];
+    const live = ideas.filter((o) => !o.gone && o !== it);
+    spots()
+      .sort((p, q) => p[1] - q[1])
+      .forEach(([x, y], k) => live.every((o) => Math.hypot(o.hx - x, o.hy - y) > 70) && out.push({ spot: { k }, x, y }));
+    for (const el of document.querySelectorAll(HEADS)) {
+      const p = low(textSpot(el, cr));
+      if (p) out.push({ spot: { el, side: p[2] }, x: p[0], y: p[1] });
+    }
+    for (const el of document.querySelectorAll('.shelf__slot')) {
+      const p = low(slotSpot(el, cr));
+      if (p) out.push({ spot: { el, slot: true }, x: p[0], y: p[1] });
+    }
+    return out.sort((p, q) => p.y - q.y);
+  }
+  // Where a spot is now (the page moves under it), or null when it is gone
+  function spotPos(s) {
+    if (!s.el) return spots().sort((p, q) => p[1] - q[1])[s.k] || null;
+    const cr = canvas.getBoundingClientRect();
+    return low(s.slot ? slotSpot(s.el, cr) : textSpot(s.el, cr, s.side));
+  }
+
+  // Who it runs from: the car if it moved in the last CHASER_MS and is on the
+  // screen, else the mouse pointer; nobody on touch (taps send the car)
+  const pointer = { cx: 0, cy: 0, vy: 0, t: 0 };
+  window.addEventListener(
+    'pointermove',
+    (e) => {
+      if (e.pointerType !== 'mouse') return;
+      const now = performance.now();
+      const fresh = now - pointer.t < 200;
+      pointer.vy = fresh ? MathUtils.lerp(pointer.vy, ((e.clientY - pointer.cy) * 1000) / Math.max(4, now - pointer.t), 0.5) : 0;
+      Object.assign(pointer, { cx: e.clientX, cy: e.clientY, t: now });
+      if (runaway?.guide) wake();
+    },
+    { passive: true },
+  );
+  function chaser(now) {
+    if (now - car.movedAt < CHASER_MS && carOnScreen()) return { x: car.x, y: car.y, vy: car.vy, moving: Math.hypot(car.vx, car.vy) > 40, r: dodgeR, car: true };
+    if (!pointer.t || now - pointer.t > CHASER_MS) return null;
+    const [x, y] = local(pointer.cx, pointer.cy);
+    return { x, y, vy: pointer.vy, moving: now - pointer.t < 200, r: POINTER_R, car: false };
+  }
+
+  // The visitor's way down or up the page: where their last scroll went, from
+  // where it started (a small nudge at its end, e.g. the browser keeping the
+  // content in place, does not count)
+  let scrollDir = 1;
+  let scrollAt = 0;
+  let lastY = scrollY;
+  let fromY = scrollY;
+  let settleT = 0;
+  window.addEventListener(
+    'scroll',
+    () => {
+      const now = performance.now();
+      if (now - scrollAt > SETTLE_MS) fromY = lastY;
+      if (Math.abs(scrollY - fromY) > 4) scrollDir = scrollY > fromY ? 1 : -1;
+      lastY = scrollY;
+      scrollAt = now;
+      clearTimeout(settleT);
+      settleT = setTimeout(wake, SETTLE_MS + 50); // the guide checks once the scroll rests
+    },
+    { passive: true },
+  );
+
+  // Chased: one hop to the next spot ahead in the chaser's direction (the
+  // nearest on the screen, else the next one off it), never next to the
+  // chaser. Nothing ahead (the top or the end of the page): a short dodge
+  // where it is.
+  function ahead(it, now, c, line) {
+    const dir = Math.abs(c.vy) > 40 ? Math.sign(c.vy) : scrollDir;
+    const list = guideSpots(it)
+      .filter((s) => (s.y - it.y) * dir > 40 && Math.hypot(s.x - c.x, s.y - c.y) > c.r + 40)
+      .sort((p, q) => (p.y - q.y) * dir);
+    const next = list.find((s) => onScreen(s.x, s.y)) || list[0];
+    if (next) hopTo(it, next.spot, next.x, next.y, now, farHop(next.y - it.y), 150);
+    else {
+      const p = farSpot(it, c.x, c.y, (x, y) => (y < land.b + 20 ? free(x, y, 40) : onScreen(x, y)));
+      if (!p) return;
+      hopTo(it, null, p[0], p[1], now, HOP_MS, 46);
+    }
+    openEyes(it, now);
+    it.crept = false;
+    it.nextDodge = now + DODGE_MS * 2;
+    if (c.car) shout(line || CHASE_LINES[it.flees++ % CHASE_LINES.length], now);
+    sfx.thump();
+  }
+
+  // The visitor scrolled away from it: once the scroll rests it hops back in
+  // from the edge it left, onto the spot nearest that edge on the screen
+  function hopIn(it, now, fromTop) {
+    it.inAt = now;
+    const c = chaser(now);
+    const list = guideSpots(it).filter((s) => onScreen(s.x, s.y) && (!c || Math.hypot(s.x - c.x, s.y - c.y) > c.r + 40));
+    if (!list.length) return;
+    const s = fromTop ? list[0] : list[list.length - 1];
+    it.x = s.x;
+    it.y = fromTop ? -60 : H + 60;
+    hopTo(it, s.spot, s.x, s.y, now, 900, 120);
+    if (carOnScreen()) shout('There you are!', now);
+    sfx.thump();
+  }
+
+  // Per frame: waits on its spot, hops ahead when chased, back in after a
+  // scroll away, creeps closer while the visitor rests
+  function guideStep(it, now) {
+    if (it.spot) {
+      const p = spotPos(it.spot);
+      if (p) [it.hx, it.hy] = p;
+      else it.spot = null; // its building site slid away: it stays where it is
+    }
+    if (it.hop) {
+      it.hop.x1 = it.hx;
+      it.hop.y1 = it.hy;
+      const k = Math.min(1, (now - it.hop.t0) / it.hop.ms);
+      it.x = MathUtils.lerp(it.hop.x0, it.hop.x1, k);
+      it.y = MathUtils.lerp(it.hop.y0, it.hop.y1, k);
+      if (k >= 1) it.hop = null;
+      return;
+    }
+    it.x = it.hx;
+    it.y = it.hy;
+    const c = chaser(now);
+    const d = c ? Math.hypot(c.x - it.x, c.y - it.y) : Infinity;
+    if (it.crept) {
+      // Crept up while the visitor rested: only reaching for it sets it off
+      if (c?.moving && d < NEAR_R) return ahead(it, now, c, 'So close!');
+      if (c?.moving && d > CREEP_GAP + 60) it.crept = false;
+    } else if (c?.moving && d < c.r && now >= it.nextDodge) return ahead(it, now, c);
+    const above = it.y < -40;
+    const below = it.y > H + 40;
+    if (((above && scrollDir > 0) || (below && scrollDir < 0)) && now - scrollAt > SETTLE_MS && it.inAt < scrollAt) return hopIn(it, now, above);
+    if (!above && !below) creep(it, now);
   }
 
   // Everything in canvas px moves together: the layer moving back over the
@@ -653,33 +827,6 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     for (const p of [...puffs, ...rings]) (p.x += dx), (p.y += dy);
   }
 
-  // The runaway hops to stop k and waits there (the hop ends on the stop
-  // even as the page scrolls); past the last stop it heads back to the landing
-  function flee(it, now, k) {
-    if (k >= stopEls.length) return homeRun(it, now);
-    const [x, y] = stopPos(k);
-    Object.assign(it, { stop: k, stopAt: now, hx: x, hy: y, vx: 0, vy: 0, winkUntil: now + 700, nextDodge: now + DODGE_MS * 2, crept: false });
-    it.hop = { x0: it.x, y0: it.y, x1: x, y1: y, t0: now, ms: MathUtils.clamp(500 + Math.abs(y - it.y) * 0.45, 700, 1400), lift: 150 };
-    sfx.thump();
-    wake();
-  }
-
-  // ...and back onto a free spot on the landing ("There you are!"), where the
-  // chase starts over: dodges, then off down the page again
-  function homeRun(it, now) {
-    const taken = ideas.filter((o) => !o.gone && o !== it);
-    const open = spots().filter(([x, y]) => free(x, y, 40) && taken.every((o) => Math.hypot(o.x - x, o.y - y) > 80) && Math.hypot(car.x - x, car.y - y) > dodgeR + 40);
-    if (!open.length) {
-      it.stopAt = now; // car in the way: try again in a while
-      return;
-    }
-    const [x, y, mirror] = open[Math.floor(Math.random() * open.length)];
-    Object.assign(it, { stop: undefined, hx: x, hy: y, mirror, dodges: 0, lastDodge: 0, calmAt: now, nextDodge: now + DODGE_MS, winkUntil: now + 700 });
-    it.hop = { x0: it.x, y0: it.y, x1: x, y1: y, t0: now, ms: 1100, lift: 160 };
-    shout('There you are!', now);
-    wake();
-  }
-
   // Per frame: the layer back over the screen, re-measure (the landing moves
   // on the screen), and the car back to a visitor who returned to the landing
   // without it
@@ -698,43 +845,18 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     }
     const it = runaway;
     // Tells shelfbulb.js and rest.js the runaway is on the screen, so theirs
-    // keep away: one runaway on the screen at a time
-    html.classList.toggle('runaway-shown', !!it && !it.gone && it.pop > 0.02 && it.y > -60 && it.y < H + 60);
+    // keep away: one runaway on the screen at a time. Once on, it stays on
+    // until the runaway is well off the screen (no flicker at the edge).
+    const m = html.classList.contains('runaway-shown') ? 160 : 60;
+    html.classList.toggle('runaway-shown', !!it && !it.gone && it.pop > 0.02 && it.y > -m && it.y < H + m);
   }
 
-  // ...and back: it hops up from the landing's bottom edge onto a free spot,
-  // eyes open, and the chase can start again
-  function comeBack(now) {
-    // rest.js's runaway is on screen (visitor resting beside the page): wait
-    if (document.querySelector('.rest-layer .bulb')) {
-      returnAt = now + 1500;
-      return;
-    }
-    returnAt = 0;
-    const taken = ideas.filter((o) => !o.gone);
-    const open = spots().filter(([x, y]) => free(x, y, 40) && taken.every((o) => Math.hypot(o.x - x, o.y - y) > 80) && Math.hypot(car.x - x, car.y - y) > dodgeR + 40);
-    if (!open.length) {
-      returnAt = now + 1500; // nowhere to land yet (car in the way): try again soon
-      return;
-    }
-    const [x, y, mirror] = open[Math.floor(Math.random() * open.length)];
-    const g = bulbModel();
-    scene.add(g);
-    const y0 = land.b + BOTTOM + 80;
-    const it = { g, x, y: y0, hx: x, hy: y, vx: 0, vy: 0, pop: 1, popV: 0, delay: now, phase: Math.random() * 6, mirror, gone: false, waiting: false };
-    ideas.push(it);
-    makeRunaway(it);
-    openEyes(it, now);
-    it.hop = { x0: x, y0, x1: x, y1: y, t0: now, ms: ESCAPE_MS, lift: 120 };
-    shout('There you are!', now);
-    wake();
-  }
-  // A skimmer (scrolled away without catching anything): a random bulb wakes
-  // up and leaves. Someone who has played keeps the round as it is.
+  // The visitor leaves the landing before the runaway has: it goes on ahead
+  // of them (a skimmer who never caught one: a random bulb wakes up and goes)
   window.addEventListener(
     'scroll',
     () => {
-      if (!entered || !firstRound || runawayDone || caught || window.scrollY <= 40) return;
+      if (!entered || !firstRound || runaway?.guide || window.scrollY <= 40) return;
       const now = performance.now();
       if (!runaway) {
         const left = ideas.filter((o) => !o.gone && now >= o.delay);
@@ -788,7 +910,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
         onWave?.();
         makeRunaway(left[0]);
       }
-    }
+    } else if (firstRound && !ideas.some((o) => !o.gone && o !== runaway)) onWave?.(); // the rest, after one went ahead as the guide
     chain = now - chainAt < 1400 ? chain + 1 : 0;
     chainAt = now;
     sfx.collect(chain);
@@ -1116,6 +1238,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
 
     // "Drive me to an idea" (until the first catch) hides while the car rolls
     // and comes back once it has rested a moment; a shout stays up its full time
+    if (vNow > 20) car.movedAt = now;
     if (vNow > 15) {
       car.restAt = now;
       if (!shoutUntil) bubble?.classList.remove('is-on');
@@ -1142,37 +1265,19 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
       const dx = car.x - it.x;
       const dy = car.y - it.y;
       const d = Math.hypot(dx, dy);
-      // The runaway at a stop on the page: the car coming close
-      // sends it on to the next one; seen from the landing while it waits off
-      // screen, it comes back by itself after a while
-      if (it === runaway && it.stop !== undefined) {
-        [it.hx, it.hy] = stopPos(it.stop);
-        if (it.hop) {
-          it.hop.x1 = it.hx;
-          it.hop.y1 = it.hy;
-          const k = Math.min(1, (now - it.hop.t0) / it.hop.ms);
-          it.x = MathUtils.lerp(it.hop.x0, it.hop.x1, k);
-          it.y = MathUtils.lerp(it.hop.y0, it.hop.y1, k);
-          if (k >= 1) it.hop = null;
-        } else {
-          it.x = it.hx;
-          it.y = it.hy;
-          if (d < dodgeR && now >= it.nextDodge && Math.hypot(car.vx, car.vy) > 40) {
-            it.flees = (it.flees || 0) + 1;
-            shout(CHASE_LINES[(it.flees - 1) % CHASE_LINES.length], now);
-            flee(it, now, it.stop + 1);
-          } else if (onLanding() && (it.y < -60 || it.y > H + 60) && now - it.stopAt > RETURN_MS) homeRun(it, now);
-        }
+      // The guide (the runaway once it has left the landing) is never caught
+      if (it === runaway && it.guide) {
+        guideStep(it, now);
         continue;
       }
-      // The runaway never drifts in and is never caught: it hops away instead
+      // The runaway on the landing never drifts in and is never caught: it hops away instead
       if (it === runaway) {
         if (it.hop) {
           const k = Math.min(1, (now - it.hop.t0) / it.hop.ms);
           it.x = MathUtils.lerp(it.hop.x0, it.hop.x1, k);
           it.y = MathUtils.lerp(it.hop.y0, it.hop.y1, k);
-          if (k >= 1 && !it.escaping) it.hop = null;
-        } else if (!it.escaping) {
+          if (k >= 1) it.hop = null;
+        } else {
           const moving = Math.hypot(car.vx, car.vy) > 40;
           if (it.crept) {
             // Crept up while the visitor rested: only a car reaching for it
@@ -1185,7 +1290,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
             else if (chased) dodge(it, now, d);
             else if (it.lastDodge && now - Math.max(it.lastDodge, it.calmAt || 0) > IDLE_ESCAPE_MS) escape(now);
           }
-          if (!it.hop && !it.escaping) creep(it, now, d);
+          if (!it.hop && !it.guide) creep(it, now);
         }
         continue;
       }
@@ -1211,9 +1316,6 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
       it.x += it.vx * dt;
       it.y += it.vy * dt;
     }
-    // The runaway has been gone a while: it comes back (only while the
-    // landing is on screen, so a visitor who scrolls back up sees it return)
-    if (runawayDone && !runaway && returnAt && now > returnAt && hostR.bottom > 0 && hostR.top < innerHeight) comeBack(now);
   }
 
   /* 2D layer: headlights, marks, smoke, rings */
@@ -1483,7 +1585,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
 
   // Test hook: ?debug exposes the game state (headless tests only)
   if (new URLSearchParams(location.search).has('debug')) {
-    window.__landing = { car, ideas: () => ideas, walls: () => walls, area: () => area, canvas, fxCounts: () => [marks[0].length + marks[1].length, puffs.length, rings.length], goal: () => dragGoal(), runaway: () => runaway, firstRound: () => firstRound, howTo: () => howTo, caught: () => caught, returnAt: () => returnAt, off: () => off, land: () => land, layer, grab, played: () => played, asleep: () => !raf, stopPos: (k) => stopPos(k), dodgeR };
+    window.__landing = { car, ideas: () => ideas, walls: () => walls, area: () => area, canvas, fxCounts: () => [marks[0].length + marks[1].length, puffs.length, rings.length], goal: () => dragGoal(), runaway: () => runaway, firstRound: () => firstRound, howTo: () => howTo, caught: () => caught, off: () => off, land: () => land, layer, grab, played: () => played, asleep: () => !raf, spots: () => guideSpots(runaway), scrollRest: () => ({ scrollAt, scrollDir, raf }), dodgeR };
   }
 
   return {

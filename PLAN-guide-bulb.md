@@ -12,6 +12,9 @@ Older decisions and story: [PLAYBOOK-runaway-idea.md](PLAYBOOK-runaway-idea.md).
 | S3a red car + keys | Done, commit `4e422c7` |
 | S3b chase into the page | Committed as work in progress (G0). Ahmed: "It's okay but need to fill a few gaps" |
 | This plan | Replaces the rest of S3b and S3c |
+| G1 game layer | ✅ Done, commit `3404b0c` |
+| G2 guide bulb | Committed, feel check with G3 |
+| Next | G3 shelf beats onto the guide |
 
 ## Ahmed's words (23 Oct, feedback on S3b)
 - "let the car drive over the elements in the landing page / home section as well"

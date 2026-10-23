@@ -416,11 +416,11 @@
   transition: opacity 0.25s;
 }
 
-/* The landing's runaway is on the screen, out on the page (chase mode,
-   hero3d.js): one runaway on the screen at a time, so this one keeps out of
-   sight */
+/* The guide (hero3d.js) is on the screen: one runaway on the screen at a
+   time, so this one keeps out of sight, at once (it fades back in) */
 .runaway-shown .shelf-bulb {
   opacity: 0;
+  transition-duration: 0s;
 }
 
 .shelf-bulb--slot {

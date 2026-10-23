@@ -71,6 +71,39 @@ Plan: [PLAN-guide-bulb.md](PLAN-guide-bulb.md).
 - Remove: chase stops list (`stopEls`), `homeRun`, `comeBack` return to the landing; skimmer hop-off now hops to the next spot below.
 - Done when: chase from landing to footer and back up, bulb always on screen or one hop off it; never returns to the top unasked.
 
+#### G2 as built (23 Oct)
+| Part | What |
+|---|---|
+| The guide | The runaway, once it leaves the landing (`it.guide`) |
+| It leaves | 3 dodges, chase stopped 8 s, cornered, or the visitor leaves the landing (played or not) |
+| First hop | To the Featured heading, "Hey! Come back!" |
+| Spots | Landing spots (not ones a round bulb sits on), headings, building sites in view, footer line |
+| Headings | Featured, each banner title, All games, each shelf name |
+| Spot rules | Beside the text, else above. Never on a picture or button. Never lower than the car can get below |
+| Chaser | Car, if it moved in the last 5 s and is on screen. Else the mouse pointer (90 px). Touch: car only |
+| Hop ahead | Next spot in the chaser's up or down direction (flat: last scroll). Nearest on screen first. Never next to the chaser |
+| End of page | Nothing ahead: short dodge where it is |
+| Scroll away | Scroll rests 0.4 s, it is off screen behind you: hops in from that edge onto the nearest spot |
+| Scroll direction | From where the scroll started to where it ended (a small nudge at the end does not count) |
+| Rest | Creeps to the car, else the pointer. Reach for it: "So close!", hops on |
+| Lines | Car only, while on screen |
+| Brainstorm | Also given when the rest are caught after one went ahead |
+| Removed | Stops list, home run, come back, skimmer hop-off |
+| Cost | Same as the landing before G2 while the guide shows; loop sleeps when it is off screen |
+| Building sites | Stands in the site's picture (on phones the slot row also holds the words) |
+| One bulb on screen | Shelf and rest bulbs hide while the guide shows; hide at once, fade back in |
+| Screen edge | Counts as showing until well off screen, so the shelf bulb never flickers |
+
+#### G2 tests
+| Suite | Result |
+|---|---|
+| `g2.mjs` (new): round to guide, chase to footer and back, scroll away, mouse, rest, phone, resize, dark | 25/25, last 2 runs; chase part 12/12 × 3 after the last fix |
+| `g1.mjs` (3 checks rewritten for the guide) | 45/45 |
+| `s3a-g1.mjs` | 14/14 (2 one-off misses in 4 runs: edge speed, click park 92 px) |
+| `s1.mjs` | 30/33: phone work-in-site beat steps aside for the guide (G3) |
+| Console errors | 0 |
+| Weight, 3D chunk gzip | 142.2 → 143.0 KB |
+
 ### G3: shelf beats moved onto the guide
 - Building site: bulb works in its slot (hop per 120 px of scroll, dust, lines).
 - Reach (cursor or car): "Nope, not a game yet.", laugh, hop to the next spot ahead.
