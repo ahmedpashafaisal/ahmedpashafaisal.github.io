@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Games layout wireframes</title>
+  <!-- Dev only (npm run dev → /layouts-test.html). Not a build input, never deployed.
+       "All games" in a clean, modern look: 7 layout options as wireframes. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400..700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="lt-bar" role="toolbar" aria-label="Wireframe options">
+    <span class="lt-group lt-group--opts"><b>Layout</b><span class="lt-opts"></span></span>
+    <span class="lt-group"><b>Width</b>
+      <button type="button" data-k="width" data-v="desk">Desktop</button><button type="button" data-k="width" data-v="phone">Phone</button></span>
+    <span class="lt-group"><b>Covers</b>
+      <button type="button" data-k="covers" data-v="off">Grey</button><button type="button" data-k="covers" data-v="on">Real</button></span>
+  </div>
+
+  <main class="lt-main">
+    <aside class="lt-notes" aria-live="polite"></aside>
+    <div class="lt-stage">
+      <header class="lt-head">
+        <p class="lt-head__title">All games</p>
+      </header>
+      <div class="lt-view"></div>
+    </div>
+  </main>
+
+  <script type="module" src="./layouts-test/layouts.js"></script>
+</body>
+</html>

@@ -22,7 +22,7 @@ function confetti() {
 function wobble() {
   sfx.boing();
   if (!juicy()) return;
-  document.querySelectorAll('main > *, .featured__list > *, .deck > li, .entrance__center').forEach((el, i) =>
+  document.querySelectorAll('main > *, .featured__list > *, .shelf, .entrance__center').forEach((el, i) =>
     el.animate(
       [
         { transform: 'none' },

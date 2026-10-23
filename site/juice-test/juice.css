@@ -1,0 +1,63 @@
+/* Step D3 wireframe: juice and bulb beats on top of the H shelves (layouts.css). */
+.lt-notes .jt-hint { margin-top: 16px; font-size: 13px; color: var(--soft); }
+.lt-cat .jt-count { display: inline-block; min-width: 18px; text-align: center; }
+
+/* 1. Stocking */
+.jt-undealt { opacity: 0; }
+.jt-ring { position: absolute; left: 50%; width: 70%; height: 14px; border: 2px solid var(--ink); border-radius: 50%; pointer-events: none; }
+.h-item { position: relative; }
+
+/* 2. Lift, tilt, glint, press */
+.jt-j2 .jt-item { transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--lift, 0px)); transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.jt-j2 .jt-item:hover { --lift: -6px; }
+.jt-j2 .jt-item .h-cover { transition: box-shadow 0.2s ease; }
+.jt-j2 .jt-item:hover .h-cover { box-shadow: 9px 11px 0 var(--ink); }
+.jt-j2 .jt-item:active { transform: perspective(900px) translateY(-1px) scale(0.97, 0.94); transition-duration: 0.08s; }
+.jt-glint { position: absolute; inset: 0; z-index: 2; background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.45), transparent 45%); opacity: 0; transition: opacity 0.2s ease; pointer-events: none; }
+.jt-j2 .jt-item:hover .jt-glint { opacity: 1; }
+.lt-cover .jt-glint { padding: 0; }
+
+/* 4. Peek */
+.lt-cover .jt-shot { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; padding: 0; object-fit: cover; opacity: 0; transition: opacity 0.35s ease; }
+.lt-cover .jt-shot--portrait { object-fit: contain; background: var(--ink); }
+.lt-cover .jt-shot--grey { display: grid; place-items: center; background: repeating-linear-gradient(-45deg, #d6d6d6 0 8px, #e8e8e8 8px 16px); font-size: 12px; color: var(--soft); }
+.jt-shot.is-on { opacity: 1; }
+
+/* 3. Open: mock game page */
+.jt-clone { position: fixed; z-index: 21; margin: 0; transform-origin: 0 0; }
+.jt-page { position: fixed; inset: 0; z-index: 20; overflow: hidden; padding: 24px 16px; background: var(--paper); }
+.jt-back { position: absolute; top: 16px; left: 16px; z-index: 22; padding: 6px 14px; border: 2px solid var(--ink); border-radius: 999px; background: #fff; font: 700 14px Figtree, sans-serif; cursor: pointer; }
+.jt-page__hero { width: min(900px, 100%); aspect-ratio: 16 / 9; margin: 48px auto 0; }
+.jt-page__body { display: grid; gap: 8px; width: min(900px, 100%); margin: 24px auto 0; }
+.jt-page__title { margin: 0; font: 800 44px/1.05 'Bricolage Grotesque', sans-serif; }
+.jt-page__note { margin: 12px 0 0; padding: 16px; border: 2px dashed var(--line); border-radius: 12px; color: var(--soft); }
+
+/* 5. Car on the sliding shelf */
+.jt-road { position: relative; height: 28px; }
+.jt-car { top: -13px; left: 8px; transform: rotate(calc(90deg * var(--dir, 1))); transition: left 0.12s linear; }
+.jt-puff { position: absolute; top: -6px; width: 10px; height: 10px; border-radius: 50%; background: #cfcfcf; pointer-events: none; }
+@container (max-width: 600px) {
+  .jt-road { display: none; }
+}
+
+/* Bulb beats */
+.jt-bulb { position: absolute; z-index: 3; pointer-events: none; line-height: 0; }
+.jt-slot__box { overflow: visible; border-style: dashed; box-shadow: none; background: repeating-linear-gradient(45deg, #f0f0f0 0 8px, #f7f7f7 8px 16px); }
+.jt-slot__box > span:not(.jt-bulb) { align-self: end; margin-bottom: 8px; }
+/* .lt-cover span (layouts.css) pads its label; keep it off the bulb's own spans */
+.lt-cover .jt-bulb, .lt-cover .jt-bulb span { padding: 0; }
+.jt-bulb--slot { left: 50%; top: 50%; transform: translate(-50%, -62%); }
+.jt-perch .h-row { padding-top: 44px; }
+.jt-bulb--perch { top: -50px; right: 18px; }
+.jt-bulb--road { top: -46px; left: 72px; transition: left 0.12s linear; }
+.e-head { position: relative; }
+.jt-bulb--head { top: -40px; right: 90px; left: auto !important; }
+.jt-say { position: absolute; bottom: 100%; left: 50%; z-index: 5; transform: translate(-50%, -6px); padding: 6px 10px; border-radius: 10px; background: var(--ink); color: #fff; font: 700 13px/1.2 Figtree, sans-serif; white-space: nowrap; line-height: 1.2; }
+.jt-say::after { content: ''; position: absolute; top: 100%; left: 50%; margin-left: -6px; border: 6px solid transparent; border-top-color: var(--ink); }
+.jt-say--fixed { position: fixed; bottom: auto; z-index: 30; transform: translate(-50%, -100%); pointer-events: none; }
+@container (max-width: 600px) {
+  .jt-bulb--slot { transform: translate(-50%, -70%) scale(0.75); }
+  .jt-perch .h-row { padding-top: 0; }
+  .jt-bulb--perch { top: -20px; right: 4px; }
+}
+.lt-cover .jt-bulb .jt-say { padding: 6px 10px; font-size: 13px; color: #fff; text-align: left; }

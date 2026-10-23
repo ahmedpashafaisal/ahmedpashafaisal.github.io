@@ -8,15 +8,15 @@ import { sfx } from './sound.js';
 import { burst } from './burst.js';
 
 const GAMES = data.games.filter((g) => !g.hidden).length;
-const TABS = data.categories.length + 1; // + "All"
+const SHELVES = new Set(data.games.filter((g) => !g.hidden).map((g) => g.categories[0])).size;
 
 // Browsing the work (games, stories, videos, me) plus a few playful ones.
 export const LIST = [
   { id: 'enter', title: 'Press Start', text: 'Pressed the big button.' },
   { id: 'idea10', title: 'Bright Idea', text: 'Caught 10 ideas with the car.' },
   { id: 'storm', title: 'Brainstorm', text: 'Caught every idea but one.' },
-  { id: 'flip', title: 'Card Shark', text: 'Flipped 5 cards.' },
-  { id: 'tabs', title: 'Window Shopper', text: 'Tried every tab.' },
+  { id: 'peek', title: 'Sneak Peek', text: 'Peeked at 5 games.' },
+  { id: 'tabs', title: 'Window Shopper', text: 'Browsed every shelf.' },
   { id: 'bottom', title: 'Rock Bottom', text: 'Scrolled to the very end.' },
   { id: 'speed', title: 'Speedrunner', text: 'Scrolled really, really fast.' },
   { id: 'game1', title: 'Curious', text: 'Opened a game page.' },
@@ -54,9 +54,10 @@ const save = (k, v) => {
 
 // Unlocks from older versions of the list are dropped
 let got = Object.fromEntries(Object.entries(load(KEY, {})).filter(([id]) => IDS.has(id)));
-const stats = { visits: 0, ideas: 0, flip: 0, tabs: [], games: [], ...load(STATS, {}) };
+const stats = { visits: 0, ideas: 0, flip: 0, tabs: [], games: [], peeks: [], shelves: [], ...load(STATS, {}) };
 
-export const unlocked = () => ({ ...got });
+// Only achievements that still exist (Card Shark left with the card deck, 23 Oct)
+export const unlocked = () => Object.fromEntries(Object.entries(got).filter(([id]) => IDS.has(id)));
 export const readStats = () => ({ ...stats });
 export const act = (name) => window.dispatchEvent(new CustomEvent('apf:act', { detail: name }));
 
@@ -69,7 +70,7 @@ let showing = false;
 
 function renderBar() {
   if (!bar) return;
-  const n = Object.keys(got).length;
+  const n = Object.keys(unlocked()).length;
   bar.style.setProperty('--xp', String(n / LIST.length));
   bar.setAttribute('aria-valuenow', String(n));
 }
@@ -121,6 +122,13 @@ function unlock(id) {
 
 /* ---------- what counts ---------- */
 
+// Distinct things (games peeked at, shelves seen)
+function collect(key, item, goal, id) {
+  if (!stats[key].includes(item)) stats[key].push(item);
+  save(STATS, stats);
+  if (stats[key].length >= goal) unlock(id);
+}
+
 function count(key, goal, id) {
   stats[key] += 1;
   save(STATS, stats);
@@ -133,13 +141,8 @@ const ONE_OFF = new Set(['enter', 'video', 'contact', 'sound', 'dark', 'drive', 
 function onAct(name) {
   if (ONE_OFF.has(name)) unlock(name);
   else if (name === 'idea') count('ideas', 10, 'idea10');
-  else if (name === 'flip') count('flip', 5, 'flip');
-  else if (name.startsWith('tab:')) {
-    const t = name.slice(4);
-    if (!stats.tabs.includes(t)) stats.tabs.push(t);
-    save(STATS, stats);
-    if (stats.tabs.length >= TABS) unlock('tabs');
-  }
+  else if (name.startsWith('peek:')) collect('peeks', name.slice(5), 5, 'peek');
+  else if (name.startsWith('shelf:')) collect('shelves', name.slice(6), SHELVES, 'tabs');
 }
 
 function watchPage() {
@@ -206,7 +209,7 @@ function watchPage() {
 export function initAchievements() {
   if (new URLSearchParams(location.search).has('reset-achievements')) {
     got = {};
-    Object.assign(stats, { visits: 0, ideas: 0, flip: 0, tabs: [], games: [] });
+    Object.assign(stats, { visits: 0, ideas: 0, flip: 0, tabs: [], games: [], peeks: [], shelves: [] });
     save(KEY, got);
     save(STATS, stats);
   }
@@ -242,7 +245,7 @@ export function initAchievements() {
 export function renderAchievementList(root) {
   if (!root) return;
   const draw = () => {
-    const n = Object.keys(got).length;
+    const n = Object.keys(unlocked()).length;
     root.querySelector('.ach-count').textContent = `${n} / ${LIST.length}`;
     root.querySelector('.ach-grid').innerHTML = LIST.map((a) =>
       got[a.id]

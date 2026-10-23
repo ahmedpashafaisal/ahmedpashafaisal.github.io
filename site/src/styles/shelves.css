@@ -1,0 +1,435 @@
+/* "All games" as shelves, one per category (js/shelves.js). Covers keep
+   their 16:9 art uncropped, framed like the Featured banners (ink border,
+   hard shadow). Layout follows the shelves' own width: phones get a short
+   list per shelf. */
+.shelves {
+  container: shelves / inline-size;
+  width: min(1200px, 100%);
+}
+
+.shelf + .shelf {
+  margin-top: 2.5rem;
+}
+
+.shelf__head {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.shelf__name {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  font: 700 0.85rem/1.2 var(--font-body);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.shelf__count {
+  min-width: 1.4rem;
+  padding: 0.05rem 0.45rem;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--bg);
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+.shelf__arrows {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.shelf__arrow {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--ink);
+  font: 700 1.1rem/1 var(--font-body);
+  box-shadow: 0 3px 0 var(--ink);
+  cursor: pointer;
+  transition: translate 0.15s var(--ease-out), box-shadow 0.15s var(--ease-out), opacity 0.2s;
+}
+
+.shelf__arrow:active {
+  translate: 0 3px;
+  box-shadow: 0 0 0 var(--ink);
+}
+
+.shelf__arrow:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* Rows: room on top for the runaway bulb to perch on a cover */
+.shelf__row {
+  display: grid;
+  gap: 1.5rem;
+  padding-top: 2.5rem;
+}
+
+.shelf--fill .shelf__row {
+  grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+}
+
+.shelf--rail .shelf__row {
+  display: flex;
+  overflow-x: auto;
+  padding: 2.5rem 10px 1.75rem 0;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  border-bottom: 2px dashed var(--line);
+}
+
+.shelf--rail .shelf__row::-webkit-scrollbar {
+  display: none;
+}
+
+.shelf--rail .shelf__item,
+.shelf--rail .shelf__slot {
+  flex: 0 0 calc((100% - 3rem) / 3);
+  scroll-snap-align: start;
+}
+
+/* One game or one empty slot */
+.shelf__item,
+.shelf__slot {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 0.35rem;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.shelf__item {
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--lift, 0px));
+  transition: transform 0.25s var(--ease-spring);
+}
+
+.shelf__item:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 6px;
+  border-radius: 14px;
+}
+
+.shelf__cover {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 9;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+  border: 2px solid var(--ink);
+  border-radius: 14px;
+  background: var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
+  transition: box-shadow 0.2s var(--ease-out);
+}
+
+.shelf__cover img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.shelf__placeholder {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  background: var(--surface);
+  font: 800 2.5rem/1 var(--font-display);
+}
+
+/* Peek: screenshots fade over the cover while the pointer rests */
+.shelf__cover .shelf__shot {
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.shelf__cover .shelf__shot--tall {
+  object-fit: contain;
+  background: var(--ink);
+}
+
+.shelf__shot.is-on {
+  opacity: 1;
+}
+
+.shelf__glint {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.4), transparent 45%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.shelf__text {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.shelf__title {
+  font: 800 1.3rem/1.15 var(--font-display);
+}
+
+.shelf__star {
+  font-size: 0.6em;
+  vertical-align: 0.3em;
+}
+
+.shelf__meta,
+.shelf__genre {
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.shelf__meta,
+.shelf__hook,
+.shelf__btn {
+  display: none;
+}
+
+/* One game: its story beside the cover */
+.shelf--solo .shelf__item {
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 2.25rem;
+  align-items: center;
+}
+
+.shelf--solo .shelf__text {
+  gap: 0.5rem;
+}
+
+.shelf--solo .shelf__meta,
+.shelf--solo .shelf__hook {
+  display: block;
+}
+
+.shelf--solo .shelf__genre {
+  display: none;
+}
+
+.shelf--solo .shelf__title {
+  font-size: 1.9rem;
+}
+
+.shelf--solo .shelf__btn {
+  display: inline-block;
+  justify-self: start;
+  margin-top: 0.5rem;
+  padding: 0.5rem 1.1rem;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font: 800 0.95rem/1 var(--font-display);
+  box-shadow: 0 4px 0 var(--ink);
+}
+
+/* Empty slot at the end of a shelf: where the runaway idea likes to sit */
+.shelf__cover--empty {
+  display: grid;
+  place-items: end center;
+  overflow: visible;
+  border-style: dashed;
+  background: repeating-linear-gradient(45deg, var(--surface) 0 10px, var(--bg) 10px 20px);
+  box-shadow: none;
+}
+
+.shelf__cover--empty > span:not(.shelf-bulb) {
+  margin-bottom: 0.6rem;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+/* Hover (mouse): lift, tilt toward the pointer, glint; press squashes */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .shelf__item:hover {
+    --lift: -6px;
+  }
+
+  .shelf__item:hover .shelf__cover {
+    box-shadow: 10px 12px 0 var(--ink);
+  }
+
+  .shelf__item:hover .shelf__glint {
+    opacity: 1;
+  }
+}
+
+.shelf__item:active {
+  transform: perspective(900px) translateY(-1px) scale(0.97, 0.94);
+  transition-duration: 0.08s;
+}
+
+/* Stocking: covers wait off the shelf until it comes into view */
+.shelf__item.is-unstocked,
+.shelf__slot.is-unstocked {
+  opacity: 0;
+}
+
+/* Road under a sliding shelf: the ink car drives along */
+.shelf__road {
+  position: relative;
+  height: 1.75rem;
+}
+
+.shelf__car {
+  position: absolute;
+  top: -21px;
+  left: 8px;
+  line-height: 0;
+  rotate: calc(90deg * var(--dir, 1));
+  transition: left 0.12s linear;
+}
+
+.shelf__puff {
+  position: absolute;
+  top: -6px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--ink-soft);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* The runaway bulb on the shelves (js/shelfbulb.js) */
+.shelf-bulb {
+  position: absolute;
+  z-index: 3;
+  line-height: 0;
+  pointer-events: none;
+}
+
+.shelf-bulb--slot {
+  left: 50%;
+  top: 50%;
+  translate: -50% -62%;
+}
+
+.shelf-bulb--perch {
+  top: -2.4rem;
+  right: 1rem;
+}
+
+.shelf-bulb--road {
+  top: -3.4rem;
+  transition: left 0.12s linear;
+}
+
+/* Bulb's line: ink bubble (the car's lines use .car-bubble) */
+.shelf-say {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  z-index: 4;
+  translate: -50% 0;
+  padding: 0.3rem 0.65rem;
+  border-radius: 10px;
+  background: var(--ink);
+  color: var(--bg);
+  font: 800 0.8rem/1.2 var(--font-display);
+  white-space: nowrap;
+  animation: shelf-say 1.6s var(--ease-spring) both;
+}
+
+.shelf-say::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -6px;
+  border: 6px solid transparent;
+  border-top-color: var(--ink);
+}
+
+@keyframes shelf-say {
+  0% { scale: 0; }
+  20%, 85% { scale: 1; }
+  100% { scale: 0; }
+}
+
+.shelf-shout {
+  position: fixed;
+  z-index: 40;
+}
+
+/* Phones and narrow screens: a short list per shelf, nothing slides */
+@container shelves (max-width: 600px) {
+  .shelf__row,
+  .shelf--fill .shelf__row,
+  .shelf--rail .shelf__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.9rem;
+    overflow: visible;
+    padding: 0.75rem 0 0;
+    border: 0;
+  }
+
+  .shelf__item,
+  .shelf__slot,
+  .shelf--solo .shelf__item {
+    grid-template-columns: 120px minmax(0, 1fr);
+    gap: 0.9rem;
+    align-items: center;
+  }
+
+  .shelf__cover {
+    margin: 0;
+    border-radius: 10px;
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+
+  .shelf__title,
+  .shelf--solo .shelf__title {
+    font-size: 1.05rem;
+  }
+
+  .shelf--solo .shelf__meta,
+  .shelf--solo .shelf__hook,
+  .shelf--solo .shelf__btn {
+    display: none;
+  }
+
+  .shelf--solo .shelf__genre {
+    display: block;
+  }
+
+  .shelf__cover--empty {
+    box-shadow: none;
+  }
+
+  .shelf__cover--empty > span:not(.shelf-bulb) {
+    display: none;
+  }
+
+  .shelf-bulb--slot {
+    translate: -50% -66%;
+    scale: 0.7;
+  }
+
+  .shelf__arrows,
+  .shelf__road {
+    display: none;
+  }
+}

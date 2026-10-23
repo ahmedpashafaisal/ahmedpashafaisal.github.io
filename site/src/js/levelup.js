@@ -1,6 +1,6 @@
 // "Level progress" card in the footer: shows once per page view when the
 // visitor scrolls down to the footer. Stats: time on site this visit,
-// cards flipped (all time), achievements unlocked.
+// games peeked at (all time), achievements unlocked.
 import { burst } from './burst.js';
 import { juicy } from './motion.js';
 import { sfx } from './sound.js';
@@ -37,7 +37,7 @@ export function initLevelUp(foot) {
     <p class="levelup__title">Level progress</p>
     <ul class="levelup__stats">
       <li><span>Time</span><b data-k="time"></b></li>
-      <li><span>Cards flipped</span><b data-k="flip"></b></li>
+      <li><span>Games peeked</span><b data-k="peeks"></b></li>
       <li><span>Achievements</span><b data-k="ach"></b></li>
     </ul>`;
   foot.prepend(card);
@@ -47,7 +47,7 @@ export function initLevelUp(foot) {
     if (shown || !e.isIntersecting || scrollY < 200) return;
     shown = true;
     card.querySelector('[data-k="time"]').textContent = clock(Date.now() - t0);
-    card.querySelector('[data-k="flip"]').textContent = String(readStats().flip);
+    card.querySelector('[data-k="peeks"]').textContent = String(readStats().peeks.length);
     card.querySelector('[data-k="ach"]').textContent = `${Object.keys(unlocked()).length} / ${LIST.length}`;
     card.hidden = false;
     sfx.enter();

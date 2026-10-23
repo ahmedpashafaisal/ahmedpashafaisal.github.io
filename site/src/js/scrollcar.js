@@ -5,7 +5,7 @@
 import { juicy } from './motion.js';
 import { act } from './achievements.js';
 
-const CAR = `
+export const CAR = `
 <svg viewBox="0 0 20 32" width="26" height="42" aria-hidden="true">
   <rect x="0.5" y="5" width="4" height="7" rx="1.5" fill="var(--ink-soft)"/>
   <rect x="15.5" y="5" width="4" height="7" rx="1.5" fill="var(--ink-soft)"/>

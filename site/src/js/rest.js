@@ -46,6 +46,14 @@ window.addEventListener(
 
 export const stillFor = () => performance.now() - lastInput;
 
+// The shelves' own runaway (shelfbulb.js) is the one on screen: no second one
+const shelfHolds = () => {
+  const b = document.querySelector('.shelf-bulb');
+  if (!b) return false;
+  const r = b.getBoundingClientRect();
+  return r.bottom > 0 && r.top < innerHeight;
+};
+
 // The landing game owns the rest while it fills most of the screen
 export function landingHolds() {
   const c = document.querySelector('.hero-3d');
@@ -119,6 +127,7 @@ export function initRest() {
     html.classList.contains('pre-entry') ||
     html.classList.contains('wipe-in') ||
     !!document.querySelector('.lightbox:not([hidden])') ||
+    shelfHolds() ||
     landingHolds();
 
   const clampY = (y, h) => Math.min(Math.max(y, TOP + h / 2), innerHeight - BOTTOM - h / 2);

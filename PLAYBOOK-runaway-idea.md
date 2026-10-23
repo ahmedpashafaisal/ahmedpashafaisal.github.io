@@ -31,6 +31,10 @@ A livelier, more custom, fun site built from Ahmed's own idea, with no heavier l
 | Scope | Re-skin in waves, live after each |
 | Look of buttons, labels, frames | Kept as before: lime pills, hard black shadows. "Glass" built 22 Oct, then reverted: weaker in light mode |
 | Fonts | Keep Bricolage Grotesque (headings) and Figtree (body) |
+| Featured | Kept as is: clean enough (Ahmed, 22 Oct); only its 3 bulb beats are added |
+| Deck | Locked 23 Oct: H Adaptive shelves (`site/layouts-test.html?opt=H`). One shelf per category, covers uncropped 16:9, one click to the game page (no flip, no "See more"). Shelf slides only when its games do not fit; 2–3 games fill the width; 1 game shows its story beside the cover. Phone: short list per shelf. Featured 3 included. Map, islands and forest look dropped |
+| Map look | Dropped 23 Oct (2D/3D map "ugly"; islands "not convinced") |
+| Deck bulb beat | Decide in step D3 (shelves juice + bulb). Parked ideas: empty slot "Nope, not a game yet."; graveyard of unfinished ideas |
 
 ## Story: "The one that got away" (locked 22 Oct)
 Core (never said on the site):
@@ -62,7 +66,7 @@ Core (never said on the site):
 | Featured: Wildlings | Bulb blasted across the banner by recoil |
 | Featured: Magic Mineral | Bulb dims to hide in the dark cave shot; its glow gives it away |
 | Featured: Storm Alert | Quiet: sits by the lit window, soft glow, no gag |
-| Deck | One card wiggles. Flip it: bulb pops out, "Nope, not a game yet.", hops into another card |
+| Deck (shelves) | Step D3 decides. Was: one card wiggles; flip it: bulb pops out, "Nope, not a game yet.", hops into another card |
 | Game pages (shared) | Bulb peeks at the screenshots, then ducks behind "Next" |
 | Storm Alert page | Quiet: bulb sits still, soft glow |
 | About | Bulb hovers over the avatar's head. Car: "There you are!" Rays flick, it hops off |
@@ -95,6 +99,7 @@ Core (never said on the site):
 | Lime pills with hard black shadow | Kept ("Glass" built, then reverted) | Ahmed: old look better in light mode |
 | Bulb: no face, acts through motion only | Runaway bulb gets eyes (beside the filament); 5 caught stay plain | Feelings looked alike; eyes mark the one that got away |
 | Fake Skip top-right on every page (the gag) | Dropped; step 5c is resting only | Ahmed: nothing blocks, so no Skip needed |
+| Deck: grid of trading cards, filter tabs, flip for the story | Shelves per category, H Adaptive shelves (23 Oct; map tried in 6a, islands in D1, both dropped) | Ahmed: deck is the least fun part and not clean; the grid looks most like a template; "See more" was the only way to a game page |
 
 ## Defaults I picked (not asked)
 | Default | Why |
@@ -129,7 +134,9 @@ Core (never said on the site):
 | 5a | Wave 1a: Glass look everywhere (reverted) | Buttons, labels, game cards, picture frames, speech bubbles on all pages; dark mode outlines cream | 2–3 h |
 | 5b | Wave 1b: Landing joke | Last bulb left wakes up (3D eyes), dodges, hops off toward the games (or on scroll: a random one); "Hey! Come back!"; visit memory | 2–3 h |
 | 5c | Wave 1c: Resting | Rest when you rest + "So close!" (Skip dropped 22 Oct) | 3 h |
-| 6 | Wave 2: Featured + deck | Layouts; 3 banner beats; card beat ("Nope, not a game yet.") | ½ day |
+| 6a | Map look test | Dev-only page: 2D and 3D map side by side to switch, desktop + phone, ways to light up a stop, weight measured | 4–5 h |
+| 6b | Deck map | 13 stops in regions; map pinned while scrolling; scroll or click drives the car; focus card with "Open game"; phone layout; keyboard access | 1.5–2 days |
+| 6c | Featured beats | The 3 banner beats (Wildlings blast, Magic Mineral hide, Storm Alert quiet) | ½ day |
 | 7 | Wave 3: Game pages | Template layout; shared peek beat; quiet beat on Storm Alert | 2–3 h |
 | 8 | Wave 4: About, footer, 404 | Head beat + "There you are!"; quiet thesis section; 404 beat; "So close" achievement | 2–3 h |
 | 9 | Final check | Weight + Lighthouse (Perf ≥ 85, A11y ≥ 95); docs updated | 1 h |
