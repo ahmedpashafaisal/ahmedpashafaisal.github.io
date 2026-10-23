@@ -1,6 +1,6 @@
 // Landing mini-game in three.js: the ink toy car (seen from above, slightly
 // tilted) sits on the landing with a "Drive me to an idea" bubble (until the
-// first catch). Click anywhere on the landing and the car drives there and
+// first catch, or until the runaway first shows itself). Click anywhere on the landing and the car drives there and
 // parks (turning, drifting, leaving tyre marks and a smoke trail); hold and
 // move and it follows. It catches the ideas (lightbulbs) that pop up on fixed
 // spots around the name. The name, the line and the button are walls: the
@@ -53,6 +53,14 @@ const STOP_R = 0.75; // car lengths: cursor this close = parked (no steering, no
 const BUBBLE_REST_MS = 1200; // car still this long: "Drive me to an idea" comes back
 const WALL_PAD = 10;
 const BOUNCE = 0.45;
+const SOFT_HIT = 260; // px/s into a wall: slower slides along it, faster bounces off (with the thump)
+// Driving round the walls (autopilot to a clicked spot)
+const ROUTE_PAD = 1.15; // car radii: a path keeps this far from walls (contact is at 1)
+const CORNER_GAP = 26; // px past the car's radius: where corner waypoints sit
+const BRAKE = 1800; // px/s²: braking it plans for before a corner
+const CORNER_V = 240; // px/s through a right-angle corner (straight on: full speed)
+const LOOK = 0.9; // car lengths before a corner: starts turning toward the next waypoint
+const GOAL_GAP = 12; // px: a spot next to a wall or the edge parks this far off it
 const HIT_STOP_MS = 55;
 const SHAKE_MS = 200;
 const WAVE = 6;
@@ -80,7 +88,7 @@ const SMOKE_LIFE = 0.7; // s
 
 /* ---------- materials and parts ---------- */
 
-const gradientMap = (() => {
+export const gradientMap = (() => {
   const tex = new DataTexture(new Uint8Array([110, 190, 255]), 3, 1, RedFormat);
   tex.minFilter = tex.magFilter = NearestFilter;
   tex.needsUpdate = true;
@@ -88,14 +96,14 @@ const gradientMap = (() => {
 })();
 const outlineMat = new MeshBasicMaterial({ color: INK, side: BackSide });
 const mats = new Map();
-const toon = (color) => {
+export const toon = (color) => {
   if (!mats.has(color)) mats.set(color, new MeshToonMaterial({ color, gradientMap }));
   return mats.get(color);
 };
 // Car body follows the theme (ink in light mode, light ink in dark mode)
 const carBodyMat = new MeshToonMaterial({ color: INK, gradientMap });
 
-function part(geo, color, { pos = [0, 0, 0], scale = [1, 1, 1], rot = [0, 0, 0], line = 1.07 } = {}) {
+export function part(geo, color, { pos = [0, 0, 0], scale = [1, 1, 1], rot = [0, 0, 0], line = 1.07 } = {}) {
   const g = new Group();
   const outline = new Mesh(geo, outlineMat);
   outline.scale.setScalar(line);
@@ -112,7 +120,7 @@ const group = (...children) => {
 };
 
 // Toy car: 0.9 long along +x (front), roof along +y
-function carModel() {
+export function carModel() {
   const wheel = (x, z) =>
     part(new CylinderGeometry(0.13, 0.13, 0.1, 20), INK_SOFT, { pos: [x, -0.2, z], rot: [Math.PI / 2, 0, 0], line: 1 });
   const light = (z) => part(new BoxGeometry(0.04, 0.08, 0.12), LIME, { pos: [0.46, 0.0, z], line: 1 });
@@ -160,7 +168,7 @@ function addEyes(g) {
   g.add(...eyes);
   return eyes;
 }
-function bulbModel() {
+export function bulbModel() {
   const glow = new Mesh(BULB.glow, glowMat);
   glow.position.y = 0.1;
   // Filament: an arch with two legs, just in front of the glass
@@ -269,6 +277,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   // go = drive to the target until the car parks there (also after release)
   const grab = { x: 0, y: 0, on: false, id: -1, go: false, goUntil: 0 };
   let walls = []; // {l, t, r, b} in canvas px
+  let homeWalls = []; // the same at rest (scrolled to the top, no parallax): where bulbs go
   let area = { l: 0, t: 0, r: 1, b: 1 };
   let ideas = [];
   let waveBusy = false;
@@ -284,7 +293,8 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   let firstRound = false; // the round with a runaway in it
   let runawayDone = false; // escaped: later rounds are normal
   let shoutUntil = 0;
-  let howTo = true; // "Drive me to an idea" until the first catch
+  let howTo = true; // "Drive me to an idea" until the first catch or the runaway's first move
+  let caught = 0;
   let returnAt = 0; // when the runaway comes back after hopping off
   const visits = Math.max(1, readStats().visits || 1);
   const dodgeR = Math.max(DODGE_MIN_R, DODGE_R - (visits - 1) * DODGE_STEP);
@@ -297,21 +307,35 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
       const r = el.getBoundingClientRect();
       return { l: r.left - cr.left - WALL_PAD, t: r.top - cr.top - WALL_PAD, r: r.right - cr.left + WALL_PAD, b: r.bottom - cr.top + WALL_PAD };
     };
+    // Where a wall sits at rest: minus its parallax shift (CSS translate,
+    // js/scroll.js) and, for the fixed corner buttons, minus the scroll
+    const home = (el, w) => {
+      const fixed = getComputedStyle(el).position === 'fixed';
+      const [tx = 0, ty = 0] = (getComputedStyle(el).translate || '').split(' ').map((v) => parseFloat(v) || 0);
+      const dx = fixed ? 0 : tx;
+      const dy = fixed ? window.scrollY : ty; // a fixed button sits scrollY lower against the scrolled landing
+      return { l: w.l - dx, t: w.t - dy, r: w.r - dx, b: w.b - dy };
+    };
     const host = canvas.parentElement;
-    walls = [
+    const els = [
       ...host.querySelectorAll('.entrance__name, .entrance__line, .entrance__btn'),
       // Corner buttons, while they sit in their corners over the landing
       ...[...document.querySelectorAll('.sound-toggle, .mail-btn, .theme-toggle, .site-pill')].filter((el) => !el.closest('.hud')),
-    ].map(rel);
+    ];
+    walls = els.map(rel);
+    homeWalls = els.map((el, i) => home(el, walls[i]));
     const roadW = document.querySelector('.scrollcar') ? 40 : 0;
     area = { l: EDGE, t: EDGE, r: W - EDGE - roadW, b: H - BOTTOM };
-    // A wall with no car-sized gap on either side (the name on a phone) would cut
-    // the play area in two: the car drives under it instead (canvas is behind the text)
-    const fit = carR() * 2 + 8;
+    // A wall without a comfortable gap on either side (the name on a phone or
+    // a mid-size window) would cut the play area in two, or leave a slot the
+    // car only scrapes through: the car drives under it instead (canvas is
+    // behind the text)
+    const fit = carR() * 2 + 48;
     for (const w of walls) w.solid = w.l - area.l >= fit || area.r - w.r >= fit;
   }
 
   function layout() {
+    const wasW = W;
     W = canvas.clientWidth;
     H = canvas.clientHeight;
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -331,18 +355,21 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
       car.x = W * 0.5;
       car.y = area.b - 40;
     }
-    // Window resized: bulbs move to the spots of the new layout (they are
-    // placed round the name, which moved), so none is left off-screen
-    if (ideas.length) {
+    // Window got wider or narrower: the name re-flowed, so bulbs move to the
+    // spots of the new layout, top to bottom. A height-only change (a phone's
+    // address bar hiding while scrolling) keeps them where they are. No bulb is
+    // ever dropped: with fewer spots than bulbs, the rest stay put inside the
+    // play area. A hopping or escaping runaway finishes its hop first.
+    if (ideas.length && Math.abs(W - wasW) > 1) {
       const list = spots().sort((p, q) => p[1] - q[1]);
-      ideas.forEach((it, k) => {
+      const live = ideas.filter((it) => !it.gone && !it.hop && !it.escaping).sort((p, q) => p.hy - q.hy);
+      live.forEach((it, k) => {
         const sp = list[k];
-        if (!sp) {
-          it.gone = true;
-          it.goneAt = performance.now();
-          return;
+        if (sp) [it.hx, it.hy, it.mirror] = sp;
+        else {
+          it.hx = MathUtils.clamp(it.hx, area.l + 40, area.r - 40);
+          it.hy = MathUtils.clamp(it.hy, area.t + 40, area.b - 40);
         }
-        [it.hx, it.hy, it.mirror] = sp;
         it.x = it.hx;
         it.y = it.hy;
         it.vx = it.vy = 0;
@@ -354,17 +381,19 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   }
 
   /* ideas */
-  const free = (x, y, gap) =>
+  const free = (x, y, gap, ws = walls) =>
     x > area.l + gap && x < area.r - gap && y > area.t + gap && y < area.b - gap &&
-    walls.every((w) => x < w.l - gap || x > w.r + gap || y < w.t - gap || y > w.b + gap);
+    ws.every((w) => x < w.l - gap || x > w.r + gap || y < w.t - gap || y > w.b + gap);
 
   // Ideas sit on fixed spots around the name, in 3 mirrored pairs, so every
   // wave looks the same and balanced: above the name, beside it, below the
   // button. Spots that do not fit (the sides on a phone) fall back to
   // spots further up or down. Pairs pop in top to bottom; both bulbs of a
   // pair bob and sway in step (sway mirrored).
+  // Spots come from the walls at rest, so a scrolled or shifted landing (a
+  // phone's address bar resizing it mid-scroll) gives the same spots
   function spots() {
-    const [n, , btn] = walls;
+    const [n, , btn] = homeWalls;
     if (!n) return [];
     const mid = W / 2;
     const half = (n.r - n.l) / 2;
@@ -380,7 +409,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     const out = [];
     for (const [dx, y] of cands) {
       if (out.length === WAVE) break;
-      if (free(mid - dx, y, 30) && free(mid + dx, y, 30)) out.push([mid - dx, y, 1], [mid + dx, y, -1]);
+      if (free(mid - dx, y, 30, homeWalls) && free(mid + dx, y, 30, homeWalls)) out.push([mid - dx, y, 1], [mid + dx, y, -1]);
     }
     return out;
   }
@@ -405,11 +434,13 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
 
   // The runaway looks like any other bulb until its first dodge
   function makeRunaway(it) {
+    if (runaway && runaway !== it && !runaway.gone) return;
     runaway = it;
     Object.assign(it, { waiting: false, eyes: null, wokeAt: 0, blinkAt: 0, winkUntil: 0, hop: null, nextDodge: 0, dodges: 0, lastDodge: 0 });
   }
   // ...when its eyes pop open (draw() springs them in)
   function openEyes(it, now) {
+    howTo = false; // the joke has started: no "Drive me to an idea" after this
     if (it.eyes) return;
     it.eyes = addEyes(it.g);
     it.wokeAt = now;
@@ -516,6 +547,11 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   // ...and back: it hops up from the bottom edge onto a free spot, eyes
   // open, and the chase can start again
   function comeBack(now) {
+    // rest.js's runaway is on screen (visitor resting beside the page): wait
+    if (document.querySelector('.rest-layer .bulb')) {
+      returnAt = now + 1500;
+      return;
+    }
     returnAt = 0;
     const taken = ideas.filter((o) => !o.gone);
     const open = spots().filter(([x, y]) => free(x, y, 40) && taken.every((o) => Math.hypot(o.x - x, o.y - y) > 80) && Math.hypot(car.x - x, car.y - y) > dodgeR + 40);
@@ -534,11 +570,12 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     shout('There you are!', now);
     wake();
   }
-  // Scrolled away without finishing the round: a random bulb wakes up and leaves
+  // A skimmer (scrolled away without catching anything): a random bulb wakes
+  // up and leaves. Someone who has played keeps the round as it is.
   window.addEventListener(
     'scroll',
     () => {
-      if (!entered || !firstRound || runawayDone || window.scrollY <= 40) return;
+      if (!entered || !firstRound || runawayDone || caught || window.scrollY <= 40) return;
       const now = performance.now();
       if (!runaway) {
         const left = ideas.filter((o) => !o.gone && now >= o.delay);
@@ -577,6 +614,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   function collect(it, now) {
     it.gone = true;
     it.goneAt = now;
+    caught += 1;
     // First catch: the player knows how to drive, "Drive me to an idea" is done
     if (howTo) {
       howTo = false;
@@ -667,6 +705,22 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     }
   }
 
+  // Touching a wall or the edge (normal nx, ny pointing away from it): a slow
+  // touch slides along it (no flip, no thump), a hard hit bounces off nose first
+  function hit(nx, ny, now) {
+    const vn = car.vx * nx + car.vy * ny;
+    if (vn >= 0) return;
+    if (-vn < SOFT_HIT) {
+      car.vx -= vn * nx;
+      car.vy -= vn * ny;
+      return;
+    }
+    car.vx -= (1 + BOUNCE) * vn * nx;
+    car.vy -= (1 + BOUNCE) * vn * ny;
+    bounceNose(nx, ny);
+    bump(nx, ny, -vn, now);
+  }
+
   // A bounce mirrors the heading off the wall too, so the car comes off it
   // nose first instead of rolling backward
   function bounceNose(nx, ny) {
@@ -754,13 +808,13 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     return true;
   };
   function route(goal) {
-    const pad = carR() * 0.9;
+    const pad = carR() * ROUTE_PAD;
     const ws = solid();
     const start = { x: car.x, y: car.y };
     // From the car itself use half the pad: a car touching a wall sits inside the full pad
     const clear = (a, b) => ws.every((w) => !hits(a.x, a.y, b.x, b.y, w, a === start ? pad * 0.5 : pad));
-    if (clear(start, goal)) return { x: goal.x, y: goal.y, len: Math.hypot(goal.x - car.x, goal.y - car.y) };
-    const m = carR() + 14;
+    if (clear(start, goal)) return { x: goal.x, y: goal.y, len: Math.hypot(goal.x - car.x, goal.y - car.y), next: null };
+    const m = carR() + CORNER_GAP;
     const r = carR();
     const nodes = [start];
     for (const w of ws) {
@@ -793,15 +847,53 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
         }
       }
     }
-    if (dist[n - 1] === Infinity) return { x: goal.x, y: goal.y, len: Math.hypot(goal.x - car.x, goal.y - car.y) };
-    let v = n - 1;
-    while (prev[v] > 0) v = prev[v];
-    return { x: nodes[v].x, y: nodes[v].y, len: dist[n - 1] };
+    // No way to the goal (boxed in, or a gap too narrow on this screen): head
+    // for the reachable corner nearest to it instead of ramming the wall
+    let end = n - 1;
+    if (dist[end] === Infinity) {
+      end = -1;
+      for (let i = 1; i < n - 1; i++) {
+        if (dist[i] === Infinity) continue;
+        if (end < 0 || Math.hypot(nodes[i].x - goal.x, nodes[i].y - goal.y) < Math.hypot(nodes[end].x - goal.x, nodes[end].y - goal.y)) end = i;
+      }
+      if (end < 0) return { x: car.x, y: car.y, len: 0, next: null };
+    }
+    const path = [];
+    for (let v = end; v > 0; v = prev[v]) path.unshift(nodes[v]);
+    return { x: path[0].x, y: path[0].y, len: dist[end], next: path[1] || null };
+  }
+
+  // Free run (px) from the car along a direction before it would touch a
+  // solid wall or the play-area edge
+  function runTo(dx, dy) {
+    const r = carR();
+    let t = Infinity;
+    if (dx > 0) t = Math.min(t, (area.r - r - car.x) / dx);
+    if (dx < 0) t = Math.min(t, (area.l + r - car.x) / dx);
+    if (dy > 0) t = Math.min(t, (area.b - r - car.y) / dy);
+    if (dy < 0) t = Math.min(t, (area.t + r - car.y) / dy);
+    for (const w of solid()) {
+      let t0 = 0;
+      let t1 = Infinity;
+      for (const [a, d, lo, hi] of [[car.x, dx, w.l - r, w.r + r], [car.y, dy, w.t - r, w.b + r]]) {
+        if (Math.abs(d) < 1e-6) {
+          if (a < lo || a > hi) t0 = Infinity;
+          continue;
+        }
+        let u = (lo - a) / d;
+        let v = (hi - a) / d;
+        if (u > v) [u, v] = [v, u];
+        t0 = Math.max(t0, u);
+        t1 = Math.min(t1, v);
+      }
+      if (t0 <= t1 && t0 < t) t = t0;
+    }
+    return Math.max(0, t);
   }
 
   // Pointer on a wall: aim for its nearest edge instead
   function dragGoal() {
-    const r = carR();
+    const r = carR() + GOAL_GAP;
     let x = MathUtils.clamp(grab.x, area.l + r, area.r - r);
     let y = MathUtils.clamp(grab.y, area.t + r, area.b - r);
     for (const w of solid()) {
@@ -831,10 +923,25 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     // the target it neither steers nor drives, it brakes and parks.
     if (grab.go && !grab.on && now > grab.goUntil) grab.go = false;
     const driving = grab.on || grab.go;
+    let rounding = false; // on a path round a wall: less drift
     if (driving) {
       const wp = route(dragGoal());
-      const dx = wp.x - car.x;
-      const dy = wp.y - car.y;
+      rounding = !!wp.next;
+      // Aim: the waypoint, easing toward the next one as the corner nears,
+      // so the turn starts before the corner instead of at it
+      let ax = wp.x;
+      let ay = wp.y;
+      const toWp = Math.hypot(wp.x - car.x, wp.y - car.y);
+      if (wp.next) {
+        const sx = wp.next.x - wp.x;
+        const sy = wp.next.y - wp.y;
+        const sl = Math.hypot(sx, sy) || 1;
+        const k = MathUtils.clamp(1 - toWp / (carLen * LOOK), 0, 1) * Math.min(carLen * 0.6, sl);
+        ax += (sx / sl) * k;
+        ay += (sy / sl) * k;
+      }
+      const dx = ax - car.x;
+      const dy = ay - car.y;
       const near = Math.hypot(dx, dy);
       const park = carLen * STOP_R;
       const hx0 = Math.cos(car.h);
@@ -851,7 +958,18 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
         if (Math.abs(turn) > SHARP) sp = Math.min(sp, Math.max(140, TURN * near * 0.45));
         // Facing away: keep rolling forward slowly while it turns round
         sp *= Math.max(0.35, Math.cos(Math.min(Math.abs(turn), Math.PI / 2)));
+        // Corner ahead: brake in time to take it at a speed that fits the bend
+        if (wp.next) {
+          const bend = Math.abs(angleTo(Math.atan2(wp.y - car.y, wp.x - car.x), Math.atan2(wp.next.y - wp.y, wp.next.x - wp.x)));
+          const vc = MathUtils.lerp(maxV, CORNER_V, Math.min(1, bend / (Math.PI / 2)));
+          sp = Math.min(sp, Math.sqrt(vc * vc + 2 * BRAKE * Math.max(0, toWp - carLen * 0.3)));
+        }
       }
+      // Never faster than it can slow to a soft touch before the wall or edge
+      // it is moving toward (a target flipped behind it, a drift, a corner cut)
+      const v0 = Math.hypot(car.vx, car.vy);
+      const run = v0 > 1 ? runTo(car.vx / v0, car.vy / v0) : runTo(hx0, hy0);
+      sp = Math.min(sp, Math.sqrt(CORNER_V * CORNER_V + 2 * BRAKE * run));
       const hx = Math.cos(car.h);
       const hy = Math.sin(car.h);
       const fwd = car.vx * hx + car.vy * hy;
@@ -872,7 +990,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     // rolls straight on and stops; leftover drift dies out through the grip.
     speed *= Math.exp(-ROLL * dt);
     if (!driving && Math.abs(speed) < 6) speed = 0; // rolled to a stop (never while the engine pulls)
-    side *= Math.exp(-(j ? (driving ? GRIP : GRIP * 2.5) : GRIP * 3) * dt); // released: tyres grip, drift ends fast
+    side *= Math.exp(-(j ? (driving ? (rounding ? GRIP * 2 : GRIP) : GRIP * 2.5) : GRIP * 3) * dt); // released: tyres grip, drift ends fast
     const vNow = Math.hypot(speed, side);
     if (vNow > maxV) {
       speed *= maxV / vNow;
@@ -913,13 +1031,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
       }
       car.x = qx + nx * r;
       car.y = qy + ny * r;
-      const vn = car.vx * nx + car.vy * ny;
-      if (vn < 0) {
-        car.vx -= (1 + BOUNCE) * vn * nx;
-        car.vy -= (1 + BOUNCE) * vn * ny;
-        bounceNose(nx, ny);
-        if (-vn > 90) bump(nx, ny, -vn, now);
-      }
+      hit(nx, ny, now);
     }
     const edges = [
       [car.x - r - area.l, 1, 0],
@@ -931,13 +1043,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
       if (gap >= 0) continue;
       car.x -= nx * gap;
       car.y -= ny * gap;
-      const vn = car.vx * nx + car.vy * ny;
-      if (vn < 0) {
-        car.vx -= (1 + BOUNCE) * vn * nx;
-        car.vy -= (1 + BOUNCE) * vn * ny;
-        bounceNose(nx, ny);
-        if (-vn > 90) bump(nx, ny, -vn, now);
-      }
+      hit(nx, ny, now);
     }
 
     // Ideas: drift toward a close car, caught inside the pickup radius
@@ -1171,6 +1277,8 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     }
 
     drawFx(now, dt);
+    // Tells rest.js a runaway is on the landing, so it keeps its own away
+    canvas.toggleAttribute('data-runaway', !!runaway && !runaway.gone);
 
     const shakeT = (now - shakeStart) / SHAKE_MS;
     camera.position.copy(camBase);
@@ -1239,7 +1347,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
 
   // Test hook: ?debug exposes the game state (headless tests only)
   if (new URLSearchParams(location.search).has('debug')) {
-    window.__landing = { car, ideas: () => ideas, walls: () => walls, area: () => area, canvas, fxCounts: () => [marks[0].length + marks[1].length, puffs.length, rings.length], goal: () => dragGoal(), runaway: () => runaway, firstRound: () => firstRound, dodgeR };
+    window.__landing = { car, ideas: () => ideas, walls: () => walls, area: () => area, canvas, fxCounts: () => [marks[0].length + marks[1].length, puffs.length, rings.length], goal: () => dragGoal(), runaway: () => runaway, firstRound: () => firstRound, dodgeR, howTo: () => howTo, caught: () => caught, returnAt: () => returnAt };
   }
 
   return {

@@ -54,6 +54,15 @@ const shelfHolds = () => {
   return r.bottom > 0 && r.top < innerHeight;
 };
 
+// The landing's runaway is on screen (any part of the landing showing): one
+// runaway at a time
+const landingRunaway = () => {
+  const c = document.querySelector('.hero-3d[data-runaway]');
+  if (!c) return false;
+  const r = c.getBoundingClientRect();
+  return r.bottom > 0 && r.top < innerHeight;
+};
+
 // The landing game owns the rest while it fills most of the screen
 export function landingHolds() {
   const c = document.querySelector('.hero-3d');
@@ -128,6 +137,7 @@ export function initRest() {
     html.classList.contains('wipe-in') ||
     !!document.querySelector('.lightbox:not([hidden])') ||
     shelfHolds() ||
+    landingRunaway() ||
     landingHolds();
 
   const clampY = (y, h) => Math.min(Math.max(y, TOP + h / 2), innerHeight - BOTTOM - h / 2);

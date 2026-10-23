@@ -98,6 +98,9 @@ Core (never said on the site):
 | Fonts flagged as template | Fonts kept; only shapes change | Ahmed, after the font comparison |
 | Lime pills with hard black shadow | Kept ("Glass" built, then reverted) | Ahmed: old look better in light mode |
 | Bulb: no face, acts through motion only | Runaway bulb gets eyes (beside the filament); 5 caught stay plain | Feelings looked alike; eyes mark the one that got away |
+| Skimmer hop-off on any scroll mid-round | Only before the first catch | Ahmed: bulbs went away on scrolling back up (23 Oct) |
+| "Drive me to an idea" until the first catch | Until the first catch or the runaway first shows | Ahmed: the line came back after missing the last bulb (23 Oct) |
+| Car scrapes and bounces round the walls | Brakes for corners, keeps clear, slides on soft touches; drives under a wall with no comfortable gap | Ahmed: "bumps to the obstacles uncontrollably" (23 Oct) |
 | Fake Skip top-right on every page (the gag) | Dropped; step 5c is resting only | Ahmed: nothing blocks, so no Skip needed |
 | Deck: grid of trading cards, filter tabs, flip for the story | Shelves per category, H Adaptive shelves (23 Oct; map tried in 6a, islands in D1, both dropped) | Ahmed: deck is the least fun part and not clean; the grid looks most like a template; "See more" was the only way to a game page |
 
