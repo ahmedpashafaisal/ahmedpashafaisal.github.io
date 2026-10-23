@@ -244,20 +244,139 @@
   box-shadow: 0 4px 0 var(--ink);
 }
 
-/* Empty slot at the end of a shelf: where the runaway idea likes to sit */
+/* Empty slot at the end of a shelf: the next game, under construction, and
+   where the runaway idea likes to sit. Safety yellow, black and the cone's
+   orange stay the same in both themes; lines follow the ink. */
 .shelf__cover--empty {
-  display: grid;
-  place-items: end center;
+  --site-yellow: #ffc81e;
+  --site-black: #1d1b18;
+  --site-cone: #ff7a1a;
   overflow: visible;
   border-style: dashed;
-  background: repeating-linear-gradient(45deg, var(--surface) 0 10px, var(--bg) 10px 20px);
+  background: var(--surface);
   box-shadow: none;
 }
 
-.shelf__cover--empty > span:not(.shelf-bulb) {
-  margin-bottom: 0.6rem;
-  font-size: 0.8rem;
-  color: var(--ink-soft);
+.site {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+}
+
+.site__line,
+.site__bricks {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.site__bricks {
+  fill: var(--bg);
+  stroke-width: 2.5;
+}
+
+.site__ground {
+  fill: var(--line);
+}
+
+.site__yellow {
+  fill: var(--site-yellow);
+}
+
+.site__black {
+  fill: var(--site-black);
+}
+
+.site__cone {
+  fill: var(--site-cone);
+}
+
+.site__band {
+  fill: #fffdf8;
+}
+
+.site__post {
+  fill: var(--ink);
+}
+
+.site__crate {
+  fill: var(--bg);
+}
+
+.site__pict {
+  fill: var(--site-black);
+  stroke: var(--site-black);
+  stroke-width: 3.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.site__pict path {
+  fill: none;
+}
+
+.site__screen {
+  fill: var(--ink);
+}
+
+.site__crack {
+  fill: none;
+  stroke: var(--surface);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Blinking lamp and the swinging brick: the site is alive with or without
+   the bulb */
+.site__lamp {
+  fill: var(--site-yellow);
+}
+
+.site__swing {
+  transform-box: view-box;
+  transform-origin: 222px 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .site__lamp {
+    animation: site-blink 1.2s steps(1) infinite;
+  }
+
+  .site__swing {
+    animation: site-swing 2.6s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes site-blink {
+  50% {
+    fill: var(--surface);
+  }
+}
+
+@keyframes site-swing {
+  from {
+    rotate: -5deg;
+  }
+
+  to {
+    rotate: 5deg;
+  }
+}
+
+/* Dust where the working bulb lands (js/shelfbulb.js) */
+.shelf-dust {
+  position: absolute;
+  z-index: 3;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--ink-soft);
+  pointer-events: none;
 }
 
 /* Hover (mouse): lift, tilt toward the pointer, glint; press squashes */
@@ -286,38 +405,14 @@
   opacity: 0;
 }
 
-/* Road under a sliding shelf: the ink car drives along */
-.shelf__road {
-  position: relative;
-  height: 1.75rem;
-}
-
-.shelf__car {
-  position: absolute;
-  top: -21px;
-  left: 8px;
-  line-height: 0;
-  rotate: calc(90deg * var(--dir, 1));
-  transition: left 0.12s linear;
-}
-
-.shelf__puff {
-  position: absolute;
-  top: -6px;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--ink-soft);
-  opacity: 0.5;
-  pointer-events: none;
-}
-
-/* The runaway bulb on the shelves (js/shelfbulb.js) */
+/* The runaway bulb on the shelves (js/shelfbulb.js). Its feet are the
+   bottom of its box: the working hop squashes from there. */
 .shelf-bulb {
   position: absolute;
   z-index: 3;
   line-height: 0;
   pointer-events: none;
+  transform-origin: 50% 100%;
 }
 
 .shelf-bulb--slot {
@@ -329,11 +424,6 @@
 .shelf-bulb--perch {
   top: -2.4rem;
   right: 1rem;
-}
-
-.shelf-bulb--road {
-  top: -3.4rem;
-  transition: left 0.12s linear;
 }
 
 /* Bulb's line: ink bubble (the car's lines use .car-bubble) */
@@ -419,17 +509,12 @@
     box-shadow: none;
   }
 
-  .shelf__cover--empty > span:not(.shelf-bulb) {
-    display: none;
-  }
-
   .shelf-bulb--slot {
     translate: -50% -66%;
     scale: 0.7;
   }
 
-  .shelf__arrows,
-  .shelf__road {
+  .shelf__arrows {
     display: none;
   }
 }

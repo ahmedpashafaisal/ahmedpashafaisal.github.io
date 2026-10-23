@@ -1,14 +1,14 @@
 // "All games" as shelves, one per category (step D3, layout H). Covers keep
 // their 16:9 art; a shelf only slides when its games do not fit, 2 or 3 games
 // fill the width, 1 game shows its story beside the cover; each shelf with
-// room ends in an empty slot. Phones get a short list per shelf (shelves.css).
+// room ends in an empty slot, drawn as a building site (the next game, under
+// construction). Phones get a short list per shelf (shelves.css).
 // Juice, each telling the visitor something:
 //   stocking: covers slide onto a shelf when it comes into view, landing with
 //     a dot-grid thump while the count ticks up (how many games are here);
 //   lift: covers lift and tilt toward the mouse, glint, squash on press;
 //   peek: rest the mouse on a cover and it fades through 3 screenshots;
-//   open: a click grows the cover into the game page (grow.js);
-//   car: the ink car drives along under a sliding shelf (where you are in it).
+//   open: a click grows the cover into the game page (grow.js).
 // The runaway bulb (shelfbulb.js) loads once the shelves come near.
 import data from '../data/games.json';
 import { byCategory, primaryCat } from './order.js';
@@ -16,7 +16,6 @@ import { juicy } from './motion.js';
 import { sfx } from './sound.js';
 import { act } from './achievements.js';
 import { sendShock } from './dotgrid.js';
-import { CAR } from './scrollcar.js';
 import { growOut } from './grow.js';
 
 const STOCK_MS = 520;
@@ -25,7 +24,6 @@ const PEEK_WAIT_MS = 450; // pointer resting this long starts the peek
 const PEEK_MS = 1000; // per screenshot
 const PEEK_SHOTS = 3;
 const TILT = 4; // degrees at the cover's edge
-const PUFF_MS = 60;
 
 const esc = (s) =>
   String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -53,11 +51,62 @@ function itemHTML(g) {
   </a>`;
 }
 
-// Placeholder words: Ahmed rewrites
-const SLOT = `<div class="shelf__slot" aria-hidden="true">
-    <span class="shelf__cover shelf__cover--empty"><span>Next game</span></span>
-    <span class="shelf__text"><span class="shelf__title">Empty slot</span><span class="shelf__genre">Not made yet</span></span>
+// Empty slot: the next game, under construction (a 320 x 180 scene, colours
+// in shelves.css). Two sites take turns down the page: half built (brick wall
+// going up, scaffold, a brick swinging on the crane hook) and broken (cracked
+// screen behind caution tape, a barrier). Both have the road works sign, a
+// cone and a blinking lamp; the wall top and the crate are where the runaway
+// bulb stands to work (60% down, where shelf-bulb--slot puts its feet).
+const SIGN = `<rect class="site__post" x="266" y="112" width="4" height="46"/>
+  <path class="site__line site__yellow" d="M268 66l26 26-26 26-26-26z"/>
+  <g class="site__pict"><circle cx="264" cy="80" r="3.6"/><path d="M264 85l3 12-5 8m5-8l5 7m-7-16l9 5 4 10m-1 0l-2 4 6-1z"/></g>`;
+const CONE = `<path class="site__line site__cone" d="M297 124h8l8 32h-24z"/>
+  <path class="site__band" d="M293.8 137h14.4l2 8h-18.4z"/>
+  <rect class="site__post" x="285" y="155" width="32" height="4" rx="1.5"/>`;
+const GROUND = '<rect class="site__ground" y="158" width="320" height="22"/><path class="site__line" d="M0 158h320"/>';
+const LAMP = (x, y) => `<rect class="site__post" x="${x - 3}" y="${y + 4}" width="6" height="${y > 100 ? 8 : 4}"/><circle class="site__line site__lamp" cx="${x}" cy="${y}" r="5.5"/>`;
+// Brick rows from the ground up, [x, width]; the top row is still going up
+const WALL = [
+  [146, [[116, 22], [138, 22], [160, 22], [182, 22]]],
+  [134, [[116, 11], [127, 22], [149, 22], [171, 22], [193, 11]]],
+  [122, [[116, 22], [138, 22], [160, 22], [182, 22]]],
+  [110, [[127, 22], [149, 22], [171, 22]]],
+]
+  .flatMap(([y, row]) => row.map(([x, w]) => `<rect x="${x}" y="${y}" width="${w}" height="12" rx="1.5"/>`))
+  .join('');
+
+const SITES = [
+  (hz) => `<path class="site__line" d="M28 158V58M74 158V58M24 58h54M28 82h46M28 134h46M28 82l46 26M28 108l46 26"/>
+  <rect class="site__line" x="24" y="104" width="54" height="8" style="fill: url(#${hz})"/>
+  ${LAMP(51, 48)}
+  <g class="site__swing"><path class="site__line" d="M222 -4V40l-10 10m10-10l10 10"/><rect class="site__line site__yellow" x="208" y="50" width="28" height="13" rx="2"/></g>
+  <g class="site__bricks">${WALL}</g>`,
+  (hz) => `<path class="site__screen" d="M98 34H222a6 6 0 0 1 6 6V112l-9 6-7-4-6 12-8 2-4 12-4 10H98a6 6 0 0 1-6-6V40a6 6 0 0 1 6-6z"/>
+  <path class="site__crack" d="M128 62l-14-10-8-14M128 62l12-12 18-6 10 4M128 62l24 10 14 18 10 4M128 62l-6 22-16 12M128 62l-24 6M152 72l4 22"/>
+  <path class="site__screen" d="M206 158l10-14 12 6 2 8z"/>
+  <rect class="site__line" x="70" y="67" width="180" height="14" style="fill: url(#${hz})" transform="rotate(-12 160 74)"/>
+  <path class="site__line" d="M24 129l-8 29M24 129l8 29M76 129l-8 29M76 129l8 29"/>
+  <rect class="site__line" x="12" y="116" width="76" height="13" rx="2" style="fill: url(#${hz})"/>
+  ${LAMP(24, 102)}
+  <rect class="site__line site__crate" x="136" y="110" width="48" height="48" rx="2"/>
+  <path class="site__line" d="M136 122h48M136 146h48M136 146l48-24"/>`,
+];
+
+let slots = 0; // building sites drawn so far: the next one takes the other turn
+function slotHTML() {
+  const i = slots++;
+  const hz = `site-hz-${i}`;
+  return `<div class="shelf__slot" aria-hidden="true">
+    <span class="shelf__cover shelf__cover--empty"><svg class="site" viewBox="0 0 320 180" focusable="false">
+  <defs><pattern id="${hz}" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect class="site__yellow" width="14" height="14"/><rect class="site__black" width="7" height="14"/></pattern></defs>
+  ${GROUND}
+  ${SITES[i % SITES.length](hz)}
+  ${SIGN}
+  ${CONE}
+</svg></span>
+    <span class="shelf__text"><span class="shelf__title">Next game</span><span class="shelf__genre">Under construction</span></span>
   </div>`;
+}
 
 function shelfHTML(c) {
   const n = c.games.length;
@@ -70,8 +119,7 @@ function shelfHTML(c) {
       : '';
   return `<section class="shelf shelf--${mode}" data-cat="${esc(c.id)}" style="--n: ${n + (slot ? 1 : 0)}" aria-label="${label}, ${n} ${n === 1 ? 'game' : 'games'}">
     <div class="shelf__head"><h3 class="shelf__name">${label} <span class="shelf__count" aria-hidden="true">${n}</span></h3>${arrows}</div>
-    <div class="shelf__row">${c.games.map(itemHTML).join('')}${slot ? SLOT : ''}</div>
-    ${mode === 'rail' ? `<div class="shelf__road" aria-hidden="true"><span class="shelf__car">${CAR}</span></div>` : ''}
+    <div class="shelf__row">${c.games.map(itemHTML).join('')}${slot ? slotHTML() : ''}</div>
   </section>`;
 }
 
@@ -150,48 +198,18 @@ function hover(item) {
   item.addEventListener('pointerdown', (e) => e.pointerType === 'mouse' && sfx.press());
 }
 
-// Sliding shelf: arrows, and the car drives along the road under it. Tells
-// the bulb about each slide with a 'shelf:slide' event ({ x, p }).
+// Sliding shelf: arrows. Tells the bulb about each slide with a 'shelf:slide'
+// event ({ p }: 0 at the start, 1 at the end).
 function rail(shelf) {
   const row = shelf.querySelector('.shelf__row');
-  const road = shelf.querySelector('.shelf__road');
-  const car = road.querySelector('.shelf__car');
   const [back, more] = shelf.querySelectorAll('.shelf__arrow');
-  let last = 0;
-  let lastPuff = 0;
-  let atEnd = false;
 
   const place = (quiet) => {
     const max = row.scrollWidth - row.clientWidth;
     const p = max > 0 ? row.scrollLeft / max : 0;
-    const x = 8 + p * Math.max(0, road.clientWidth - 50);
-    const dir = row.scrollLeft >= last ? 1 : -1;
-    last = row.scrollLeft;
-    car.style.left = `${x}px`;
-    car.style.setProperty('--dir', dir);
     back.disabled = p < 0.01;
     more.disabled = p > 0.99;
-    if (quiet) return;
-    const now = performance.now();
-    if (juicy() && now - lastPuff > PUFF_MS) {
-      lastPuff = now;
-      const puff = Object.assign(document.createElement('span'), { className: 'shelf__puff' });
-      puff.style.left = `${x + 16 - dir * 22}px`;
-      road.append(puff);
-      puff.animate([{ transform: 'scale(0.6)', opacity: 0.5 }, { transform: `translate(${-dir * 14}px, -10px) scale(1.7)`, opacity: 0 }], {
-        duration: 520,
-        easing: 'ease-out',
-      }).finished.then(() => puff.remove());
-    }
-    if (p > 0.995 && !atEnd) {
-      atEnd = true;
-      if (juicy()) {
-        car.animate([{ scale: '1' }, { scale: '0.8 1.3' }, { scale: '1' }], { duration: 320, easing: 'ease-out' });
-        sfx.boing();
-      }
-    }
-    if (p < 0.98) atEnd = false;
-    shelf.dispatchEvent(new CustomEvent('shelf:slide', { detail: { x, p } }));
+    if (!quiet) shelf.dispatchEvent(new CustomEvent('shelf:slide', { detail: { p } }));
   };
 
   row.addEventListener('scroll', () => place('stocking' in shelf.dataset), { passive: true });
@@ -213,6 +231,7 @@ export function initShelves(root) {
     .map((c) => ({ ...c, games: games.filter((g) => primaryCat(g) === c.id) }))
     .filter((c) => c.games.length);
 
+  slots = 0;
   root.innerHTML = cats.map(shelfHTML).join('');
   const shelves = [...root.querySelectorAll('.shelf')];
   root.querySelectorAll('.shelf__item').forEach(hover);

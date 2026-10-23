@@ -28,6 +28,10 @@ A livelier, more custom, fun site built from Ahmed's own idea, with no heavier l
 | Runaway bulb | Eyes beside the filament, no mouth; eyes change with each motion (22 Oct) |
 | Bulb elsewhere | SVG twin of the 3D bulb (~3 KB); poses via CSS |
 | Handwriting | Parked; lines in speech bubbles (car-bubble style) |
+| Car after the landing | 23 Oct: ink car on the shelves removed; scrollbar car stays. One 3D car follows you section to section, drives to a spot and parks; some reference on every page; phones when light enough |
+| Car look | 23 Oct: "too flat"; game or toy look; CC0 models allowed (Ahmed downloads) |
+| Car control in sections | My plain pick, not yet confirmed: no steering; click = honk, bounce, shout |
+| Empty slots | 23 Oct: under construction (broken or growing), universal signs, yellow-black; bulb hops with page scroll "as if it is working on it", with lines; reach = runs away as before |
 | Scope | Re-skin in waves, live after each |
 | Look of buttons, labels, frames | Kept as before: lime pills, hard black shadows. "Glass" built 22 Oct, then reverted: weaker in light mode |
 | Fonts | Keep Bricolage Grotesque (headings) and Figtree (body) |
