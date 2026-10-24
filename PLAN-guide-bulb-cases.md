@@ -263,6 +263,26 @@ Ahmed: "step 8", then "8a then 8b"; ending = catch after all pages (8b); 404 car
 Tests (`g8a.js`, session scratchpad): 30/30. About: car beside "← Home"; bulb centred on the avatar, base in the photo top; gone after the hop; no beat on reload; thesis quiet 6.5 s with no resting bulb; a resting bulb outside the thesis, a real mouse path reaches it: "So Close" unlocked, count shows 23. 404: bulb centred between title and text, line shown, flipped car loaded, reach and phone tap: hops off with "So close!", "So Close" unlocked. Reduced motion: no head beat; 404 bulb shows. 0 errors.
 Seen: phone head beat's rays touch the bottom of "← Home" for about 3 s. 404 "No" button text is invisible in dark mode (there before 8a).
 
+#### 8b as built (24 Oct)
+Ahmed's answers: dim the page; "open the mail app or gmail or outlook"; later visits "simply catch it and the bulb will fly towards the mail icon"; card "When I first reach for it. And the mail button at the bottom should do the same."; "unlock a 24th". Then "Go".
+
+| Part | What |
+|---|---|
+| Module | New `src/js/idea.js` + `src/styles/idea.css`; every page entry loads both |
+| Pages | Home, About, 14 game pages, any order, over visits. Home now counted (`stats.home`; older visitors: from home-only achievements). 404 not counted |
+| Modes | `chase` (set not complete: as before), `ending` (complete, not caught), `calm` (caught). Storm Alert (quiet) never plays the ending |
+| Ending, other pages | 0.9 s in: bulb drops in near the middle, off text and pictures, fixed to the screen; "Okay. You got me." (draft). Game-page bulb and About head beat stand down. Reach (mouse path 70 px, tap 100 px) = caught |
+| Ending, home | A bulb of the landing round wakes at once with the line; it never dodges. The car catches it (or the mouse pointer, once it is out on the page as the guide). No new round after |
+| Caught (ending) | Saved at once (`apf-idea`). Lights up, sparks, ding; squashes flat; the card flips in from that spot. "Eureka" unlocks when the card closes (its toast would hide behind the dim) |
+| Calm | Every bulb lets itself be caught: resting, game page behind Next, 404 hiding spot, home landing and guide. It flies in an arc into the email button (button bumps). First catch of a visit opens "Got an idea? Reach out!" |
+| Card | `<dialog>`, page dimmed. Playing-card shape, ink border, hard shadow. Blank dashed frame; "Got an idea?" or "Got an idea? Reach out!"; lime "Email me" (mailto); Gmail, Outlook (open a new message), Copy address; the address. Close: ×, Esc, click on the dim. Any of the ways in unlocks "Say Hi" |
+| Email button | Opens the "Reach out!" card (the old "Copied!" bubble is gone; copying lives in the card) |
+| Achievement | 24th: "Eureka", "Saw every page and caught the idea." (draft) |
+| Reduced motion | Bulb shows still; no flash or flight; card opens at once |
+| Weight (gzip, JS + CSS, no three.js) | Home +3.3 KB, About and 404 +5.6 KB (the bundler regrouped shared code), three.js chunk +0.2 KB |
+
+Tests (`g8b.js`, session scratchpad): 56/56. Ending on a game page (1440 light, mouse): drops in, in view, off text, line shown, one bulb; reach → card centred, mailto, Gmail, Outlook, address, contrast 16.9; saved at once; Esc → "Eureka" toast; 24 achievements. Ending on About (390 dark, tap): no head beat; card fits the phone; × closes; reload = calm. Calm game page (1440 dark): behind Next → flies (no dodge) → "Reach out!" card; click on the dim closes; 404 same visit: caught, no "So close!", no second card. Chase (fresh): Next still dodges, 404 still "So close!"; email button → card; copy → "Copied!" on the clipboard, "Say Hi". Home ending (1440): one bulb awake with the line, car catches it → card → "Eureka" (3 runs). Home calm (390, taps): last one never dodges, flies, card, no new round. Home chase: the last one still dodges the car. Reduced motion: bulb shows, catch → card. 0 errors. Regression: `g8a.js` 30/30, `g5.js` 29/29.
+
 ### G6: red accents
 - Small red touches on the site so the car belongs (Ahmed: yes). Picture first.
 

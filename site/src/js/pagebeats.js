@@ -5,11 +5,15 @@
 //   404: it sits in the middle, in its hiding spot: "You found my hiding
 //     spot." Reach for it and it hops off by a hair: "So close!" (a near
 //     miss, like resting).
+// The ending (js/idea.js): on the page that completes the set its bulb is
+// the only one, so no head beat; once the set is complete, the 404's bulb
+// lets itself be caught.
 // About's thesis section stays quiet: rest.js keeps away from [data-quiet].
 // rest.js also stands down while one of these (.beatbulb) is on screen.
 import { reducedMotion } from './motion.js';
 import { sfx } from './sound.js';
 import { act } from './achievements.js';
+import { caughtIdea, ideaMode } from './idea.js';
 
 const START_MS = 900; // the page deals in first
 const HEAD = 'apf-beat-head'; // sessionStorage: the head beat played this visit
@@ -28,7 +32,7 @@ const inView = (el) => {
 
 /* ---------- About: on the avatar's head, laughs, hops off ---------- */
 export function initHeadBeat(avatar) {
-  if (!avatar || reducedMotion()) return;
+  if (!avatar || reducedMotion() || ideaMode() === 'ending') return;
   try {
     if (sessionStorage.getItem(HEAD)) return;
   } catch {}
@@ -94,6 +98,12 @@ export async function initHidingSpot(spot) {
     if (gone) return;
     gone = true;
     say.classList.remove('is-on');
+    if (ideaMode() !== 'chase') {
+      const [bx, by] = middle();
+      box.remove();
+      caughtIdea(bx, by, w);
+      return;
+    }
     sfx.thump();
     act('close');
     const [bx] = middle();

@@ -14,8 +14,10 @@ Older decisions and story: [PLAYBOOK-runaway-idea.md](PLAYBOOK-runaway-idea.md).
 | G4 car comes to you | ✅ Done, `44fc6cd` (pushed) |
 | G6 red accents | ✅ Done, `c3e6b5d` (not pushed) |
 | Characters | Car = Ahmed's working side, one line; bulb = his curious side. [Playbook](PLAYBOOK-runaway-idea.md#cast-and-voices) |
-| G5 + 7 game pages | ✅ Done 24 Oct |
-| Next | 8 About, footer, 404 (rest of G5) or 6c |
+| G5 + 7 game pages | ✅ Done 24 Oct, `7bc3340` |
+| 8a About, 404, "So Close" | ✅ Done 24 Oct, `a19276a` |
+| 8b the ending | Built 24 Oct, not committed; waiting for Ahmed's look |
+| Next | 6c or 9 |
 
 ## Ahmed's words (23 Oct, feedback on S3b)
 - "let the car drive over the elements in the landing page / home section as well"

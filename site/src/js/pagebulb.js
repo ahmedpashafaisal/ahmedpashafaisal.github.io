@@ -8,13 +8,16 @@
 //     is never caught.
 //   Quiet pages (Storm Alert): it sits still on the frame with a soft glow,
 //     no gag, no reactions, no Next.
+//   The ending (js/idea.js): on the page that completes the set its bulb is
+//     the only one, so none here; once caught, behind Next it lets itself be
+//     caught too.
 // Clicks pass through it; a clip at the edge hides whatever is behind it.
 // Reduced motion: no frame beat; it waits behind Next, still.
 // rest.js stands down while this bulb is on screen (one bulb at a time).
 import { reducedMotion } from './motion.js';
 import { sfx } from './sound.js';
+import { QUIET, caughtIdea, ideaMode } from './idea.js';
 
-const QUIET = new Set(['storm-alert']);
 const SIZE = 56; // px, bulb width (40 on small screens)
 const UP = 0.2; // risen: this share of its height stays behind the edge
 const NEXT_UP = 0.3; // behind Next: a little lower, eyes just clear of the edge
@@ -67,7 +70,7 @@ export function initPageBulb(root) {
   const slug = root?.dataset.slug;
   const media = root?.querySelector('.page__media');
   const next = root?.querySelector('.page__nav--next');
-  if (!slug || (!media && !next)) return;
+  if (!slug || (!media && !next) || ideaMode() === 'ending') return;
   const quiet = QUIET.has(slug);
   const ready = () => !html.classList.contains('grow-in') && !html.classList.contains('wipe-in');
   let state = 'waiting'; // waiting, frame, next, quiet
@@ -144,9 +147,19 @@ export function initPageBulb(root) {
     m.look(behind.el, 'open', -side * 0.6); // eyes toward the card's middle
   }
 
-  // Reached for: ducks, then comes up at the other end of the edge, winking
+  // Reached for: ducks, then comes up at the other end of the edge, winking.
+  // Caught once (js/idea.js): it lets itself be caught.
   async function dodge() {
     if (busy || !behind) return;
+    if (ideaMode() !== 'chase') {
+      const [x, y] = middle();
+      const w = behind.el.getBoundingClientRect().width;
+      behind.box.remove();
+      behind = null;
+      state = 'caught';
+      caughtIdea(x, y, w);
+      return;
+    }
     busy = true;
     const m = await load();
     sfx.thump();
@@ -173,7 +186,7 @@ export function initPageBulb(root) {
       const [ax, ay] = px < 0 ? [e.clientX, e.clientY] : [px, py];
       px = e.clientX;
       py = e.clientY;
-      if (!behind || busy || reducedMotion() || e.pointerType !== 'mouse') return;
+      if (!behind || busy || (reducedMotion() && ideaMode() === 'chase') || e.pointerType !== 'mouse') return;
       const [bx, by] = middle();
       const dx = px - ax;
       const dy = py - ay;
@@ -183,7 +196,7 @@ export function initPageBulb(root) {
     { passive: true },
   );
   addEventListener('pointerdown', (e) => {
-    if (!behind || busy || reducedMotion()) return;
+    if (!behind || busy || (reducedMotion() && ideaMode() === 'chase')) return;
     const [bx, by] = middle();
     if (Math.hypot(e.clientX - bx, e.clientY - by) < (e.pointerType === 'mouse' ? REACH : TAP_REACH)) dodge();
   });

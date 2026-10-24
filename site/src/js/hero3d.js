@@ -58,6 +58,11 @@
 // runaway sneaks up on the parked car (or the pointer), closer than a chase
 // ever gets it; reaching for it sets it off only at the last moment, and it
 // teases: "So close!".
+// The ending (js/idea.js): once the visitor has seen every page it stops
+// running. On the page that completes the set a bulb of the round wakes up
+// at once ("Okay. You got me."); after that, the last one left. The car (or
+// the mouse pointer, out on the page) catches it like any idea, and it is
+// handed over: a card, or a flight into the email button. No new round.
 //
 // Physics runs in canvas pixels (simple car: engine along the heading,
 // sideways grip so it drifts in fast turns; it can only turn while moving, so
@@ -70,6 +75,7 @@ import {
 } from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { act, readStats } from './achievements.js';
+import { ENDING_LINE, caughtIdea, ideaMode } from './idea.js';
 import { burst } from './burst.js';
 import { sendShock } from './dotgrid.js';
 import { juicy, reducedMotion } from './motion.js';
@@ -539,6 +545,14 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     runaway = null;
     firstRound = !runawayDone && ideas.length >= 2;
     waveBusy = false;
+    // The page that completes the set (js/idea.js): one of them wakes up at
+    // once, says so and waits to be caught
+    if (ideaMode() === 'ending' && !runawayDone && ideas.length) {
+      const it = ideas[Math.floor(Math.random() * ideas.length)];
+      makeRunaway(it);
+      openEyes(it, now);
+      it.sayAt = it.delay + 700;
+    }
   }
 
   // The runaway looks like any other bulb until its first dodge
@@ -1113,7 +1127,11 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     }
     const c = chaser(now);
     const d = c ? Math.hypot(c.x - it.x, c.y - it.y) : Infinity;
-    if (it.crept) {
+    if (ideaMode() !== 'chase') {
+      // Caught (js/idea.js): by the car, or by the moving mouse pointer
+      const p = pointer.t && now - pointer.t < 200 ? local(pointer.cx, pointer.cy) : null;
+      if ((!selfDrive() && Math.hypot(car.x - it.x, car.y - it.y) < PICK_R + carLen * 0.2) || (p && Math.hypot(p[0] - it.x, p[1] - it.y) < POINTER_R * 0.75)) return catchIdea(it, now);
+    } else if (it.crept) {
       // Crept up while the visitor rested: only reaching for it sets it off
       if (c?.moving && d < NEAR_R) {
         act('close');
@@ -1230,7 +1248,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     if (!coming || selfDrive()) return;
     coming = false;
     const it = runaway;
-    if (!grab.auto || held.size || !it?.guide || it.gone || it.hop || it.laugh || !carOnScreen() || !(it.x > 0 && it.x < W && it.y > 0 && it.y < H)) return;
+    if (ideaMode() !== 'chase' || !grab.auto || held.size || !it?.guide || it.gone || it.hop || it.laugh || !carOnScreen() || !(it.x > 0 && it.x < W && it.y > 0 && it.y < H)) return;
     it.wideUntil = now + WIDE_MS;
     it.tease = now + WIDE_MS * 0.5;
   }
@@ -1383,6 +1401,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
       if (left.length === 1) {
         onWave?.();
         makeRunaway(left[0]);
+        if (ideaMode() !== 'chase') openEyes(left[0], now); // it will not dodge: awake at once
       }
     } else if (firstRound && !ideas.some((o) => !o.gone && o !== runaway)) onWave?.(); // the rest, after one went ahead as the guide
     chain = now - chainAt < 1400 ? chain + 1 : 0;
@@ -1404,6 +1423,16 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
       car.squash = 0.3;
       car.popV += 4 + c;
     }
+  }
+
+  // The set of pages is complete (js/idea.js): caught like any idea, then
+  // handed over at its place on the screen (the card, or the email button)
+  function catchIdea(it, now) {
+    runawayDone = true; // no new round after it
+    collect(it, now);
+    it.g.visible = false;
+    const [sx, sy] = project(it.x, it.drawY || it.y);
+    caughtIdea(sx, sy, 56 * (it.size || 1));
   }
 
   function bump(nx, ny, hard, now) {
@@ -1757,13 +1786,21 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
         guideStep(it, now);
         continue;
       }
+      const reach = PICK_R + carLen * 0.2;
       // The runaway on the landing never drifts in and is never caught: it hops away instead
+      // (the set of pages complete, js/idea.js: it stays and the car catches it)
       if (it === runaway) {
         if (it.hop) {
           const k = Math.min(1, (now - it.hop.t0) / it.hop.ms);
           it.x = MathUtils.lerp(it.hop.x0, it.hop.x1, k);
           it.y = MathUtils.lerp(it.hop.y0, it.hop.y1, k);
           if (k >= 1) it.hop = null;
+        } else if (ideaMode() !== 'chase') {
+          if (it.sayAt && now >= it.sayAt) {
+            it.sayAt = 0;
+            bulbSay(ENDING_LINE, now);
+          }
+          if (!selfDrive() && d < reach) catchIdea(it, now);
         } else {
           const moving = Math.hypot(car.vx, car.vy) > 40 && !selfDrive();
           if (it.crept) {
@@ -1781,7 +1818,6 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
         }
         continue;
       }
-      const reach = PICK_R + carLen * 0.2;
       // A bulb that pops up under the parked car waits for the player's next
       // click (see pointerdown) or for the car to leave it, so it is never a
       // free catch, but the first click picks it up

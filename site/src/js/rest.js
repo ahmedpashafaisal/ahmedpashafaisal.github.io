@@ -14,6 +14,7 @@
 // rests with the visitor instead.
 // The bulb (js/bulb.js and its CSS) loads on the first rest, not before.
 import { act } from './achievements.js';
+import { caughtIdea, ideaMode } from './idea.js';
 import { reducedMotion } from './motion.js';
 import { sfx } from './sound.js';
 
@@ -324,8 +325,16 @@ export function initRest() {
   }
 
   // Reached for: hops off away from the hand, winking. Once it is gone, the
-  // visitor's line at the pointer (where it is by then)
+  // visitor's line at the pointer (where it is by then). After the set of
+  // pages is complete (js/idea.js) it lets itself be caught instead.
   function nearMiss(px, py) {
+    if (ideaMode() !== 'chase') {
+      const { wrap, x, y, w } = b;
+      state = 'gone';
+      remove(wrap);
+      caughtIdea(x, y, w);
+      return;
+    }
     state = 'gone';
     act('close');
     const { wrap } = b;

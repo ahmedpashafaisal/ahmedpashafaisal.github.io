@@ -119,6 +119,8 @@ Decided 24 Oct (Ahmed): two sides of Ahmed. Never said on the site: subtle.
 | Car scrapes and bounces round the walls | Brakes for corners, keeps clear, slides on soft touches; drives under a wall with no comfortable gap | Ahmed: "bumps to the obstacles uncontrollably" (23 Oct) |
 | Fake Skip top-right on every page (the gag) | Dropped; step 5c is resting only | Ahmed: nothing blocks, so no Skip needed |
 | No end, never caught (22 Oct) | Caught once after all 16 pages, right away on the last one; blank card "Got an idea? Email me"; later visits: calm bulb, contact card once per visit | Ahmed, step 8 talk (24 Oct) |
+| Later visits: calm bulb (no detail) | Every bulb lets itself be caught and flies into the email button; the "Reach out!" card opens on the first catch of a visit; the email button opens it too; 24th achievement for the ending | Ahmed, 8b answers (24 Oct) |
+| Email button copies the address ("Copied!" bubble) | Opens the card: mail app, Gmail, Outlook, or copy | Ahmed: "open the mail app or gmail or outlook whatever they use" (24 Oct) |
 | About head beat with "There you are!" | No words (the car's lines were cut 24 Oct) | Cast decision |
 | Deck: grid of trading cards, filter tabs, flip for the story | Shelves per category, H Adaptive shelves (23 Oct; map tried in 6a, islands in D1, both dropped) | Ahmed: deck is the least fun part and not clean; the grid looks most like a template; "See more" was the only way to a game page |
 

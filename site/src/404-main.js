@@ -10,6 +10,7 @@ import './styles/achievements.css';
 import './styles/extras.css';
 import './styles/theme.css';
 import './styles/rest.css';
+import './styles/idea.css';
 import './styles/pagebulb.css';
 
 import { initDotGrid } from './js/dotgrid.js';
@@ -22,6 +23,7 @@ import { initTheme } from './js/theme.js';
 import { initMail } from './js/mail.js';
 import { initHud } from './js/hud.js';
 import { initRest } from './js/rest.js';
+import { initIdea } from './js/idea.js';
 import { initTabTitle } from './js/tabtitle.js';
 import { initHidingSpot } from './js/pagebeats.js';
 import { letters } from './js/detail.js';
@@ -39,6 +41,7 @@ document.querySelectorAll('.juicy-btn').forEach(initJuicyButton);
 initSoundToggle(document.querySelector('.sound-toggle'));
 initHud();
 initRest();
+initIdea();
 initHidingSpot(document.querySelector('.lost'));
 
 const title = document.querySelector('[data-letters]');

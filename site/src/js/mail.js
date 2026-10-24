@@ -1,13 +1,13 @@
-// Email button, left of the theme toggle. Click copies the address and a
-// "Copied!" bubble pops above the button with the address in it, so it
-// still works for people with no mail app set up.
+// Email button, left of the theme toggle. Click opens the "Got an idea?
+// Reach out!" card (js/idea.js): the mail app, Gmail, Outlook, or copy the
+// address, which the card also shows, so it works with no mail app set up.
+// Caught bulbs fly into it (step 8b).
 import { juicy } from './motion.js';
 import { sfx } from './sound.js';
 import { burst } from './burst.js';
-import { act } from './achievements.js';
+import { openCard } from './idea.js';
 
 export const EMAIL = 'ahmedpashafaisal@gmail.com';
-const TIP_MS = 2200;
 
 const ICON = `
 <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -37,25 +37,16 @@ export function initMail() {
   const btn = document.createElement('button');
   btn.className = 'mail-btn';
   btn.type = 'button';
-  btn.setAttribute('aria-label', `Copy my email: ${EMAIL}`);
-  btn.title = 'Copy my email';
-  btn.innerHTML = `${ICON}<span class="mail-btn__tip" role="status"></span>`;
+  btn.setAttribute('aria-label', 'Email me');
+  btn.setAttribute('aria-haspopup', 'dialog');
+  btn.title = 'Email me';
+  btn.innerHTML = ICON;
   document.body.appendChild(btn);
 
-  const tip = btn.querySelector('.mail-btn__tip');
-  let timer = 0;
-  btn.addEventListener('click', async () => {
+  btn.addEventListener('click', () => {
     sfx.press();
-    const ok = await copyText(EMAIL);
-    // Copy failed: the address is still shown, so it can be typed
-    tip.innerHTML = ok ? `Copied! <b>${EMAIL}</b>` : `<b>${EMAIL}</b>`;
-    btn.classList.add('is-tip');
-    if (ok) act('contact');
-    clearTimeout(timer);
-    timer = setTimeout(() => btn.classList.remove('is-tip'), TIP_MS);
-    if (juicy()) {
-      const r = btn.getBoundingClientRect();
-      burst(r.left + r.width / 2, r.top + r.height / 2, 8);
-    }
+    const r = btn.getBoundingClientRect();
+    if (juicy()) burst(r.left + r.width / 2, r.top + r.height / 2, 8);
+    openCard('reach', { x: r.left + r.width / 2, y: r.top + r.height / 2 });
   });
 }

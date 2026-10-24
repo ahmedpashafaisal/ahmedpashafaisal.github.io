@@ -1,0 +1,141 @@
+/* The ending (js/idea.js): the bulb that lets itself be caught, its flight
+   into the email button, and the "Got an idea?" card */
+.idea-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 27; /* over the resting bulb's layer, under the toast */
+  pointer-events: none;
+}
+
+.idea-bulb {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.idea-bulb .bulb { display: block; }
+
+/* Caught: it lights up (the glow and rays of its show-off flare) */
+.idea-bulb--lit .bulb__glow { opacity: 0.5; transform: scale(1.4); }
+.idea-bulb--lit .bulb__rays { transform: scale(1.3); }
+
+/* Its line, over it (js/idea.js places it) */
+.idea-say { z-index: 1; }
+
+/* The card: playing-card shape, the site's ink border and hard shadow */
+.idea-card {
+  max-width: none;
+  max-height: none;
+  margin: auto;
+  padding: 16px;
+  border: 0;
+  background: none;
+  overflow: visible;
+  perspective: 900px;
+}
+
+.idea-card:focus { outline: none; }
+
+.idea-card::backdrop {
+  background: rgba(22, 20, 15, 0.55);
+  animation: idea-dim 300ms ease-out;
+}
+
+@keyframes idea-dim {
+  from { opacity: 0; }
+}
+
+.idea-card__face {
+  position: relative;
+  display: grid;
+  align-content: space-between; /* blank on top, the address at the bottom */
+  justify-items: center;
+  gap: 0.85rem;
+  width: min(300px, calc(100vw - 32px));
+  aspect-ratio: 5 / 7;
+  padding: 1.25rem 1.25rem 1.1rem;
+  border: 2px solid var(--ink);
+  border-radius: 18px;
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 6px 0 var(--ink);
+  text-align: center;
+}
+
+/* Blank: a game that does not exist yet */
+.idea-card__blank {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 2px dashed var(--line);
+  border-color: color-mix(in srgb, var(--ink) 30%, transparent);
+  border-radius: 12px;
+  background: var(--bg);
+}
+
+.idea-card__title {
+  margin: 0.2rem 0 0;
+  font: 800 1.6rem/1.1 var(--font-display);
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+.idea-card__mail {
+  min-width: 0;
+  padding: 0.85rem 1.9rem;
+  font-size: 1.15rem;
+  text-decoration: none;
+}
+
+.idea-card__more {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem 1rem;
+  margin: 0.15rem 0 0;
+  font: 700 0.9rem/1.2 var(--font-body);
+}
+
+.idea-card__more a,
+.idea-card__copy {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.idea-card__addr {
+  margin: 0;
+  color: var(--ink-soft);
+  font: 500 0.85rem/1.2 var(--font-body);
+  overflow-wrap: anywhere;
+  user-select: all;
+}
+
+.idea-card__close {
+  position: absolute;
+  top: -14px;
+  right: -14px;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 3px 0 var(--ink);
+  cursor: pointer;
+}
+
+.idea-card__close:hover { background: var(--accent); color: var(--on-accent); }
+
+.idea-card a:focus-visible,
+.idea-card button:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
+}

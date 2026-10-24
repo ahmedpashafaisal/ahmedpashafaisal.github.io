@@ -34,6 +34,7 @@ export const LIST = [
   { id: 'charged', title: 'Fully Charged', text: 'Held the big button until it filled up.' },
   { id: 'idle', title: 'AFK', text: 'Left the page alone for a whole minute.' },
   { id: 'close', title: 'So Close', text: 'Reached for the idea. Missed.' },
+  { id: 'caught', title: 'Eureka', text: 'Saw every page and caught the idea.' },
   { id: 'all', title: '100%', text: 'Unlocked everything else.' },
 ];
 const IDS = new Set(LIST.map((a) => a.id));
@@ -55,7 +56,10 @@ const save = (k, v) => {
 
 // Unlocks from older versions of the list are dropped
 let got = Object.fromEntries(Object.entries(load(KEY, {})).filter(([id]) => IDS.has(id)));
-const stats = { visits: 0, ideas: 0, flip: 0, tabs: [], games: [], peeks: [], shelves: [], ...load(STATS, {}) };
+const stats = { visits: 0, ideas: 0, flip: 0, tabs: [], games: [], peeks: [], shelves: [], home: false, ...load(STATS, {}) };
+// The home page was not counted before the ending (8b): anything only the
+// home page gives means it was seen
+stats.home ||= !!(got.enter || got.storm || got.idea10 || got.peek || got.tabs || stats.peeks.length || stats.shelves.length);
 
 // Only achievements that still exist (Card Shark left with the card deck, 23 Oct)
 export const unlocked = () => Object.fromEntries(Object.entries(got).filter(([id]) => IDS.has(id)));
@@ -137,7 +141,7 @@ function count(key, goal, id) {
 }
 
 // One-off actions unlock the achievement with the same id
-const ONE_OFF = new Set(['enter', 'video', 'contact', 'sound', 'dark', 'drive', 'name', 'charged', 'storm', 'close']);
+const ONE_OFF = new Set(['enter', 'video', 'contact', 'sound', 'dark', 'drive', 'name', 'charged', 'storm', 'close', 'caught']);
 
 function onAct(name) {
   if (ONE_OFF.has(name)) unlock(name);
@@ -161,8 +165,12 @@ function watchPage() {
 
   if (new Date().getHours() < 5) unlock('night');
 
-  // Which page is this?
+  // Which page is this? (home, About and every game page: js/idea.js counts them)
   const path = location.pathname;
+  if ((path === '/' || path.endsWith('/index.html')) && !stats.home) {
+    stats.home = true;
+    save(STATS, stats);
+  }
   if (path.endsWith('/about.html')) unlock('about');
   const game = path.match(/\/games\/([^/]+)\.html$/)?.[1];
   if (game) {
@@ -210,7 +218,7 @@ function watchPage() {
 export function initAchievements() {
   if (new URLSearchParams(location.search).has('reset-achievements')) {
     got = {};
-    Object.assign(stats, { visits: 0, ideas: 0, flip: 0, tabs: [], games: [], peeks: [], shelves: [] });
+    Object.assign(stats, { visits: 0, ideas: 0, flip: 0, tabs: [], games: [], peeks: [], shelves: [], home: false });
     save(KEY, got);
     save(STATS, stats);
   }
