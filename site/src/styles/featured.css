@@ -18,6 +18,19 @@
   font-size: clamp(2rem, 5vw, 3.25rem);
 }
 
+/* Road dash in the car's red above the section headings (here and All games) */
+.featured__head h2::before,
+.games__head h2::before {
+  content: "";
+  display: block;
+  width: 2.4rem;
+  height: 0.32rem;
+  margin: 0 auto 0.55rem;
+  border-radius: 999px;
+  background: var(--red);
+  box-shadow: 0 0 0 1.5px var(--ink);
+}
+
 .featured__sub {
   margin: 0;
   color: var(--ink-soft);
@@ -190,7 +203,7 @@
   font-size: clamp(5rem, 14vw, 10rem);
 }
 
-/* Separator between banners: line with a rarity gem in the middle */
+/* Separator between banners: a road line with a red marker in the middle */
 .banner-sep {
   position: relative;
   display: grid;
@@ -205,7 +218,7 @@
   left: 0;
   right: 0;
   top: 50%;
-  border-top: 2px dashed var(--line);
+  border-top: 3px dashed var(--line);
 }
 
 .banner-sep__gem {
@@ -213,7 +226,7 @@
   width: 1rem;
   height: 1rem;
   border: 1.5px solid var(--ink);
-  background: var(--accent);
+  background: var(--red);
   transform: rotate(45deg);
   box-shadow: 0 0 0 6px var(--bg);
 }

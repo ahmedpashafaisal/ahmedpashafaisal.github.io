@@ -3,7 +3,7 @@ Read first in every session. Plan: [PLAYBOOK-runaway-idea.md](PLAYBOOK-runaway-i
 Rule: a finished step's Status is `✅ DONE`. Green check on every done row, never plain DONE.
 
 ## RESUME HERE (24 Oct 2026)
-- **Next: Ahmed picks G6 (red accents, picture first) or G5 (other pages: same bulb, car reference, new character lines).** G4 ✅ committed and pushed 24 Oct.
+- **Next: Ahmed picks the next step: G5 (other pages: same bulb, car reference, lines for the new characters), 6c Featured beats, 7 game pages, or 8 About, footer, 404.** G4 ✅ pushed; G6 ✅ committed 24 Oct (`lively` not pushed since G4).
 - Characters (24 Oct): car = Ahmed's working side (visitor drives it), says only "Drive me to an idea"; bulb = his curious side, plays and teases. [Playbook](PLAYBOOK-runaway-idea.md#cast-and-voices).
 - Open from G4: building-site play extras (cone, crane brick, cracked screen); other pages still have the old car lines (G5).
 - G2 + G3 ✅ approved 24 Oct ("it feels ok"). G1 ✅ `3404b0c`. `lively` pushed up to `3fc1f6a` (24 Oct).
@@ -56,7 +56,7 @@ Rule: a finished step's Status is `✅ DONE`. Green check on every done row, nev
 | G3 | Shelf beats moved onto the guide | ✅ DONE | Reading A (Ahmed: "Go A"). Round 2 ("now it just keeps dodging"; "a guide wouldn't go back"): forward only, out of sight, back after 6 s, follows back up. Round 3 ("not running away anymore" at the bottom; "everytime it just appears on the linkedin link"): side exit at the page end; fresh free place and random edge on every return; parked car counts; phone peek. Final build: G3 60/60 × 3, g2 25/25 × 3, g1 45/45 × 2, S3a 14/14 × 2, S1 without WebGL 33/33 × 2 (one more run lost to a browser page crash, no check failed), 0 errors. 3D chunk +2.8 KB gzip. [As built + tests](PLAN-guide-bulb-cases.md#g3-as-built-23-oct) | 24 Oct |
 | G4 | Car comes to you and parks | ✅ DONE | Round 1 (Ahmed: "too close to the bulb"): parks far; characters decided (car = working side, bulb = curious side); car says only "Drive me to an idea"; bulb plays in sites; tease when the car parks; arrows only scroll. Ahmed: "done, commit and push". [As built + tests](PLAN-guide-bulb-cases.md#g4-as-built-24-oct) | 24 Oct |
 | G5 | Other pages: same bulb, car reference | Later | [details](PLAN-guide-bulb-cases.md#g5-other-pages-later) | |
-| G6 | Red accents | TODO | [details](PLAN-guide-bulb-cases.md#g6-red-accents) | |
+| G6 | Red accents | ✅ DONE | Dev-only `site/red-test.html` + `site/red-test/` (never built): the real home page in a frame; sets Today, A quiet (red scrollbar car, red road dash above Featured and All games), B road (A + red marker between banners, red site lamps), C dashboard (B + red star in the counter, red toast edge); light, dark, desktop, phone; jumps; sample toast. Red only on shapes (red text on cream about 3.6:1). Real clicks 16/16, 0 errors. Ahmed: "Do B, although there was no red diamond in the preview". Built into the site: [as built](PLAN-guide-bulb-cases.md#g6-as-built-24-oct). Ahmed: "commit" | 24 Oct |
 | 6b | Deck map | ✅ DONE (replaced by shelves) | Map look rejected in 6a; islands dropped in D1; shelves built in D2–D3 | 23 Oct |
 | 6c | Featured beats | ON HOLD | Still planned; order decided after re-plan | |
 | 7 | Wave 3: Game pages | TODO | | |

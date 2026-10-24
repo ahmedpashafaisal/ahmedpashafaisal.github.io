@@ -231,6 +231,18 @@ Plan: [PLAN-guide-bulb.md](PLAN-guide-bulb.md).
 ### G6: red accents
 - Small red touches on the site so the car belongs (Ahmed: yes). Picture first.
 
+#### G6 as built (24 Oct, set B)
+| Part | What |
+|---|---|
+| Colour | `--red: #e8473c` in `tokens.css` (the car's body), both themes. Shapes only, never text |
+| Scrollbar car | Body red (`scrollcar.js`), every page with a mouse |
+| Section headings | Red road dash above "Featured" and "All games" (`featured.css`) |
+| Between banners | Road line 3 px; red marker in place of the lime diamond (`featured.css`) |
+| Building sites | Blinking lamp red (`shelves.css`) |
+| Not taken | Set C extras: red star in the counter, red toast edge |
+| Preview note | Ahmed saw no red diamond on the test page (an injected style there can lose to a later site style); the real site sets it in its own CSS |
+| Tests | Real pages, desktop + phone, light + dark: 28/28, 0 errors; About, a game page, 404 checked |
+
 ## Corner cases
 | Case | Expected |
 |---|---|

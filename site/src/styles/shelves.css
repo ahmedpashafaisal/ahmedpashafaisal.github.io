@@ -331,10 +331,10 @@
   stroke-linejoin: round;
 }
 
-/* Blinking lamp and the swinging brick: the site is alive with or without
-   the bulb */
+/* Blinking lamp (the car's red) and the swinging brick: the site is alive
+   with or without the bulb */
 .site__lamp {
-  fill: var(--site-yellow);
+  fill: var(--red);
 }
 
 .site__swing {

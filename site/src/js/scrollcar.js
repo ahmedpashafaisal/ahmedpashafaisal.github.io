@@ -1,4 +1,4 @@
-// Scroll bar as a road: the ink car from the landing drives down the right
+// Scroll bar as a road: the red car from the landing drives down the right
 // edge as you scroll, turns around when you scroll back up, and puffs smoke
 // while moving. Drag the car to scroll; click the road to jump there.
 // Mouse screens only (the native bar is hidden there); touch keeps its own.
@@ -11,7 +11,7 @@ export const CAR = `
   <rect x="15.5" y="5" width="4" height="7" rx="1.5" fill="var(--ink-soft)"/>
   <rect x="0.5" y="20" width="4" height="7" rx="1.5" fill="var(--ink-soft)"/>
   <rect x="15.5" y="20" width="4" height="7" rx="1.5" fill="var(--ink-soft)"/>
-  <rect x="3" y="1.5" width="14" height="29" rx="5" fill="var(--ink)" stroke="var(--ink)" stroke-width="1.5"/>
+  <rect x="3" y="1.5" width="14" height="29" rx="5" fill="var(--red)" stroke="var(--ink)" stroke-width="1.5"/>
   <rect x="5.5" y="9" width="9" height="11" rx="2.5" fill="var(--surface)" stroke="var(--ink)" stroke-width="1.2"/>
   <rect x="5" y="2.8" width="3" height="1.8" rx="0.9" fill="#caff00"/>
   <rect x="12" y="2.8" width="3" height="1.8" rx="0.9" fill="#caff00"/>

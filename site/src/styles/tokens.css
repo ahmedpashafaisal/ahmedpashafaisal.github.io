@@ -9,6 +9,9 @@
   --dot: #cdc4b1;
   --accent: #caff00;
   --accent-deep: #9fcc00;
+  /* The car's red (hero3d.js), both themes: small shapes only, never text
+     (on the cream background it is about 3.6:1) */
+  --red: #e8473c;
 
   /* Category tints: soft and low-saturation, one per games.json category.
      Cards, tab dots and next/previous links use them (js/order.js). */
