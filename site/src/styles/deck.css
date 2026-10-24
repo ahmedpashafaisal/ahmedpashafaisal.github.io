@@ -6,11 +6,6 @@
   text-align: center;
 }
 
-.games__sub {
-  margin: 0;
-  color: var(--ink-soft);
-}
-
 .deck-tools {
   display: flex;
   flex-wrap: wrap;

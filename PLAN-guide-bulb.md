@@ -4,18 +4,17 @@ Read first in a new session. Tracker: [CHECKLIST-runaway-idea.md](CHECKLIST-runa
 Bugs, corner cases, tests: [PLAN-guide-bulb-cases.md](PLAN-guide-bulb-cases.md).
 Older decisions and story: [PLAYBOOK-runaway-idea.md](PLAYBOOK-runaway-idea.md).
 
-## Where we are (23 Oct 2026, night)
+## Where we are (24 Oct 2026)
 | Step | State |
 |---|---|
-| S1 building-site slots | Done, commit `0e55b2b` |
-| S2 car look | Done: car A, red |
-| S3a red car + keys | Done, commit `4e422c7` |
-| S3b chase into the page | Committed as work in progress (G0). Ahmed: "It's okay but need to fill a few gaps" |
-| This plan | Replaces the rest of S3b and S3c |
-| G1 game layer | ✅ Done, commit `3404b0c` |
-| G2 guide bulb | Committed, feel check with G3 |
-| G3 shelf beats | Built (reading A), not committed, feel check with G2 |
-| Next | Ahmed's G2 + G3 feel check, then G4 |
+| S1 to S3b | Done (S3b replaced by this plan) |
+| G1 game layer | ✅ Done, `3404b0c` |
+| G2 guide bulb | ✅ Done, `8dd6a94` |
+| G3 shelf beats | ✅ Done, `b330cf7` |
+| G4 car comes to you | ✅ Done, `44fc6cd` (pushed) |
+| G6 red accents | ✅ Done, `c3e6b5d` (not pushed) |
+| Characters | Car = Ahmed's working side, one line; bulb = his curious side. [Playbook](PLAYBOOK-runaway-idea.md#cast-and-voices) |
+| Next | Ahmed picks: G5, 6c Featured beats, 7 game pages, or 8 About, footer, 404 |
 
 ## Ahmed's words (23 Oct, feedback on S3b)
 - "let the car drive over the elements in the landing page / home section as well"
@@ -81,9 +80,9 @@ Older decisions and story: [PLAYBOOK-runaway-idea.md](PLAYBOOK-runaway-idea.md).
 | G1 | One game layer, car anywhere | B3 | ½ day |
 | G2 | One guide bulb on the home page | B4, part of B1 | ½–1 day |
 | G3 | Shelf beats moved onto the guide | B1, B2 | ½ day |
-| G4 | Car comes to you and parks (old S3c) | Built 24 Oct, feel check pending | ½ day |
+| G4 | Car comes to you and parks (old S3c) | ✅ Done 24 Oct | ½ day |
 | G5 | Other pages: same bulb, car reference | | later |
-| G6 | Red accents on the site | | 2–3 h |
+| G6 | Red accents on the site | ✅ Done 24 Oct (set B) | 2–3 h |
 
 Details per step: [PLAN-guide-bulb-cases.md](PLAN-guide-bulb-cases.md#steps-in-detail).
 

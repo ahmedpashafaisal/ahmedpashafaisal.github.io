@@ -3,17 +3,18 @@ Read first in every session. Plan: [PLAYBOOK-runaway-idea.md](PLAYBOOK-runaway-i
 Rule: a finished step's Status is `✅ DONE`. Green check on every done row, never plain DONE.
 
 ## RESUME HERE (24 Oct 2026)
-- **Next: Ahmed picks the next step: G5 (other pages: same bulb, car reference, lines for the new characters), 6c Featured beats, 7 game pages, or 8 About, footer, 404.** G4 ✅ pushed; G6 ✅ committed 24 Oct (`lively` not pushed since G4).
+- **Next: Ahmed picks the next step: G5 (other pages: same bulb, car reference, lines for the new characters), 6c Featured beats, 7 game pages, or 8 About, footer, 404.** G4 ✅ `44fc6cd` pushed; G6 ✅ `c3e6b5d` committed, not pushed.
 - Characters (24 Oct): car = Ahmed's working side (visitor drives it), says only "Drive me to an idea"; bulb = his curious side, plays and teases. [Playbook](PLAYBOOK-runaway-idea.md#cast-and-voices).
 - Open from G4: building-site play extras (cone, crane brick, cracked screen); other pages still have the old car lines (G5).
-- G2 + G3 ✅ approved 24 Oct ("it feels ok"). G1 ✅ `3404b0c`. `lively` pushed up to `3fc1f6a` (24 Oct).
-- G4 as built, tests: [PLAN-guide-bulb-cases.md](PLAN-guide-bulb-cases.md#g4-as-built-24-oct).
-- Tests to rebuild if the scratchpad is gone: `g1`, `g2`, `g3`, `s3a`, `s1` suites (list in the cases file).
+- G1 to G4 and G6 ✅ (G2 + G3 approved 24 Oct: "it feels ok"). Arrows only scroll; car by WASD, mouse, taps.
+- As built and tests: [G4](PLAN-guide-bulb-cases.md#g4-as-built-24-oct), [G6](PLAN-guide-bulb-cases.md#g6-as-built-24-oct).
+- Test suites (`g4`, `g1`, `g2`, `g3`, `s3a-g1`, `s1`, `g6`, `g6b`) live in the scratchpad `/private/tmp/claude-501/-Users-ahmedpashafaisal-Documents-Work-GameJob--DevPortfolio-ahmedpashafaisal-github-io/10a9b6ba-73fc-4806-b6c0-51dca79fd97b/scratchpad/` (gone after a restart: rebuild from the cases file). Run steps in [_current_step.md](_current_step.md).
+- Dev-only `site/red-test.html` + `site/red-test/`: untracked, out of date; Ahmed decides delete or keep.
 - **Start with [PLAN-guide-bulb.md](PLAN-guide-bulb.md)** (the bulb as the site's guide; steps G0 to G6). Bugs and corner cases: [PLAN-guide-bulb-cases.md](PLAN-guide-bulb-cases.md).
-- Branch `lively` (from `main`). Pushed up to `3fc1f6a` (24 Oct). Live site untouched: deploy runs only on `main`. Ask Ahmed before each commit and push.
+- Branch `lively` (from `main`). Pushed up to `44fc6cd` (G4, 24 Oct); `c3e6b5d` (G6) local. Live site untouched: deploy runs only on `main`. Ask Ahmed before each commit and push.
 - Done: 1–5c. Bulb twin + 20 motions + runaway eyes (`src/js/bulb.js`, `src/styles/bulb.css`); landing joke in `src/js/hero3d.js`; resting in `src/js/rest.js` + `src/styles/rest.css`.
 - 5a "Glass" look was built and reverted: black shadows stay (see `CHECKLIST-redesign.md` taste rules).
-- Landing now: one round of 6 (4 or 2 on short screens), last bulb left wakes up and dodges, car lines "What the…!" / "Hold still!" / "Seriously?!" / "Hey! Come back!", comes back after 6 s ("There you are!"). Lines are drafts Ahmed may rewrite.
+- Landing now: one round of 6 (4 or 2 on short screens), last bulb left wakes up and dodges (wink, no words), comes back after 6 s. Since 24 Oct the car says only "Drive me to an idea"; the bulb says "Nope, not a game yet." and "So close!".
 - Dev-only test pages (not built, not deployed): `bulb-test.html` + `bulb-test/`, `kit-test.html`. Delete at step 9.
 - Run: `npm run dev` → http://localhost:5173 (`?reset` = first visit, `?debug` = `window.__landing`).
 - Step 5c approved 22 Oct, committed `a92ae9c` and pushed to `origin/lively`. Skip dropped (Ahmed: nothing blocks).
@@ -24,7 +25,7 @@ Rule: a finished step's Status is `✅ DONE`. Green check on every done row, nev
 - **Car + slots (23 Oct, late).** Ahmed: ink car goes (scrollbar car stays); one 3D car as decoration that follows you section to section and parks; "some reference to every page"; toy look, CC0 models OK; empty slots under construction, yellow-black, bulb hops with scroll. Steps S1–S3 below.
 - **S1 done (23 Oct), committed `0e55b2b`. S2 done: car A in red.** S3a (car A on the landing, WASD / arrow keys) done, committed `4e422c7`. S3b chase into the page committed as work in progress; Ahmed found gaps (two bulbs, bulb back to the top, cannot drive back up, clicks on text). Replaced by the guide plan: G0 to G6.
 - Decided 23 Oct: red as subtle accents elsewhere on the site (later step); today's light stays, plus a subtle headlight glow on the ground in dark mode (in S3b); no key hint.
-- Open: placeholder copy for him to rewrite: subline "Every game, shelf by shelf." (`site/index.html`); slot "Next game", "Under construction"; working lines "Almost done.", "Don't look yet!", "Five more minutes.", "It worked yesterday.", "Nearly there." (`src/js/shelves.js`, `src/js/shelfbulb.js`).
+- Copy pass (24 Oct, Ahmed): subline "Every game, shelf by shelf." removed (and `.games__sub`); shelf bulb working lines cut to one, "Almost done." (`src/js/shelfbulb.js`, no-WebGL visitors only). Tested 1440 + 390, light + dark, no-WebGL line repeats, 0 errors. Slot "Next game", "Under construction" kept as is (Ahmed: "the rest is okay"). Committed.
 
 | # | Step | Status | Evidence | Approved |
 |---|---|---|---|---|

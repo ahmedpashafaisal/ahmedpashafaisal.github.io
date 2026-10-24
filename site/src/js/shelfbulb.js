@@ -23,7 +23,7 @@ const HOP_PX = 120; // page scroll per working hop
 const HOP_MS = 380;
 const LINE_EVERY = 6; // working hops per line, the first on the 3rd hop
 // Placeholder words: Ahmed rewrites
-const LINES = ['Almost done.', "Don't look yet!", 'Five more minutes.', 'It worked yesterday.', 'Nearly there.'];
+const LINE = 'Almost done.';
 
 const pick = (list) => list[Math.floor(Math.random() * list.length)];
 const fine = () => matchMedia('(hover: hover) and (pointer: fine)').matches;
@@ -125,7 +125,6 @@ export function initShelfBulb(root) {
   let scrolled = 0;
   let hops = 0;
   let hopping = false;
-  let line = '';
   const work = () => {
     hopping = true;
     holder
@@ -141,8 +140,7 @@ export function initShelfBulb(root) {
       .finished.then(() => (hopping = false), () => (hopping = false));
     setTimeout(() => where.kind === 'slot' && dust(holder), HOP_MS * 0.72);
     if (++hops % LINE_EVERY === 3) {
-      line = pick(LINES.filter((l) => l !== line));
-      say(holder, line);
+      say(holder, LINE);
     }
   };
   addEventListener(

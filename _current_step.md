@@ -2,6 +2,14 @@
 
 G6 done and committed 24 Oct. Next step not picked yet: G5 (other pages), 6c Featured beats, 7 game pages, or 8 About, footer, 404.
 
+## Side task 24 Oct: Trapped (2023 Twine) added, live
+- `main` 8177d35 pushed, deployed, checked live (1440 + 390, 0 errors). Merged into `lively` as 75ed85f (not pushed).
+- Card source: `~/Documents/Trapped-2023/art-src/card.html`. Copy is premise only (no spoilers).
+- Closed: roleTags kept; itch description left as is (Ahmed: "No that's okay").
+
+## Copy pass 24 Oct: done
+- Subline removed; shelf bulb line "Almost done." only; slot lines kept.
+
 ## Open
 - `lively` not pushed since G4 (`44fc6cd`).
 - Dev-only `site/red-test.html` + `site/red-test/`: untracked and out of date (its Today shows red too). Ahmed decides: delete or keep.
