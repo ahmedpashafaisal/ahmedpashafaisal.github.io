@@ -17,10 +17,10 @@ A livelier, more custom, fun site built from Ahmed's own idea, with no heavier l
 | Replaces | 20 Oct rule "No narrative frame, nothing fancy" |
 | Story | "The one that got away" (locked 22 Oct, see below) |
 | Tone | Funny leads; subtext never said aloud |
-| End | No end: "rest when you rest" near-miss, anywhere |
+| End | Changed 24 Oct (Ahmed): caught once, after all 16 pages (home, About, every game); it drops in on the page that completes the set and becomes a blank card "Got an idea? Email me". Until then: "rest when you rest" near-miss |
 | Game pages | One shared beat; featured 3 keep their own banner beats |
 | Serious pages | Quiet beat (Storm Alert page, About thesis section) |
-| Return visits | Bulb remembers you: starts closer each visit, never caught |
+| Return visits | Bulb remembers you: starts closer each visit. After the catch (24 Oct): bulb calm, no chase; a "Got an idea? Reach out!" card once per visit |
 | Skimmers | No car game played: the runaway hops off ahead of them when they start scrolling |
 | Car game rounds | One round of 6 (4 or 2 when the screen is too short; the joke works the same), no new rounds, no "Brainstorm!" text; the runaway comes back 6 s after leaving ("There you are!") |
 | Landing hint | Car says "Drive me to an idea" until the first catch, then never again; "Catch me." dropped 22 Oct |
@@ -118,6 +118,8 @@ Decided 24 Oct (Ahmed): two sides of Ahmed. Never said on the site: subtle.
 | "Drive me to an idea" until the first catch | Until the first catch or the runaway first shows | Ahmed: the line came back after missing the last bulb (23 Oct) |
 | Car scrapes and bounces round the walls | Brakes for corners, keeps clear, slides on soft touches; drives under a wall with no comfortable gap | Ahmed: "bumps to the obstacles uncontrollably" (23 Oct) |
 | Fake Skip top-right on every page (the gag) | Dropped; step 5c is resting only | Ahmed: nothing blocks, so no Skip needed |
+| No end, never caught (22 Oct) | Caught once after all 16 pages, right away on the last one; blank card "Got an idea? Email me"; later visits: calm bulb, contact card once per visit | Ahmed, step 8 talk (24 Oct) |
+| About head beat with "There you are!" | No words (the car's lines were cut 24 Oct) | Cast decision |
 | Deck: grid of trading cards, filter tabs, flip for the story | Shelves per category, H Adaptive shelves (23 Oct; map tried in 6a, islands in D1, both dropped) | Ahmed: deck is the least fun part and not clean; the grid looks most like a template; "See more" was the only way to a game page |
 
 ## Defaults I picked (not asked)

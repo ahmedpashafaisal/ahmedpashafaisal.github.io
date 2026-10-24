@@ -33,6 +33,7 @@ export const LIST = [
   { id: 'night', title: 'Night Owl', text: 'Dropped by between midnight and 5 am.' },
   { id: 'charged', title: 'Fully Charged', text: 'Held the big button until it filled up.' },
   { id: 'idle', title: 'AFK', text: 'Left the page alone for a whole minute.' },
+  { id: 'close', title: 'So Close', text: 'Reached for the idea. Missed.' },
   { id: 'all', title: '100%', text: 'Unlocked everything else.' },
 ];
 const IDS = new Set(LIST.map((a) => a.id));
@@ -136,7 +137,7 @@ function count(key, goal, id) {
 }
 
 // One-off actions unlock the achievement with the same id
-const ONE_OFF = new Set(['enter', 'video', 'contact', 'sound', 'dark', 'drive', 'name', 'charged', 'storm']);
+const ONE_OFF = new Set(['enter', 'video', 'contact', 'sound', 'dark', 'drive', 'name', 'charged', 'storm', 'close']);
 
 function onAct(name) {
   if (ONE_OFF.has(name)) unlock(name);

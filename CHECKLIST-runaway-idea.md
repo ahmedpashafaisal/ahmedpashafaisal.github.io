@@ -3,7 +3,7 @@ Read first in every session. Plan: [PLAYBOOK-runaway-idea.md](PLAYBOOK-runaway-i
 Rule: a finished step's Status is `✅ DONE`. Green check on every done row, never plain DONE.
 
 ## RESUME HERE (24 Oct 2026)
-- **G5 + 7 (game pages) ✅ done 24 Oct (Ahmed: "commit"). Next: 8 About, footer, 404 (rest of G5 there), or 6c.** [As built + tests](PLAN-guide-bulb-cases.md#g5--7-as-built-24-oct). G4 ✅ `44fc6cd` pushed; local: G6 `c3e6b5d`, Trapped merge `75ed85f`, copy pass `892dcee`.
+- **Next: 8b (the ending).** 8a ✅ (About, 404, "So Close"); G5 + 7 ✅ `7bc3340`. [As built + tests](PLAN-guide-bulb-cases.md#g5--7-as-built-24-oct). G4 ✅ `44fc6cd` pushed; local: G6 `c3e6b5d`, Trapped merge `75ed85f`, copy pass `892dcee`.
 - Characters (24 Oct): car = Ahmed's working side (visitor drives it), says only "Drive me to an idea"; bulb = his curious side, plays and teases. [Playbook](PLAYBOOK-runaway-idea.md#cast-and-voices).
 - Open from G4: building-site play extras (cone, crane brick, cracked screen); other pages still have the old car lines (G5).
 - G1 to G4 and G6 ✅ (G2 + G3 approved 24 Oct: "it feels ok"). Arrows only scroll; car by WASD, mouse, taps.
@@ -61,5 +61,6 @@ Rule: a finished step's Status is `✅ DONE`. Green check on every done row, nev
 | 6b | Deck map | ✅ DONE (replaced by shelves) | Map look rejected in 6a; islands dropped in D1; shelves built in D2–D3 | 23 Oct |
 | 6c | Featured beats | ON HOLD | Still planned; order decided after re-plan | |
 | 7 | Wave 3: Game pages | ✅ DONE | Ahmed: "Go G5 + 7"; layout kept (beats only); car parked by "← All games". Peek at the screenshots, ducks, waits behind Next, dodges a reach; Storm Alert quiet; car picture from the real 3D car (3.9 KB WebP). Phones: gap between Previous and Next widened so the bulb never sits on Previous (a tap there opened the previous game). Tests 29/29 × 3 (1440 + 390, light + dark, real mouse path, taps, reduced motion, fast scroll, Next still clickable, rest stands down, 0 errors). S1 31/33: the 2 misses count 4 building sites, not 3, since Trapped joined Gamification. Weight: beat about 1.5 KB gzip; bulb kit 2.0 KB script + 3.4 KB CSS now loads on game pages; car 3.9 KB. Ahmed tried it on the dev server: "commit" | 24 Oct |
-| 8 | Wave 4: About, footer, 404 | TODO | | |
+| 8a | About, 404, "So Close" | ✅ DONE | Ahmed: "step 8", then "8a then 8b". About: car by "← Home", head beat (no words), thesis quiet. 404: bulb with "You found my hiding spot.", flipped car. 23rd achievement "So Close". Built: [as built + tests](PLAN-guide-bulb-cases.md#8a-as-built-24-oct). Tests 30/30 (1440 light, 390 dark, reduced motion, real mouse paths and taps, 0 errors). Ahmed: "commit" | 24 Oct |
+| 8b | The ending | TODO | All 16 pages (home, About, every game) → it drops in on the last one, caught, blank card "Got an idea? Email me". Later visits: calm bulb, "Got an idea? Reach out!" card once per visit | |
 | 9 | Final check | TODO | | |

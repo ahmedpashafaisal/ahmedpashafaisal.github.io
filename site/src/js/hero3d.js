@@ -69,7 +69,7 @@ import {
   BackSide, BoxGeometry, CircleGeometry, ConeGeometry, CylinderGeometry, DataTexture, DirectionalLight, Group, HemisphereLight, MathUtils, Mesh, MeshBasicMaterial, MeshToonMaterial, NearestFilter, PerspectiveCamera, Plane, Raycaster, RedFormat, Scene, SphereGeometry, TorusGeometry, Vector2, Vector3, WebGLRenderer,
 } from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
-import { readStats } from './achievements.js';
+import { act, readStats } from './achievements.js';
 import { burst } from './burst.js';
 import { sendShock } from './dotgrid.js';
 import { juicy, reducedMotion } from './motion.js';
@@ -575,6 +575,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     if (it.crept) {
       it.crept = false;
       bulbSay('So close!', now);
+      act('close');
     } else it.dodges += 1;
     sfx.thump();
   }
@@ -1114,7 +1115,10 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     const d = c ? Math.hypot(c.x - it.x, c.y - it.y) : Infinity;
     if (it.crept) {
       // Crept up while the visitor rested: only reaching for it sets it off
-      if (c?.moving && d < NEAR_R) return ahead(it, now, c, 'So close!');
+      if (c?.moving && d < NEAR_R) {
+        act('close');
+        return ahead(it, now, c, 'So close!');
+      }
       if (c?.moving && d > CREEP_GAP + 60) it.crept = false;
     } else if (c?.moving && now >= it.nextDodge && (d < c.r || (!c.car && pointerOn(it.spot)))) return reached(it, now, c);
     const above = it.y < -40;

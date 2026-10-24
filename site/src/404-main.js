@@ -10,6 +10,7 @@ import './styles/achievements.css';
 import './styles/extras.css';
 import './styles/theme.css';
 import './styles/rest.css';
+import './styles/pagebulb.css';
 
 import { initDotGrid } from './js/dotgrid.js';
 import { initJuicyButton } from './js/button.js';
@@ -22,6 +23,7 @@ import { initMail } from './js/mail.js';
 import { initHud } from './js/hud.js';
 import { initRest } from './js/rest.js';
 import { initTabTitle } from './js/tabtitle.js';
+import { initHidingSpot } from './js/pagebeats.js';
 import { letters } from './js/detail.js';
 import { juicy } from './js/motion.js';
 import { sfx } from './js/sound.js';
@@ -37,6 +39,7 @@ document.querySelectorAll('.juicy-btn').forEach(initJuicyButton);
 initSoundToggle(document.querySelector('.sound-toggle'));
 initHud();
 initRest();
+initHidingSpot(document.querySelector('.lost'));
 
 const title = document.querySelector('[data-letters]');
 title.setAttribute('aria-label', title.textContent);

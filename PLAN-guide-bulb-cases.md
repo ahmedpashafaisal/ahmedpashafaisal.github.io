@@ -246,6 +246,23 @@ Ahmed: "Go G5 + 7"; layout kept, beats only; car parked by "← All games".
 
 Tests (`g5.js`, session scratchpad): 29/29 × 3. Frame beat, wide eyes, duck; car beside the back link; Next peek; mouse-path reach dodges; Next card still opens the next game, whose frame beat plays; Storm Alert quiet, still, no Next bulb; phone dark: 40 px, clear of the car and of Previous, tap on its visible part dodges without leaving the page; reduced motion; fast scroll; rest stays away while the bulb shows; 0 errors.
 
+#### 8a as built (24 Oct)
+Ahmed: "step 8", then "8a then 8b"; ending = catch after all pages (8b); 404 car flipped over.
+
+| Part | What |
+|---|---|
+| About car | Same parked car beside "← Home" (`about.html`, link home, hidden from screen readers) |
+| Head beat | `src/js/pagebeats.js` `initHeadBeat`: 0.9 s after load, avatar in view: pops up on the avatar's head (48 px, 40 on phones), laughs (rays flick, bubbles sound), hops off right. No words. Once per visit (`sessionStorage` `apf-beat-head`). Reduced motion: none |
+| Thesis quiet | `data-quiet` on `#thesis`; `rest.js` stays away while a quiet section fills over half the screen |
+| 404 | `initHidingSpot`: bulb drops into a reserved spot between "Game Over" and the text (64 px, 52 on phones): "You found my hiding spot." (guide's ink bubble, 2.6 s). Reach (mouse path 60 px, tap 80 px): hops off, "So close!" at the pointer, counts as a near miss |
+| 404 car | `public/img/car-flipped.webp` (4.3 KB): same car, upside down, skewed; under the Yes / No buttons |
+| "So Close" | 23rd achievement, "Reached for the idea. Missed." (draft). Unlocks on any near miss: resting (`rest.js`), the 404 bulb, the landing creep (`hero3d.js`, wired, not tested by real play) |
+| One bulb | `rest.js` also stands down while a `.beatbulb` is on screen |
+| Styles | `src/styles/pagebulb.css` (About and 404 parts), loaded by both pages |
+
+Tests (`g8a.js`, session scratchpad): 30/30. About: car beside "← Home"; bulb centred on the avatar, base in the photo top; gone after the hop; no beat on reload; thesis quiet 6.5 s with no resting bulb; a resting bulb outside the thesis, a real mouse path reaches it: "So Close" unlocked, count shows 23. 404: bulb centred between title and text, line shown, flipped car loaded, reach and phone tap: hops off with "So close!", "So Close" unlocked. Reduced motion: no head beat; 404 bulb shows. 0 errors.
+Seen: phone head beat's rays touch the bottom of "← Home" for about 3 s. 404 "No" button text is invisible in dark mode (there before 8a).
+
 ### G6: red accents
 - Small red touches on the site so the car belongs (Ahmed: yes). Picture first.
 

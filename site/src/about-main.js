@@ -13,6 +13,7 @@ import './styles/scrollcar.css';
 import './styles/extras.css';
 import './styles/theme.css';
 import './styles/rest.css';
+import './styles/pagebulb.css';
 
 import { initDotGrid } from './js/dotgrid.js';
 import { initJuicyButton } from './js/button.js';
@@ -31,6 +32,7 @@ import { initHud } from './js/hud.js';
 import { initRest } from './js/rest.js';
 import { initTabTitle } from './js/tabtitle.js';
 import { initLevelUp } from './js/levelup.js';
+import { initHeadBeat } from './js/pagebeats.js';
 
 const root = document.querySelector('.about');
 const title = root.querySelector('[data-letters]');
@@ -66,3 +68,4 @@ document.querySelectorAll('.juicy-btn').forEach(initJuicyButton);
 initSoundToggle(document.querySelector('.sound-toggle'));
 initHud();
 initRest();
+initHeadBeat(root.querySelector('.about__avatar'));

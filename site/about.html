@@ -26,7 +26,10 @@
 
   <!-- Placeholder copy: Ahmed rewrites -->
   <main class="detail about">
-    <a class="chip detail__back" href="/">← Home</a>
+    <div class="detail__top">
+      <a class="chip detail__back" href="/">← Home</a>
+      <a class="detail__car" href="/" tabindex="-1" aria-hidden="true"><img src="/img/car-parked.webp" alt="" width="84" height="56" /></a>
+    </div>
 
     <header class="page__hero about__hero page__part">
       <div class="page__intro">
@@ -126,7 +129,7 @@
       </div>
     </section>
 
-    <section class="page__section page__part" id="thesis" aria-labelledby="thesis-title">
+    <section class="page__section page__part" id="thesis" aria-labelledby="thesis-title" data-quiet>
       <h2 id="thesis-title" class="page__label">Master's thesis</h2>
       <article class="thesis">
         <header class="thesis__head">

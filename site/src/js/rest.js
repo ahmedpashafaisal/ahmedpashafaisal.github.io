@@ -13,6 +13,7 @@
 // the home page with the 3D guide (html.has-guide) it stays off: the guide
 // rests with the visitor instead.
 // The bulb (js/bulb.js and its CSS) loads on the first rest, not before.
+import { act } from './achievements.js';
 import { reducedMotion } from './motion.js';
 import { sfx } from './sound.js';
 
@@ -48,12 +49,19 @@ window.addEventListener(
 
 export const stillFor = () => performance.now() - lastInput;
 
-// The shelves' own runaway (shelfbulb.js) or a game page's (pagebulb.js) is
-// the one on screen: no second one
+// The shelves' own runaway (shelfbulb.js), a game page's (pagebulb.js) or
+// About's and the 404's (pagebeats.js) is the one on screen: no second one
 const shelfHolds = () =>
-  [...document.querySelectorAll('.shelf-bulb, .pagebulb')].some((b) => {
+  [...document.querySelectorAll('.shelf-bulb, .pagebulb, .beatbulb')].some((b) => {
     const r = b.getBoundingClientRect();
     return r.bottom > 0 && r.top < innerHeight;
+  });
+
+// A quiet section (About's thesis, [data-quiet]) fills most of the screen: no gag
+const quietHolds = () =>
+  [...document.querySelectorAll('[data-quiet]')].some((s) => {
+    const r = s.getBoundingClientRect();
+    return Math.min(r.bottom, innerHeight) - Math.max(r.top, 0) > innerHeight * 0.5;
   });
 
 // The landing's runaway is on screen (any part of the landing showing): one
@@ -141,6 +149,7 @@ export function initRest() {
     !!document.querySelector('.lightbox:not([hidden])') ||
     html.classList.contains('runaway-shown') || // the landing's runaway is on the screen, out on the page (hero3d.js)
     shelfHolds() ||
+    quietHolds() ||
     landingRunaway() ||
     landingHolds();
 
@@ -318,6 +327,7 @@ export function initRest() {
   // visitor's line at the pointer (where it is by then)
   function nearMiss(px, py) {
     state = 'gone';
+    act('close');
     const { wrap } = b;
     play(b.el, 'hop-off', { dir: px > b.x ? -1 : 1 }).then(() => {
       remove(wrap);

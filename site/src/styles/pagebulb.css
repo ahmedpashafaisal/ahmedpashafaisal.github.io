@@ -38,3 +38,48 @@
 @media (prefers-reduced-motion: reduce) {
   .pagebulb--quiet .bulb__glow { animation: none; }
 }
+
+/* About and 404 (js/pagebeats.js) */
+.beatbulb {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.beatbulb .bulb { display: block; }
+
+/* About: the avatar's column holds the bulb on its head */
+.about .page__intro { position: relative; }
+
+/* 404: the hiding spot between "Game Over" and the text, room kept so
+   nothing moves when it drops in; its line shows above it */
+.lost {
+  position: relative;
+  width: 64px;
+  height: calc(64px * 1.1 + 2.2rem);
+}
+
+.beatbulb--lost {
+  left: 0;
+  bottom: 0;
+}
+
+.lost__say {
+  left: 50%;
+  top: 1.7rem;
+}
+
+/* The car, upside down: game over */
+.gameover__car {
+  display: block;
+  width: 96px;
+  height: 64px;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .lost {
+    width: 52px;
+    height: calc(52px * 1.1 + 2.2rem);
+  }
+}
