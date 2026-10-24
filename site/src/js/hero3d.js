@@ -4,8 +4,8 @@
 // anywhere on the page (not a link, button, game cover or picture) and the
 // car drives there and parks (turning, drifting, leaving tyre marks and a
 // smoke trail); on empty space, hold and move and it follows (on text a
-// click drives, a drag still selects). WASD drive it the way they point; the
-// arrows too on the landing, and below it once the visitor has driven.
+// click drives, a drag still selects). WASD drive it the way they point (the
+// arrows only scroll the page).
 // It catches the ideas (lightbulbs) that pop up on fixed spots around the
 // name. The car drives over everything on the page, the landing included.
 //
@@ -18,37 +18,46 @@
 // The runaway idea: there is one round of 6 (4 or 2 when the screen is too
 // short for the rest). Catch them in any order; the
 // last one left will not be caught. When the car comes close it opens its
-// eyes and hops away (a little closer each visit, never close enough) while
-// the car reacts ("What the…!", "Hold still!", "Seriously?!"). After 3
-// dodges, once the chase stops, or when the visitor leaves the landing, it
-// hops off down the page to the Featured heading ("Hey! Come back!"). A
-// visitor who leaves before it is picked sees a random bulb wake up and go.
+// eyes and hops away (a little closer each visit, never close enough). After
+// 3 dodges, once the chase stops, or when the visitor leaves the landing, it
+// hops off down the page to the Featured heading. A visitor who leaves
+// before it is picked sees a random bulb wake up and go.
+// The two are two sides of Ahmed (never said on the site): the car is his
+// working side (the visitor drives it), quiet, after the next idea; its one
+// line is "Drive me to an idea". The bulb is his curious side: it plays,
+// teases the car, and has the few lines.
 // From then on it is the guide: one bulb for the whole page, near the
 // visitor, one hop ahead. It waits on spots in page order (the landing's,
 // beside the headings, in the building sites, beside the footer line). The
 // car (if it moved lately) or else the mouse pointer coming close sends it
-// on ahead ("Not again!", "Wait up!"): always down the page (a guide never
+// on ahead: always down the page (a guide never
 // leads back), to the first spot below the screen, so it is gone from view;
 // with nothing below (the end of the page) it hops off the side of the
-// screen, away from the chaser. Stay put and it sneaks back in after BACK_MS
-// ("There you are!"); go back up the page and it follows once the scroll
+// screen, away from the chaser. Stay put and it sneaks back in after BACK_MS;
+// go back up the page and it follows once the scroll
 // rests; scroll down past it and it catches up from the top edge. Each time
 // it comes back to a fresh free place on the screen (off text, links,
 // pictures and cards, away from the car), from a random edge. It never goes
 // back by itself.
 // On the shelves it does the beats of S1 (it is the only bulb on the home
 // page: shelfbulb.js and rest.js stand down, html.has-guide). In a building
-// site it works: a small hop per WORK_PX of scroll, dust, now and then a line
-// in its own bubble. Reach for it there: "Nope, not a game yet.", a laugh,
+// site it plays: a trick hop per TRICK_PX of scroll (spin, flip, twirl or
+// star jump), dust. Reach for it there: "Nope, not a game yet.", a laugh,
 // and the mouse pointer sends it onto a cover on the next shelf ahead (the
-// car: the next spot ahead). Point at that cover: the car shouts "Hold
-// still!" and it hops one cover along, after the last game into the
-// building site. Slide the shelf it stands on: once the slide stops, it hops
+// car: the next spot ahead). Point at that cover: it hops one cover along,
+// after the last game into the building site. Slide the shelf it stands on: once the slide stops, it hops
 // to the far cover in view.
+// The car is the visitor, so it comes along: left behind by a scroll, once
+// the scroll rests it drives in by itself from the nearest edge of the screen
+// (top or bottom; the screen does not follow) and parks at a free place far
+// from the guide (only the guide comes close, when the visitor rests), else
+// near the first heading on the screen. The guide notices it park: eyes
+// wide, a hop further away, a wink and a flick of its rays. It keeps an eye
+// on the car all the time. Click or tap the car: a honk and a bounce.
 // Rest when you rest: the visitor stops (no input for REST_MS) and the
 // runaway sneaks up on the parked car (or the pointer), closer than a chase
-// ever gets it; reaching for it sets it off only at the last moment ("So
-// close!").
+// ever gets it; reaching for it sets it off only at the last moment, and it
+// teases: "So close!".
 //
 // Physics runs in canvas pixels (simple car: engine along the heading,
 // sideways grip so it drifts in fast turns; it can only turn while moving, so
@@ -84,7 +93,7 @@ const FOLLOW = 3.2; // driving: speed toward the cursor per px of distance (slow
 const FOLLOW_GRIP = 6; // driving: how fast the engine reaches that speed
 const KEY_GAS = 0.7; // keys: top speed, share of MAX_SPEED
 // Keys: the way each one points on screen (WASD by position, so ZQSD on AZERTY)
-const KEY_DIRS = { KeyW: [0, -1], ArrowUp: [0, -1], KeyS: [0, 1], ArrowDown: [0, 1], KeyA: [-1, 0], ArrowLeft: [-1, 0], KeyD: [1, 0], ArrowRight: [1, 0] };
+const KEY_DIRS = { KeyW: [0, -1], KeyS: [0, 1], KeyA: [-1, 0], KeyD: [1, 0] };
 const TURN_SLOW = 0.12; // share of TURN kept when nearly still: no spinning on the spot
 const SHARP = 0.7; // rad off the pointer: slow down so the turn stays tight
 const STOP_R = 0.75; // car lengths: cursor this close = parked (no steering, no gas)
@@ -102,8 +111,6 @@ const PICK_R = 46; // generous pickup radius
 const MAGNET_R = 110; // ideas drift toward a car this close
 const EDGE = 16; // play area inset from the canvas edges
 const BOTTOM = 84; // keep clear of the bottom corner buttons
-const DODGE_LINES = ['What the…!', 'Hold still!', 'Seriously?!']; // the car, at dodge 1, 2, 3
-const CHASE_LINES = ['Not again!', 'Wait up!', 'Hey! Come back!']; // the car, as the guide hops on ahead
 const CAM_LO = 0.3; // driving: the screen scrolls to keep the car
 const CAM_HI = 0.68; // ...between these shares of its height
 const STOP_GAP = 70; // px from a heading's text to the guide waiting beside it
@@ -111,14 +118,16 @@ const CHASER_MS = 5000; // the guide runs from the car if it moved this recently
 const POINTER_R = 90; // ...hopping on when the moving pointer comes this close
 const SETTLE_MS = 400; // the visitor scrolled away from it: it hops back in once the scroll rests this long
 const BACK_MS = 6000; // dodged off the screen and the visitor stays put: it sneaks back in after this long
+const COME_MS = 600; // the scroll rested this long and the car is off the screen: it comes to the visitor
+const WIDE_MS = 700; // the car has parked: the guide's eyes go wide this long...
+const TEASE_HOPS = [90, 130, 60]; // ...and it hops one of these further away (px), winks and flicks its rays
 const RAYS_UP = 52; // px from the bulb's middle to the tip of its rays
 const PEEK = 24; // px from the screen's side edge to the middle of a bulb peeking in
-// The guide on the shelves (the beats of S1). Placeholder words: Ahmed rewrites
-const WORK_PX = 120; // page scroll per working hop in a building site
-const WORK_MS = 380;
-const WORK_KEYS = [[0, 0, 1, 1], [0.42, 16, 0.92, 1.1], [0.72, 0, 1.16, 0.84], [1, 0, 1, 1]]; // share of the hop, lift px, width, height
-const WORK_LINE = 6; // working hops per line, the first on the 3rd hop
-const WORK_LINES = ['Almost done.', "Don't look yet!", 'Five more minutes.', 'It worked yesterday.', 'Nearly there.'];
+// The guide on the shelves (the beats of S1)
+const TRICK_PX = 120; // page scroll per trick hop in a building site (it plays there)
+const TRICK_MS = 560;
+const TRICK_LIFT = 30; // px
+const TRICKS = ['spin', 'flip', 'twirl', 'star'];
 const LAUGH_MS = 900; // reached for in its building site: "Nope, not a game yet." and a laugh, then it hops
 const SAY_MS = 1600; // the bulb's own line stays up this long
 const SLIDE_START = 40; // px a shelf slides under it before it hops ahead...
@@ -134,7 +143,6 @@ const DODGE_MS = 600; // shortest time between two dodges: no jitter
 const DODGES = 3; // dodges before it hops off for good
 const IDLE_ESCAPE_MS = 8000; // chase stopped this long after a dodge: it leaves
 const HOP_MS = 420; // one dodge hop
-const SHOUT_MS = 1800; // "Hey! Come back!" stays up this long
 const CREEP_GAP = 110; // resting: the runaway sneaks up to this far from the parked car...
 const CREEP_STEP = 30; // ...in hops this long...
 const CREEP_MS = 800; // ...this far apart
@@ -369,11 +377,10 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   let lastBump = 0;
   let shakeAmp = 0.06;
   let entered = false;
-  let bubble = null; // over the car: "Drive me to an idea", or the "Hey! Come back!" shout
+  let bubble = null; // over the car: "Drive me to an idea"
   let runaway = null; // the bulb that will not be caught (an entry of ideas)
   let firstRound = false; // the round with a runaway in it
   let runawayDone = false; // left the landing (the guide now): later rounds are normal
-  let shoutUntil = 0;
   let howTo = true; // "Drive me to an idea" until the first catch or the runaway's first move
   let caught = 0;
   // The layer sits off px down the page (the scroll, or less at the very
@@ -385,6 +392,9 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   const visits = Math.max(1, readStats().visits || 1);
   const dodgeR = Math.max(DODGE_MIN_R, DODGE_R - (visits - 1) * DODGE_STEP);
   const carR = () => carLen * 0.42;
+  // The car and the guide keep this far apart when either arrives (only the
+  // guide's creep, while the visitor rests, comes closer)
+  const farR = () => Math.max(2 * dodgeR, Math.min(W, H) * 0.4);
   const pageH = () => (foot ? foot.getBoundingClientRect().bottom + scrollY : html.scrollHeight);
 
   // Back over the screen: the layer moves down the page with the scroll (never
@@ -535,7 +545,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   function makeRunaway(it) {
     if (runaway && runaway !== it && !runaway.gone) return;
     runaway = it;
-    Object.assign(it, { waiting: false, eyes: null, wokeAt: 0, blinkAt: 0, winkUntil: 0, hop: null, nextDodge: 0, dodges: 0, lastDodge: 0, guide: false, spot: null, inAt: 0, flees: 0, why: '', side: 1, leftAt: 0, backAt: 0, rail: null, work: null, works: 0, line: '', laugh: 0, reach: null, drawY: 0, size: 1 });
+    Object.assign(it, { waiting: false, eyes: null, wokeAt: 0, blinkAt: 0, winkUntil: 0, hop: null, nextDodge: 0, dodges: 0, lastDodge: 0, guide: false, spot: null, inAt: 0, why: '', side: 1, leftAt: 0, backAt: 0, rail: null, trick: null, lastTrick: '', tease: 0, wideUntil: 0, flickAt: 0, look: [0, 0], laugh: 0, reach: null, drawY: 0, size: 1 });
   }
   // ...when its eyes pop open (draw() springs them in)
   function openEyes(it, now) {
@@ -560,14 +570,12 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     hopTo(it, null, best[0], best[1], now, HOP_MS, 46);
     it.nextDodge = now + DODGE_MS;
     it.lastDodge = now;
-    // A near miss after resting is not one of the 3 dodges before it leaves
+    // A near miss after resting is not one of the 3 dodges before it leaves:
+    // it teases instead
     if (it.crept) {
       it.crept = false;
-      shout('So close!', now);
-    } else {
-      it.dodges += 1;
-      shout(DODGE_LINES[Math.min(it.dodges, DODGE_LINES.length) - 1], now);
-    }
+      bulbSay('So close!', now);
+    } else it.dodges += 1;
     sfx.thump();
   }
 
@@ -590,7 +598,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   // point (spot null)
   function hopTo(it, spot, x, y, now, ms, lift) {
     it.hop = { x0: it.x, y0: it.y, x1: x, y1: y, t0: now, ms, lift };
-    Object.assign(it, { spot, hx: x, hy: y, vx: 0, vy: 0, winkUntil: now + 700, inAt: now, work: null });
+    Object.assign(it, { spot, hx: x, hy: y, vx: 0, vy: 0, winkUntil: now + 700, inAt: now, trick: null });
     // On a sliding shelf (a cover or its building site): where the slide
     // stood when it arrived
     const row = spot?.el?.closest('.shelf--rail .shelf__row');
@@ -613,12 +621,18 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     // boxed in: it waits where it is
     const step = Math.min(CREEP_STEP, d - CREEP_GAP);
     const a0 = Math.atan2(t[1] - it.y, t[0] - it.x);
+    // Below the landing it keeps off text, links, pictures and cards too
     let x = 0;
     let y = 0;
+    let rects = null;
     const ok = [0, 0.6, -0.6, 1.1, -1.1].some((da) => {
       x = it.x + Math.cos(a0 + da) * step;
       y = it.y + Math.sin(a0 + da) * step;
-      return (y < land.b + 20 ? free(x, y, 30) : onScreen(x, y)) && Math.hypot(t[0] - x, t[1] - y) < d - 4;
+      if (Math.hypot(t[0] - x, t[1] - y) >= d - 4) return false;
+      if (y < land.b + 20) return free(x, y, 30);
+      if (!onScreen(x, y)) return false;
+      rects ||= busyOnScreen(canvas.getBoundingClientRect());
+      return boxFree(x, y, rects);
     });
     if (!ok) return;
     openEyes(it, now);
@@ -644,25 +658,15 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   // Inside the screen, clear of the edges and the bottom corner buttons
   const onScreen = (x, y) => x > area.l + 40 && x < area.r - 40 && y > 60 && y < Math.min(H - BOTTOM, area.b);
 
-  // The car (the visitor) talks back: one line in its bubble for SHOUT_MS
-  function shout(text, now) {
-    if (!bubble) return;
-    bubble.firstChild.textContent = text;
-    bubble.classList.add('is-on');
-    shoutUntil = now + SHOUT_MS;
-  }
-
   // Done dodging, chase stopped, cornered, or the visitor left the landing:
   // it hops off down the page to the first spot below the landing (the
-  // Featured heading) and the car shouts after it. From then on it is the
-  // guide.
+  // Featured heading). From then on it is the guide.
   function escape(now) {
     const it = runaway;
     if (!it || it.guide) return;
     runawayDone = true;
     it.guide = true;
     openEyes(it, now);
-    shout('Hey! Come back!', now);
     const next = guideSpots(it).find((s) => s.spot.el);
     if (next) hopTo(it, next.spot, next.x, next.y, now, farHop(next.y - it.y), 150);
     it.why = 'escape';
@@ -704,6 +708,19 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   }
   // The bulb's box (rays to feet) at x, y clear of every busy box
   const boxFree = (x, y, rects, pad = 8) => rects.every((r) => x + 34 + pad < r.l || x - 34 - pad > r.r || y + FEET + pad < r.t || y - RAYS_UP - pad > r.b);
+  // Everything busy on the screen now: each part of the page that shows
+  // (busyIn) and the corner buttons, as canvas-px boxes
+  const SCOPES = '.entrance, .featured, .games, .site-foot';
+  function busyOnScreen(cr) {
+    const seen = (r) => r.width && r.bottom > 0 && r.top < innerHeight;
+    return [
+      ...[...document.querySelectorAll(SCOPES)].filter((el) => seen(el.getBoundingClientRect())).flatMap((el) => busyIn(el, cr)),
+      ...[...document.querySelectorAll('.shelf__item, .shelf__slot, .sound-toggle, .mail-btn, .theme-toggle, .site-pill, .scrollcar')]
+        .map((el) => el.getBoundingClientRect())
+        .filter(seen)
+        .map((r) => ({ l: r.left - cr.left, t: r.top - cr.top, r: r.right - cr.left, b: r.bottom - cr.top })),
+    ];
+  }
   // Beside a text (dx further on), or above it, in canvas px
   function textSpot(el, cr, side, dx = 0) {
     range.selectNodeContents(el);
@@ -787,7 +804,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     { passive: true },
   );
   function chaser(now) {
-    if (now - car.movedAt < CHASER_MS && carOnScreen()) return { x: car.x, y: car.y, vy: car.vy, moving: Math.hypot(car.vx, car.vy) > 40, r: dodgeR, car: true };
+    if (now - car.movedAt < CHASER_MS && carOnScreen() && !selfDrive()) return { x: car.x, y: car.y, vy: car.vy, moving: Math.hypot(car.vx, car.vy) > 40, r: dodgeR, car: true };
     if (!pointer.t || now - pointer.t > CHASER_MS) return null;
     const [x, y] = local(pointer.cx, pointer.cy);
     return { x, y, vy: pointer.vy, moving: now - pointer.t < 200, r: POINTER_R, car: false };
@@ -801,19 +818,22 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   let lastY = scrollY;
   let fromY = scrollY;
   let settleT = 0;
-  let worked = 0; // page scrolled since the last working hop
+  let siteScroll = 0; // page scrolled since the last trick hop
   let backT = 0; // wakes the loop (asleep while nothing shows) for the sneak back in
+  let comeT = 0;
   window.addEventListener(
     'scroll',
     () => {
       const now = performance.now();
       if (now - scrollAt > SETTLE_MS) fromY = lastY;
       if (Math.abs(scrollY - fromY) > 4) scrollDir = scrollY > fromY ? 1 : -1;
-      worked += Math.abs(scrollY - lastY);
+      siteScroll += Math.abs(scrollY - lastY);
       lastY = scrollY;
       scrollAt = now;
       clearTimeout(settleT);
       settleT = setTimeout(wake, SETTLE_MS + 50); // the guide checks once the scroll rests
+      clearTimeout(comeT);
+      comeT = setTimeout(wake, COME_MS + 50); // ...and the car
     },
     { passive: true },
   );
@@ -838,14 +858,14 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     openEyes(it, now);
     it.crept = false;
     it.nextDodge = now + DODGE_MS * 2;
-    if (c.car) shout(line || CHASE_LINES[it.flees++ % CHASE_LINES.length], now);
+    if (line) bulbSay(line, now); // the near miss after a creep: it teases
     sfx.thump();
   }
 
   // Where it comes back to (fresh each time, never predictable): a random
   // free place in the part of the page filling most of the screen (the
   // landing, a banner, a shelf, the footer), off everything there, on the
-  // screen, away from the car (parked or not), the pointer and the other
+  // screen, far from the car (farR: parked, or where it is driving to), the pointer and the other
   // ideas, and not where it came back last time. None there: anywhere free
   // on the screen. None at all (phones: no room beside the page): a spot on
   // the screen, or a peek in from a side edge at a row with the least of the
@@ -866,8 +886,10 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
       .sort((p, q) => q.h - p.h);
     const ptr = pointer.t && now - pointer.t < CHASER_MS ? local(pointer.cx, pointer.cy) : null;
     const live = ideas.filter((o) => !o.gone && o !== it);
+    const goal = grab.go ? dragGoal() : null; // the car on its way: where it will park
     const ok = (x, y) =>
-      Math.hypot(x - car.x, y - car.y) > dodgeR + carR() + 30 && (!ptr || Math.hypot(x - ptr[0], y - ptr[1]) > POINTER_R + 60) &&
+      Math.hypot(x - car.x, y - car.y) > farR() && (!goal || Math.hypot(x - goal.x, y - goal.y) > farR()) &&
+      (!ptr || Math.hypot(x - ptr[0], y - ptr[1]) > POINTER_R + 60) &&
       live.every((o) => Math.hypot(o.hx - x, o.hy - y) > 90) && (!lastBack || Math.hypot(x - lastBack.x, y + off - lastBack.py) > 220) &&
       (y > land.b + 20 || free(x, y, 40));
     const grid = (ps, extra = []) => {
@@ -939,11 +961,10 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     it.why = fromTop ? 'in-top' : ['in-left', 'in-right', 'in-bottom'][lastEdge];
     lastBack = { x: to.x, py: to.y + off };
     it.nextDodge = now + DODGE_MS * 2;
-    if (carOnScreen()) shout('There you are!', now);
     sfx.thump();
   }
 
-  /* the guide on the shelves (the beats of S1): it works in a building site,
+  /* the guide on the shelves (the beats of S1): it plays in a building site,
      laughs when reached for there, perches on covers, rides a slide */
 
   // A cover or building site wholly in view on its shelf (a sliding shelf may be slid along)
@@ -980,21 +1001,19 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     return true;
   }
 
-  // Working: stretch up, squash on landing with dust (drawRunaway), and now
-  // and then a line
-  function work(it, now) {
-    it.work = { t0: now, dust: false };
-    if (++it.works % WORK_LINE !== 3) return;
-    const list = WORK_LINES.filter((l) => l !== it.line);
-    it.line = list[Math.floor(Math.random() * list.length)];
-    bulbSay(it.line, now);
+  // Playing: a trick hop (spin, flip, twirl or star jump, never the same
+  // twice running), dust on landing (drawRunaway)
+  function trick(it, now) {
+    const kind = any(TRICKS.filter((k) => k !== it.lastTrick));
+    it.lastTrick = kind;
+    it.trick = { t0: now, kind, dir: Math.random() < 0.5 ? -1 : 1, dust: false };
   }
 
   // In its building site: "Nope, not a game yet." and a laugh, then off it goes
   function reachSite(it, now, c) {
     openEyes(it, now);
     it.laugh = now;
-    it.work = null;
+    it.trick = null;
     it.reach = { c, shelf: it.spot.el.closest('.shelf') };
     bulbSay('Nope, not a game yet.', now);
   }
@@ -1013,11 +1032,10 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     ahead(it, now, c);
   }
 
-  // Perched: the pointer on its cover makes the car shout "Hold still!" at
-  // the pointer, and it hops one cover along (after the shelf's last game:
-  // into its building site; nowhere along: one hop ahead)
+  // Perched: the pointer on its cover makes it hop one cover along (after
+  // the shelf's last game: into its building site; nowhere along: one hop
+  // ahead)
   function alongShelf(it, now, c) {
-    pointerShout('Hold still!');
     const next = it.spot.el.nextElementSibling;
     if (!next || !hopOnto(it, next, now)) ahead(it, now, c);
   }
@@ -1042,22 +1060,6 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
       clearTimeout(t);
       t = setTimeout(look, SLIDE_SETTLE_MS);
     });
-  }
-
-  // The car's line at the mouse pointer (the visitor reaching for a cover)
-  function pointerShout(text) {
-    const s = document.createElement('span');
-    s.className = 'car-bubble shelf-shout';
-    s.append(Object.assign(document.createElement('span'), { textContent: text }));
-    s.style.left = `${MathUtils.clamp(pointer.cx, 70, innerWidth - 70)}px`;
-    s.style.top = `${Math.max(pointer.cy - 18, 44)}px`;
-    document.body.append(s);
-    void s.offsetWidth;
-    s.classList.add('is-on');
-    setTimeout(() => {
-      s.classList.remove('is-on');
-      setTimeout(() => s.remove(), 250);
-    }, 1400);
   }
 
   // The guide's own lines, in an ink bubble over it (draw() keeps it there)
@@ -1095,12 +1097,18 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
       if (now - it.laugh >= LAUGH_MS) offSite(it, now);
       return;
     }
-    // Working in its building site: a small hop per WORK_PX of page scroll,
-    // up or down, while it is on the screen
-    if (!it.spot?.slot) worked = 0;
-    else if (worked >= WORK_PX) {
-      worked = 0;
-      if (!it.work && juicy() && it.y > 0 && it.y < H) work(it, now);
+    // The car has just parked: after a wide-eyed moment it hops further away
+    if (it.tease && now >= it.tease) {
+      it.tease = 0;
+      return teaseHop(it, now);
+    }
+    // Playing in its building site: a trick hop per TRICK_PX of page scroll,
+    // up or down, while it is on the screen (scroll during a trick counts
+    // toward the next one)
+    if (!it.spot?.slot) siteScroll = 0;
+    else if (siteScroll >= TRICK_PX && !it.trick) {
+      siteScroll = Math.min(siteScroll - TRICK_PX, TRICK_PX);
+      if (juicy() && it.y > 0 && it.y < H) trick(it, now);
     }
     const c = chaser(now);
     const d = c ? Math.hypot(c.x - it.x, c.y - it.y) : Infinity;
@@ -1130,6 +1138,147 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     if (!above && !below && !aside) creep(it, now);
   }
 
+  /* the car comes to the visitor: left behind by a scroll, it drives in and
+     parks near the guide; click it and it honks */
+
+  // The car drives a trip by itself (coming in): the screen does not follow,
+  // the guide and the landing's runaway do not run from it, it catches nothing
+  const selfDrive = () => grab.go && grab.auto && !grab.on && !held.size;
+
+  // Off the screen: it jumps to just past the nearest edge (top or bottom),
+  // nose in, so it drives in instead of all the way down the page out of
+  // sight. Partly on the screen: it stays where it is.
+  function toEdge(x, top) {
+    if (car.y > -carR() && car.y < H + carR()) return;
+    for (const list of marks) if (list.length) list[list.length - 1].gap = true;
+    const y = top ? Math.max(area.t + carR(), -carR() - 10) : Math.min(area.b - carR(), H + carR() + 10);
+    Object.assign(car, { x: MathUtils.clamp(x, area.l + carR(), area.r - carR()), y, vx: 0, vy: 0, h: top ? Math.PI / 2 : -Math.PI / 2 });
+  }
+
+  // Where the car parks when it comes in: a free place on the screen (off
+  // text, links, pictures, cards and the corner buttons, clear of the bottom
+  // bar and the landing's bulbs), not where it parked last time. Far from
+  // the guide when it shows (the car is the chaser: only the guide comes
+  // close, when the visitor rests; never with the guide in its way in); else
+  // near the first heading on the screen; else anywhere free. Picked at
+  // random among the best. It drives straight in from the edge, so this is
+  // where it stops: STOP_R short of its target.
+  // {x, y, tx, ty} in canvas px, or null when nothing is free.
+  let lastPark = null; // page px
+  function parkPlace(top) {
+    const cr = canvas.getBoundingClientRect();
+    hud ||= document.querySelector('.hud');
+    const barT = (hud ? Math.min(hud.getBoundingClientRect().top, innerHeight) : innerHeight) - cr.top;
+    const rects = busyOnScreen(cr);
+    const head = [...document.querySelectorAll(HEADS)].map((el) => el.getBoundingClientRect()).find((r) => r.width && r.top > 60 && r.bottom < barT + cr.top);
+    const hb = head && { l: head.left - cr.left, t: head.top - cr.top, r: head.right - cr.left, b: head.bottom - cr.top };
+    const it = runaway?.guide && !runaway.gone ? runaway : null;
+    const shows = (x, y) => x > -40 && x < W + 40 && y > -60 && y < H + 60; // peeking in from a side counts
+    const g = it && (shows(it.hx, it.hy) || shows(it.x, it.y)) ? [it.hx, it.hy] : null;
+    const live = ideas.filter((o) => !o.gone && o !== runaway);
+    const park = carLen * STOP_R;
+    const hw = carLen * 0.36 + 8; // the car nose up or down, with a margin
+    const hh = carLen * 0.55 + 8;
+    const out = [];
+    for (let y = 60 + hh; y <= barT - hh; y += 20) {
+      const ty = y + (top ? park : -park);
+      if (ty < area.t + carR() + GOAL_GAP || ty > area.b - carR() - GOAL_GAP) continue;
+      for (let x = area.l + hw; x <= area.r - hw; x += 20) {
+        if (!rects.every((r) => x + hw < r.l || x - hw > r.r || y + hh < r.t || y - hh > r.b)) continue;
+        if (!live.every((o) => Math.hypot(o.hx - x, o.hy - y) > 90)) continue;
+        if (lastPark && Math.hypot(x - lastPark.x, y + off - lastPark.py) < 160) continue;
+        let d = 0; // lower is better
+        if (g) {
+          d = -Math.hypot(x - g[0], y - g[1]); // the farther the better
+          if (-d < farR() || segDist(g[0], g[1], [x, top ? -carR() : H + carR()], [x, y]) < carR() + 50) continue;
+        } else if (hb) d = Math.hypot(Math.max(hb.l - x, 0, x - hb.r), Math.max(hb.t - y, 0, y - hb.b));
+        out.push({ x, y, tx: x, ty, d });
+      }
+    }
+    if (!out.length) return null;
+    const best = Math.min(...out.map((p) => p.d));
+    return any(out.filter((p) => p.d <= best + 140));
+  }
+
+  // The scroll has rested COME_MS, the car is off the screen and nobody
+  // drives it: it comes in (once per scroll). On the landing: back to its
+  // spot under the button. Nothing free: it waits for the next scroll.
+  let comeTry = -1; // scrollAt of the last try
+  let coming = false;
+  function comeIn(now) {
+    if (!entered || carOnScreen() || held.size || grab.on || (grab.go && !grab.auto) || now - scrollAt < COME_MS || comeTry === scrollAt) return;
+    comeTry = scrollAt;
+    const top = car.y < 0;
+    let to;
+    if (onLanding()) {
+      const y = Math.min(H, land.b + BOTTOM) - BOTTOM - carR() - carLen * STOP_R - 20;
+      to = { x: W / 2, tx: W / 2, ty: y };
+    } else to = parkPlace(top);
+    if (!to) return;
+    toEdge(to.x, top);
+    driveTo(to.tx, to.ty, false, -1, true);
+    if (to.y) lastPark = { x: to.x, py: to.y + off };
+    coming = true;
+  }
+  // ...parked: the guide, if it shows, notices it: eyes wide, then (guideStep)
+  // a hop further away, a wink and a flick of its rays. It teases the car.
+  function arrived(now) {
+    if (!coming || selfDrive()) return;
+    coming = false;
+    const it = runaway;
+    if (!grab.auto || held.size || !it?.guide || it.gone || it.hop || it.laugh || !carOnScreen() || !(it.x > 0 && it.x < W && it.y > 0 && it.y < H)) return;
+    it.wideUntil = now + WIDE_MS;
+    it.tease = now + WIDE_MS * 0.5;
+  }
+  // The hop away from the parked car: TEASE_HOPS further from it (straight
+  // away, else at an angle that still gains), onto a free place on the screen. In its building site or on a cover, or with no room:
+  // it stays and winks. The rays flick once it lands.
+  function teaseHop(it, now) {
+    it.flickAt = now + 420;
+    if (!it.spot?.slot && !it.spot?.perch) {
+      const a0 = Math.atan2(it.y - car.y, it.x - car.x);
+      const rects = busyOnScreen(canvas.getBoundingClientRect());
+      const d0 = Math.hypot(it.x - car.x, it.y - car.y);
+      for (const step of TEASE_HOPS) for (const da of [0, 0.5, -0.5, 1, -1, 1.4, -1.4]) {
+        const x = it.x + Math.cos(a0 + da) * step;
+        const y = it.y + Math.sin(a0 + da) * step;
+        if (Math.hypot(x - car.x, y - car.y) < d0 + 30 || !onScreen(x, y) || !boxFree(x, y, rects) || (y < land.b + 20 && !free(x, y, 40))) continue;
+        hopTo(it, null, x, y, now, 380, 26);
+        it.why = 'tease';
+        sfx.boing();
+        return;
+      }
+    }
+    it.winkUntil = now + 700;
+    wake();
+  }
+
+  // Clicked or tapped: a honk, a bounce and smoke from the tail (the car does
+  // not talk)
+  let honkAt = 0;
+  function honk(now) {
+    if (now - honkAt < 250) return;
+    honkAt = now;
+    sfx.honk();
+    if (juicy()) {
+      car.squash = 0.35;
+      car.popV += 7;
+      const bx = -Math.cos(car.h);
+      const by = -Math.sin(car.h);
+      for (let i = 0; i < 3; i++) puff(car.x + bx * carLen * 0.5, car.y + by * carLen * 0.5, bx * 80 + (Math.random() - 0.5) * 60, by * 80 + (Math.random() - 0.5) * 60, 6);
+    }
+    wake();
+  }
+  // A click on the car's body (turned the way it faces), canvas px
+  function onCar(x, y) {
+    if (car.pop < 0.5) return false;
+    const dx = x - car.x;
+    const dy = y - car.y;
+    const c = Math.cos(car.h);
+    const s = Math.sin(car.h);
+    return Math.abs(dx * c + dy * s) < carLen * 0.55 && Math.abs(dy * c - dx * s) < carLen * 0.36;
+  }
+
   // Everything in canvas px moves together: the layer moving back over the
   // screen (place)
   function shiftAll(dx, dy) {
@@ -1154,8 +1303,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   }
 
   // Per frame: the layer back over the screen, re-measure (the landing moves
-  // on the screen), and the car back to a visitor who returned to the landing
-  // without it
+  // on the screen), and the car to a visitor who scrolled away from it
   function pageFrame(now) {
     place();
     measure();
@@ -1163,12 +1311,8 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
       camAt = 0;
       html.classList.remove('car-cam');
     }
-    // Left parked down the page: it drives back in from the bottom edge of
-    // the screen to the bottom of the landing
-    if (onLanding() && car.y > H + carR() && !held.size && !grab.on && !grab.go) {
-      Object.assign(car, { x: W / 2, y: H + carR() + 10, vx: 0, vy: 0, h: -Math.PI / 2 });
-      driveTo(W / 2, Math.min(H, land.b + BOTTOM) - BOTTOM - carR() - carLen * STOP_R - 20, false, -1, true);
-    }
+    comeIn(now);
+    arrived(now);
     const it = runaway;
     // Tells shelfbulb.js and rest.js the runaway is on the screen, so theirs
     // keep away: one runaway on the screen at a time. Once on, it stays on
@@ -1225,7 +1369,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     // First catch: the player knows how to drive, "Drive me to an idea" is done
     if (howTo) {
       howTo = false;
-      if (!shoutUntil) bubble?.classList.remove('is-on');
+      bubble?.classList.remove('is-on');
     }
     // Every idea but one (however many fit the screen): that is the
     // "Brainstorm" achievement now (no text, no new round), and the one left
@@ -1358,8 +1502,11 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   const blocked = (t) => !!t.closest?.('a, button, input, textarea, select, label, summary, [role="button"], [contenteditable], img, picture, video, iframe, .banner__media, .hud, .scrollcar, .lightbox, dialog');
   const texty = (t) => [...(t.childNodes || [])].some((n) => n.nodeType === 3 && n.textContent.trim());
   let downType = '';
-  // auto: the car drives itself (back to the landing): the screen does not follow
+  // auto: the car drives itself (coming in): the screen does not follow.
+  // The visitor sends it while it is off the screen: it comes in from the
+  // nearest edge, straight at the spot.
   const driveTo = (x, y, hold, id, auto = false) => {
+    if (!auto && !carOnScreen()) toEdge(x, car.y < 0);
     Object.assign(grab, { x, y, on: hold, id, go: true, goUntil: hold ? Infinity : performance.now() + GO_MS, auto });
     // The player acted: a bulb that popped up under the parked car is fair game now
     if (!auto) ideas.forEach((it) => (it.waiting = false));
@@ -1367,12 +1514,23 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   };
   document.addEventListener('pointerdown', (e) => {
     downType = e.pointerType;
-    if (!entered || e.pointerType !== 'mouse' || e.button > 0 || blocked(e.target) || texty(e.target)) return;
+    if (!entered || e.pointerType !== 'mouse' || e.button > 0 || blocked(e.target)) return;
+    if (onCar(...local(e.clientX, e.clientY))) {
+      e.preventDefault();
+      honk(performance.now());
+      return;
+    }
+    if (texty(e.target)) return;
     e.preventDefault(); // no text selection while driving
     driveTo(...local(e.clientX, e.clientY), true, e.pointerId);
   });
   document.addEventListener('click', (e) => {
     if (!entered || !e.detail || blocked(e.target)) return;
+    // On the car: a honk (the mouse honked on press)
+    if (onCar(...local(e.clientX, e.clientY))) {
+      if (downType !== 'mouse') honk(performance.now());
+      return;
+    }
     // Mouse: empty space drove on press; on text only a click, not a drag that selected it
     if (downType === 'mouse' && (!texty(e.target) || !getSelection().isCollapsed)) return;
     driveTo(...local(e.clientX, e.clientY), false, -1);
@@ -1396,8 +1554,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
 
   /* input: keys. WASD drive the car the way they point on the screen (up = up
      the page; two keys = a diagonal) while the car is on the screen. The
-     arrows too on the landing, and below it once the visitor has driven; they
-     then drive instead of scrolling (before that, keyboard readers scroll). */
+     arrows only scroll the page (Ahmed, 24 Oct). */
   const held = new Set();
   const onLanding = () => {
     const r = host.getBoundingClientRect();
@@ -1407,7 +1564,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   window.addEventListener('keydown', (e) => {
     if (!entered || !KEY_DIRS[e.code] || e.ctrlKey || e.metaKey || e.altKey) return;
     if (e.target.closest?.('input, textarea, select, [contenteditable]')) return;
-    if (!held.size && !(carOnScreen() && (e.code.startsWith('Key') || played || onLanding()))) return;
+    if (!held.size && !carOnScreen()) return;
     e.preventDefault();
     if (!held.size) ideas.forEach((it) => (it.waiting = false));
     held.add(e.code);
@@ -1431,7 +1588,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   function pushed(now, auto = false) {
     if (!auto) played = true;
     car.restAt = now;
-    if (!shoutUntil) bubble?.classList.remove('is-on');
+    bubble?.classList.remove('is-on');
     wake();
   }
 
@@ -1563,12 +1720,12 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     }
 
     // "Drive me to an idea" (until the first catch) hides while the car rolls
-    // and comes back once it has rested a moment; a shout stays up its full time
-    if (vNow > 20) car.movedAt = now;
+    // and comes back once it has rested a moment
+    if (vNow > 20 && !selfDrive()) car.movedAt = now;
     if (vNow > 15) {
       car.restAt = now;
-      if (!shoutUntil) bubble?.classList.remove('is-on');
-    } else if (bubble && entered && howTo && !shoutUntil && now - car.restAt > BUBBLE_REST_MS) bubble.classList.add('is-on');
+      bubble?.classList.remove('is-on');
+    } else if (bubble && entered && howTo && now - car.restAt > BUBBLE_REST_MS) bubble.classList.add('is-on');
 
     // Collisions: the edges of the page (keep in)
     const r = carR();
@@ -1604,7 +1761,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
           it.y = MathUtils.lerp(it.hop.y0, it.hop.y1, k);
           if (k >= 1) it.hop = null;
         } else {
-          const moving = Math.hypot(car.vx, car.vy) > 40;
+          const moving = Math.hypot(car.vx, car.vy) > 40 && !selfDrive();
           if (it.crept) {
             // Crept up while the visitor rested: only a car reaching for it
             // sets it off, at the last moment; a car driving off ends it
@@ -1628,7 +1785,9 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
         if (d > reach + 20) it.waiting = false;
         else continue;
       }
-      if (d < reach) collect(it, now);
+      if (selfDrive()) {
+        // coming in by itself: no free catches
+      } else if (d < reach) collect(it, now);
       else if (d < MAGNET_R) {
         const pull = (1 - d / MAGNET_R) * 380;
         it.vx += (dx / d) * pull * dt;
@@ -1752,8 +1911,9 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   const wp = new Vector3();
 
   // Runaway: hop arc (stretched in the air, squashed at take-off and
-  // landing); once awake, eyes that spring open, blink every few seconds and
-  // wink after each dodge
+  // landing), trick hops in a building site; once awake, eyes that spring
+  // open, blink every few seconds, wink after each dodge, go wide when the
+  // car parks, and keep watch on the car
   function drawRunaway(it, now, j, bob, bs, dt) {
     // Phones: smaller while it stands in a building site
     const size = it.spot?.slot && W < 600 ? SITE_SIZE : 1;
@@ -1761,8 +1921,11 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     let lift = 0;
     let sx = 1;
     let sy = 1;
-    let foot = 0; // working and laughing, it squashes from its feet
+    let foot = 0; // landing a trick and laughing, it squashes from its feet
     let flick = 1;
+    let spin = 0; // trick turns: in the screen's plane, head over heels, round its middle
+    let flipX = 0;
+    let twirlY = 0;
     if (it.hop && j) {
       const k = Math.min(1, (now - it.hop.t0) / it.hop.ms);
       const s = Math.sin(k * Math.PI);
@@ -1770,23 +1933,37 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
       lift = s * it.hop.lift;
       sx = 1 - s * 0.12 + (ground ? 0.12 : 0);
       sy = 1 + s * 0.16 - (ground ? 0.14 : 0);
-    } else if (it.work && j && now - it.work.t0 < WORK_MS) {
-      // Working hop: up stretched, down onto a squash (dust), back to shape
-      const k = (now - it.work.t0) / WORK_MS;
-      const i = k < WORK_KEYS[1][0] ? 0 : k < WORK_KEYS[2][0] ? 1 : 2;
-      const [k0, l0, x0, y0] = WORK_KEYS[i];
-      const [k1, l1, x1, y1] = WORK_KEYS[i + 1];
-      const t = (k - k0) / (k1 - k0);
-      const e = i === 1 ? t * t : 1 - (1 - t) * (1 - t);
-      lift = MathUtils.lerp(l0, l1, e);
-      sx = MathUtils.lerp(x0, x1, e);
-      sy = MathUtils.lerp(y0, y1, e);
-      foot = FEET * it.size * (1 - sy);
-      if (i === 2 && !it.work.dust) {
-        it.work.dust = true;
-        [-1, 1].forEach((s) => puff(it.x + s * 8, it.y + FEET * it.size - 4, s * 70, -12, 4));
+    } else if (it.trick && j && now - it.trick.t0 < TRICK_MS) {
+      // Trick hop: the trick in the air (80% of the time), then down onto a
+      // squash with dust
+      const k = (now - it.trick.t0) / TRICK_MS;
+      if (k < 0.8) {
+        const a = k / 0.8;
+        const s = Math.sin(a * Math.PI);
+        const turn = (a < 0.5 ? 2 * a * a : 1 - 2 * (1 - a) * (1 - a)) * Math.PI * 2 * it.trick.dir;
+        lift = s * TRICK_LIFT * it.size;
+        sx = 1 - s * 0.08;
+        sy = 1 + s * 0.12;
+        if (it.trick.kind === 'spin') spin = turn;
+        else if (it.trick.kind === 'flip') flipX = turn;
+        else if (it.trick.kind === 'twirl') twirlY = turn;
+        else {
+          // star jump: wide, rays out
+          sx = 1 + s * 0.3;
+          sy = 1 - s * 0.12;
+          flick = 1 + s * 0.7;
+        }
+      } else {
+        const q = Math.sin(((k - 0.8) / 0.2) * Math.PI);
+        sx = 1 + q * 0.16;
+        sy = 1 - q * 0.16;
+        foot = FEET * it.size * (1 - sy);
+        if (!it.trick.dust) {
+          it.trick.dust = true;
+          [-1, 1].forEach((d) => puff(it.x + d * 8, it.y + FEET * it.size - 4, d * 70, -12, 4));
+        }
       }
-    } else if (it.work) it.work = null;
+    } else if (it.trick) it.trick = null;
     if (it.laugh && j) {
       // Laugh: three giggles, rays flicking, a little shake
       const k = Math.min(1, (now - it.laugh) / LAUGH_MS);
@@ -1798,6 +1975,15 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
       flick = 1 + Math.max(0, g) * 0.55;
       it.g.rotation.z += Math.sin(k * Math.PI * 10) * 0.08 * (1 - k);
     }
+    // Teasing the parked car: a quick flick of its rays once it has hopped away
+    if (it.flickAt && now >= it.flickAt) {
+      const k = (now - it.flickAt) / 500;
+      if (k >= 1 || !j) it.flickAt = 0;
+      else flick = Math.max(flick, 1 + Math.max(0, Math.sin(k * Math.PI * 4)) * 0.55);
+    }
+    it.g.rotation.z += spin;
+    it.g.rotation.x = flipX;
+    it.g.rotation.y = twirlY;
     for (const r of it.g.userData.rays) r.scale.y = flick;
     it.drawY = it.y + bob - lift + foot;
     toWorld(it.x, it.drawY, wp);
@@ -1808,8 +1994,17 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     const open = j ? elasticOut(Math.min(1, (now - it.wokeAt) / 450)) : 1;
     if (now > it.blinkAt + 130) it.blinkAt = now + 2600 + Math.random() * 2400;
     const blink = it.laugh ? 0.3 : j && now > it.blinkAt ? 0.12 : 1; // laughing: eyes squeezed
-    it.eyes[0].scale.set(0.03 * open, 0.042 * open * blink, 0.012);
-    it.eyes[1].scale.set(0.03 * open, 0.042 * open * (now < it.winkUntil ? 0.15 : blink), 0.012);
+    const wide = now < it.wideUntil ? 1.45 : 1; // the car just parked
+    // Keeps an eye on the car: both eyes shift toward it
+    const lx = car.x - it.x;
+    const ly = car.y - it.drawY;
+    const ld = Math.hypot(lx, ly) || 1;
+    const ease = j ? 1 - Math.exp(-6 * dt) : 1;
+    it.look[0] = MathUtils.lerp(it.look[0], (lx / ld) * 0.035, ease);
+    it.look[1] = MathUtils.lerp(it.look[1], (-ly / ld) * 0.03, ease);
+    it.eyes.forEach((e, k) => e.position.set((k ? 0.16 : -0.16) + it.look[0], 0.15 + it.look[1], 0.235));
+    it.eyes[0].scale.set(0.03 * open * wide, 0.042 * open * wide * blink, 0.012);
+    it.eyes[1].scale.set(0.03 * open * wide, 0.042 * open * wide * (now < it.winkUntil ? 0.15 : blink), 0.012);
   }
   function draw(now, dt) {
     const j = juicy();
@@ -1866,13 +2061,6 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
       const below = runaway.drawY - up - span.offsetHeight < 8;
       sayEl.classList.toggle('is-below', below);
       sayEl.style.transform = `translate(${MathUtils.clamp(runaway.x, w, W - w).toFixed(1)}px, ${(below ? runaway.drawY + FEET * runaway.size + 12 : runaway.drawY - up).toFixed(1)}px)`;
-    }
-    // Shout over (before the first catch: back to the how-to-play line)
-    if (shoutUntil && now > shoutUntil) {
-      bubble.classList.remove('is-on');
-      if (howTo) bubble.firstChild.textContent = 'Drive me to an idea';
-      car.restAt = now;
-      shoutUntil = 0;
     }
     ideas = ideas.filter((it) => {
       if (it.gone && it.pop < 0.02 && now - it.goneAt > 400) {
@@ -1938,7 +2126,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     const settled = Math.abs(car.pop - car.popTarget) < 0.002 && Math.abs(car.popV) < 0.01 && Math.abs(car.squash) < 0.002 && Math.abs(car.squashV) < 0.01 && Math.abs(car.roll) < 0.002;
     const idle =
       !(hostR.bottom > 0 && hostR.top < innerHeight) && !(runaway && (runaway.hop || (runaway.y > -80 && runaway.y < H + 80 && runaway.x > -80 && runaway.x < W + 80))) &&
-      !puffs.length && !rings.length && !marks[0].length && !marks[1].length && !held.size && !grab.go && !camAt && !shoutUntil && !sayUntil &&
+      !puffs.length && !rings.length && !marks[0].length && !marks[1].length && !held.size && !grab.go && !camAt && !sayUntil &&
       Math.hypot(car.vx, car.vy) < 1 && settled;
     raf = !document.hidden && !idle ? requestAnimationFrame(frame) : 0;
   }
@@ -1959,7 +2147,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
 
   // Test hook: ?debug exposes the game state (headless tests only)
   if (new URLSearchParams(location.search).has('debug')) {
-    window.__landing = { car, ideas: () => ideas, walls: () => walls, area: () => area, canvas, fxCounts: () => [marks[0].length + marks[1].length, puffs.length, rings.length], goal: () => dragGoal(), runaway: () => runaway, firstRound: () => firstRound, howTo: () => howTo, caught: () => caught, off: () => off, land: () => land, layer, grab, played: () => played, asleep: () => !raf, spots: () => guideSpots(runaway), said: () => (sayUntil ? sayEl.textContent : ''), guideTo: (el) => runaway?.guide && hopOnto(runaway, el, performance.now()) && (runaway.why = 'test'), backPlace: () => backPlace(runaway, performance.now()), scrollRest: () => ({ scrollAt, scrollDir, raf }), dodgeR };
+    window.__landing = { car, ideas: () => ideas, walls: () => walls, area: () => area, canvas, fxCounts: () => [marks[0].length + marks[1].length, puffs.length, rings.length], goal: () => dragGoal(), runaway: () => runaway, firstRound: () => firstRound, howTo: () => howTo, caught: () => caught, off: () => off, land: () => land, layer, grab, played: () => played, asleep: () => !raf, spots: () => guideSpots(runaway), said: () => (sayUntil ? sayEl.textContent : ''), guideTo: (el) => runaway?.guide && hopOnto(runaway, el, performance.now()) && (runaway.why = 'test'), backPlace: () => backPlace(runaway, performance.now()), scrollRest: () => ({ scrollAt, scrollDir, raf }), dodgeR, parkPlace: (top) => parkPlace(top), coming: () => coming, lastPark: () => lastPark, onCar: (x, y) => onCar(x, y), carLen: () => carLen };
   }
 
   return {
@@ -1974,7 +2162,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
       car.h = -Math.PI / 2;
       if (juicy()) car.popV = 6;
       setTimeout(spawnWave, 350);
-      // How to play: over the car whenever it rests (also carries the "Hey! Come back!" shout)
+      // How to play: over the car whenever it rests, until the first catch (the car's one line)
       if (!bubble) {
         bubble = document.createElement('span');
         bubble.className = 'car-bubble';

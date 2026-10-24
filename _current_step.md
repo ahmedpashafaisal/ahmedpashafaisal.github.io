@@ -1,17 +1,12 @@
 # Current step (temp)
 
-G2 + G3 committed, feel check pending. Ahmed resumes in a fresh session.
+G4 done and committed 24 Oct. Next step not picked yet: G6 (red accents, picture first) or G5 (other pages).
 
 ## Open
-- Feel check of G2 + G3 on http://localhost:5173 (`npm run dev`); then mark both ✅ DONE.
-- Final build tests all green (G3 60/60 × 3, g2 25/25 × 3, g1, S3a, S1 × 2). Logs `h*-*.log` in `/private/tmp/claude-501/-Users-ahmedpashafaisal-Documents-Work-GameJob--DevPortfolio-ahmedpashafaisal-github-io/2e38467f-de2a-4772-92cf-19827cecdf2b/scratchpad/` (may be gone).
-- `refs/` (87 MB Kie images) not committed: Ahmed decides (git or local).
-- Push `lively`: not asked.
-
-## State
-- G1 `3404b0c`, G2 `8dd6a94`, G3 committed 23 Oct. Nothing pushed since `a92ae9c`.
+- Clean regression run after the G4 commit (results in chat).
+- Building-site play extras offered: cone balance, crane brick ride, cracked screen peek.
+- Other pages (About, game pages, 404) still use the old car lines: G5.
 
 ## Tests
-- Suites `g1.mjs`, `g2.mjs`, `g3.mjs`, `s3a-g1.mjs`, `s1.mjs` live in the old session scratchpad (path above); copy them over.
-- `NOGL=1` = no WebGL; `BASE=http://127.0.0.1:4173` = frozen build served by `vite preview --config <scratchpad>/preview.config.mjs --outDir <scratchpad>/build-g3`.
-- Test hooks (`?debug`): `__landing.guideTo(el)`, `__landing.backPlace()`.
+- Suites in this session's scratchpad (`/private/tmp/claude-501/-Users-ahmedpashafaisal-Documents-Work-GameJob--DevPortfolio-ahmedpashafaisal-github-io/10a9b6ba-73fc-4806-b6c0-51dca79fd97b/scratchpad/`): g4, g1, g2, g3, s3a-g1, s1 (WASD driving, quiet car, tricks).
+- Frozen build: `npm run build -- --outDir <scratchpad>/build-g4 --emptyOutDir`, then `npx vite preview --config <scratchpad>/preview.config.mjs --outDir <scratchpad>/build-g4`; run with `BASE=http://127.0.0.1:4173`. `NOGL=1` = no WebGL.

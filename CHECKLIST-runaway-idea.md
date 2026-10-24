@@ -2,12 +2,15 @@
 Read first in every session. Plan: [PLAYBOOK-runaway-idea.md](PLAYBOOK-runaway-idea.md).
 Rule: a finished step's Status is `✅ DONE`. Green check on every done row, never plain DONE.
 
-## RESUME HERE (23 Oct 2026, late night)
-- **Next: Ahmed's feel check of G2 + G3** on http://localhost:5173 (`npm run dev`). Both committed (G3 on 23 Oct, late night). G1 ✅ `3404b0c`. Nothing pushed since `a92ae9c`.
-- G3 as built, tests, known gaps: [PLAN-guide-bulb-cases.md](PLAN-guide-bulb-cases.md#g3-as-built-23-oct).
+## RESUME HERE (24 Oct 2026)
+- **Next: Ahmed picks G6 (red accents, picture first) or G5 (other pages: same bulb, car reference, new character lines).** G4 ✅ committed and pushed 24 Oct.
+- Characters (24 Oct): car = Ahmed's working side (visitor drives it), says only "Drive me to an idea"; bulb = his curious side, plays and teases. [Playbook](PLAYBOOK-runaway-idea.md#cast-and-voices).
+- Open from G4: building-site play extras (cone, crane brick, cracked screen); other pages still have the old car lines (G5).
+- G2 + G3 ✅ approved 24 Oct ("it feels ok"). G1 ✅ `3404b0c`. `lively` pushed up to `3fc1f6a` (24 Oct).
+- G4 as built, tests: [PLAN-guide-bulb-cases.md](PLAN-guide-bulb-cases.md#g4-as-built-24-oct).
 - Tests to rebuild if the scratchpad is gone: `g1`, `g2`, `g3`, `s3a`, `s1` suites (list in the cases file).
 - **Start with [PLAN-guide-bulb.md](PLAN-guide-bulb.md)** (the bulb as the site's guide; steps G0 to G6). Bugs and corner cases: [PLAN-guide-bulb-cases.md](PLAN-guide-bulb-cases.md).
-- Branch `lively` (from `main`). Pushed up to `a92ae9c`; `52e7cb5` (D3) and the L1 commit after it are local only. Live site untouched: deploy runs only on `main`. Ask Ahmed before each commit and push.
+- Branch `lively` (from `main`). Pushed up to `3fc1f6a` (24 Oct). Live site untouched: deploy runs only on `main`. Ask Ahmed before each commit and push.
 - Done: 1–5c. Bulb twin + 20 motions + runaway eyes (`src/js/bulb.js`, `src/styles/bulb.css`); landing joke in `src/js/hero3d.js`; resting in `src/js/rest.js` + `src/styles/rest.css`.
 - 5a "Glass" look was built and reverted: black shadows stay (see `CHECKLIST-redesign.md` taste rules).
 - Landing now: one round of 6 (4 or 2 on short screens), last bulb left wakes up and dodges, car lines "What the…!" / "Hold still!" / "Seriously?!" / "Hey! Come back!", comes back after 6 s ("There you are!"). Lines are drafts Ahmed may rewrite.
@@ -16,12 +19,12 @@ Rule: a finished step's Status is `✅ DONE`. Green check on every done row, nev
 - Step 5c approved 22 Oct, committed `a92ae9c` and pushed to `origin/lively`. Skip dropped (Ahmed: nothing blocks).
 - Phone test: `npm run dev -- --host` → open the Network URL on the phone (same Wi-Fi).
 - Step 6 re-planned: map (6a) and islands (D1) dropped; the deck became shelves (D2–D3). Featured kept.
-- **Forest world ON HOLD (23 Oct, Ahmed).** [PLAN-forest-world.md](PLAN-forest-world.md) parked as is. Fox questions left open: which route (3D from 1b in Meshy/Tripo, or 2D frames by Ahmed); who makes the GLB; Kie images (80 MB, `refs/forest-style/raw/`) into git or kept local. Fox cut-outs for Meshy: `refs/fox-meshy/`.
+- **Forest world ON HOLD (23 Oct, Ahmed).** [PLAN-forest-world.md](PLAN-forest-world.md) parked as is. Fox questions left open: which route (3D from 1b in Meshy/Tripo, or 2D frames by Ahmed); who makes the GLB; Kie images stay local: `refs/` is never committed (Ahmed, 24 Oct). Fox cut-outs for Meshy: `refs/fox-meshy/`.
 - **Deck done (23 Oct).** Ahmed: "make the existing game deck more interesting and interactive". Islands (D1) dropped; D2 locked H Adaptive shelves; D3 shelves, juice and bulb committed `52e7cb5`; L1 landing fixes committed right after it.
 - **Car + slots (23 Oct, late).** Ahmed: ink car goes (scrollbar car stays); one 3D car as decoration that follows you section to section and parks; "some reference to every page"; toy look, CC0 models OK; empty slots under construction, yellow-black, bulb hops with scroll. Steps S1–S3 below.
 - **S1 done (23 Oct), committed `0e55b2b`. S2 done: car A in red.** S3a (car A on the landing, WASD / arrow keys) done, committed `4e422c7`. S3b chase into the page committed as work in progress; Ahmed found gaps (two bulbs, bulb back to the top, cannot drive back up, clicks on text). Replaced by the guide plan: G0 to G6.
 - Decided 23 Oct: red as subtle accents elsewhere on the site (later step); today's light stays, plus a subtle headlight glow on the ground in dark mode (in S3b); no key hint.
-- Open: placeholder copy for him to rewrite: subline "Every game, shelf by shelf." (`site/index.html`); slot "Next game", "Under construction"; working lines "Almost done.", "Don't look yet!", "Five more minutes.", "It worked yesterday.", "Nearly there." (`src/js/shelves.js`, `src/js/shelfbulb.js`). Push `lively`: not asked yet.
+- Open: placeholder copy for him to rewrite: subline "Every game, shelf by shelf." (`site/index.html`); slot "Next game", "Under construction"; working lines "Almost done.", "Don't look yet!", "Five more minutes.", "It worked yesterday.", "Nearly there." (`src/js/shelves.js`, `src/js/shelfbulb.js`).
 
 | # | Step | Status | Evidence | Approved |
 |---|---|---|---|---|
@@ -49,9 +52,9 @@ Rule: a finished step's Status is `✅ DONE`. Green check on every done row, nev
 | S3c | Car parks in sections | Moved to G4 | | |
 | G0 | Commit S3b as work in progress | ✅ DONE | Ahmed: "commit S3b" | 23 Oct |
 | G1 | One game layer, car anywhere | ✅ DONE | 45/45 × 3, S3a 14/14, S1 33/33, 0 errors, 3D chunk −1 KB gzip. [As built + tests](PLAN-guide-bulb-cases.md#g1-as-built-23-oct). Ahmed tested on a tunnel link: "Okay commit" | 23 Oct |
-| G2 | One guide bulb on the home page | COMMITTED, feel check pending (with G3) | G2 25/25, G1 45/45, S1 30/33 (phone shelf beat: G3), 0 errors, +0.8 KB gzip. [As built + tests](PLAN-guide-bulb-cases.md#g2-as-built-23-oct) | |
-| G3 | Shelf beats moved onto the guide | COMMITTED, feel check pending (with G2) | Reading A (Ahmed: "Go A"). Round 2 ("now it just keeps dodging"; "a guide wouldn't go back"): forward only, out of sight, back after 6 s, follows back up. Round 3 ("not running away anymore" at the bottom; "everytime it just appears on the linkedin link"): side exit at the page end; fresh free place and random edge on every return; parked car counts; phone peek. Final build: G3 60/60 × 3, g2 25/25 × 3, g1 45/45 × 2, S3a 14/14 × 2, S1 without WebGL 33/33 × 2 (one more run lost to a browser page crash, no check failed), 0 errors. 3D chunk +2.8 KB gzip. [As built + tests](PLAN-guide-bulb-cases.md#g3-as-built-23-oct) | |
-| G4 | Car comes to you and parks | TODO | [details](PLAN-guide-bulb-cases.md#g4-car-comes-to-you-and-parks-old-s3c) | |
+| G2 | One guide bulb on the home page | ✅ DONE | G2 25/25, G1 45/45, S1 30/33 (phone shelf beat: G3), 0 errors, +0.8 KB gzip. [As built + tests](PLAN-guide-bulb-cases.md#g2-as-built-23-oct) | 24 Oct |
+| G3 | Shelf beats moved onto the guide | ✅ DONE | Reading A (Ahmed: "Go A"). Round 2 ("now it just keeps dodging"; "a guide wouldn't go back"): forward only, out of sight, back after 6 s, follows back up. Round 3 ("not running away anymore" at the bottom; "everytime it just appears on the linkedin link"): side exit at the page end; fresh free place and random edge on every return; parked car counts; phone peek. Final build: G3 60/60 × 3, g2 25/25 × 3, g1 45/45 × 2, S3a 14/14 × 2, S1 without WebGL 33/33 × 2 (one more run lost to a browser page crash, no check failed), 0 errors. 3D chunk +2.8 KB gzip. [As built + tests](PLAN-guide-bulb-cases.md#g3-as-built-23-oct) | 24 Oct |
+| G4 | Car comes to you and parks | ✅ DONE | Round 1 (Ahmed: "too close to the bulb"): parks far; characters decided (car = working side, bulb = curious side); car says only "Drive me to an idea"; bulb plays in sites; tease when the car parks; arrows only scroll. Ahmed: "done, commit and push". [As built + tests](PLAN-guide-bulb-cases.md#g4-as-built-24-oct) | 24 Oct |
 | G5 | Other pages: same bulb, car reference | Later | [details](PLAN-guide-bulb-cases.md#g5-other-pages-later) | |
 | G6 | Red accents | TODO | [details](PLAN-guide-bulb-cases.md#g6-red-accents) | |
 | 6b | Deck map | ✅ DONE (replaced by shelves) | Map look rejected in 6a; islands dropped in D1; shelves built in D2–D3 | 23 Oct |

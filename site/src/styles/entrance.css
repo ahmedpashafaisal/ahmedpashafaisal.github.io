@@ -197,6 +197,10 @@ html.pre-entry {
   z-index: 15;
   overflow: hidden;
   pointer-events: none;
+  /* Never eased: base.css's reduced-motion rule would give each move a 1 ms
+     transition, the layer would measure where it was, and the car would be
+     held at the top of the screen */
+  transition: none !important;
 }
 
 .game-layer .hero-3d,

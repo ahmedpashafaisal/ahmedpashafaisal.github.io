@@ -198,6 +198,31 @@ Plan: [PLAN-guide-bulb.md](PLAN-guide-bulb.md).
 - Click the car: honk, bounce, short shout.
 - Never pulls the screen (auto drives do not move the camera: `grab.auto`).
 
+#### G4 as built (24 Oct)
+| Part | What |
+|---|---|
+| When | Scroll rested 0.6 s (`COME_MS`), car off the screen, nobody driving. Once per scroll |
+| Way in | Jumps to just past the nearest edge (top: scrolled down; bottom: scrolled up), drives straight in |
+| Screen | Never follows a trip the car drives by itself |
+| Parks | Random free place: off text, links, pictures, cards, corner buttons, the bottom bar, landing bulbs |
+| Near | The guide if it shows (never within its dodge reach, never with it in the way in); else the first heading on screen; else anywhere free |
+| Fresh | Never within 160 px of the last place |
+| Landing | Back to its spot under the button (as before) |
+| Nothing free | Stays away until the next scroll (phones, now and then) |
+| Guide | Does not run from the car while it drives itself; no free catches on the landing |
+| Far | Parks far from the guide: the farthest free places, at least `farR` (desktop 360 px, phone 300). A peeking guide counts. None that far: it stays away until the next scroll (round 1 feedback: "The car is too close to the bulb when it parks after scrolling, defeats the story") |
+| Guide returns | Keep the same gap from the car and from where it is driving to |
+| Guide notices | Car parks with the guide on the screen: eyes wide, a hop further away (60 to 130 px, free place), a wink, a flick of its rays. In a site, on a cover or with no room: it winks where it is |
+| Eyes | Always glance toward the car |
+| Tap far away | Car off the screen: it comes in from the nearest edge, straight to the tap (fixes the G3 known gap) |
+| Click or tap it | Honk (two beeps), bounce, smoke from the tail. No words |
+| Lines (24 Oct, characters) | Car: only "Drive me to an idea". Cut: "What the…!", "Hold still!", "Seriously?!", "Hey! Come back!", "Not again!", "Wait up!", "There you are!", the pointer's "Hold still!", the honk lines. Bulb: "Nope, not a game yet." and "So close!" (now the bulb's, teasing). Work lines cut |
+| Building sites | It plays: a trick hop per 120 px of scroll (spin, flip, twirl, star jump; never the same twice running), dust. Scroll during a trick counts toward the next |
+| Over a link or picture | The click goes to the link or picture, no honk |
+| Keys | Arrows only scroll, on the landing too (Ahmed, 24 Oct: "make the car move only through WASD and Mouse. Keep arrow for scrolling only"). WASD while the car is on the screen |
+| Creep | Below the landing the guide now creeps only onto free places (with the car on the screen more often, it crept over covers) |
+| Fixed on the way | Reduced motion: base.css gave the layer a 1 ms transition, so it measured a frame late and the car stuck to the top of the screen (since G1). `.game-layer { transition: none !important }` |
+
 ### G5: other pages (later)
 - Same bulb story on About, game pages, 404 (SVG twin, no three.js).
 - Car reference: pre-rendered picture or SVG (weight).
@@ -239,6 +264,7 @@ Plan: [PLAN-guide-bulb.md](PLAN-guide-bulb.md).
 | Dark | Headlights, colours |
 
 ### Test lessons (from S1 to S3b)
+- After a scroll, `snap.js` may glide the page for 650 ms: wait for the rest before checking anything that waits for the scroll to rest.
 - Scroll the page only (`window.scrollBy`), never `scrollIntoView`: it slides the Mobile shelf too.
 - `snap.js` moves the page after a scroll: re-check the target is on screen before acting.
 - Clip screenshots with `captureBeyondViewport: false` and page coordinates.

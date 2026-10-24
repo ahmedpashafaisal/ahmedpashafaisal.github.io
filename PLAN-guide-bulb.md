@@ -81,7 +81,7 @@ Older decisions and story: [PLAYBOOK-runaway-idea.md](PLAYBOOK-runaway-idea.md).
 | G1 | One game layer, car anywhere | B3 | ½ day |
 | G2 | One guide bulb on the home page | B4, part of B1 | ½–1 day |
 | G3 | Shelf beats moved onto the guide | B1, B2 | ½ day |
-| G4 | Car comes to you and parks (old S3c) | | ½ day |
+| G4 | Car comes to you and parks (old S3c) | Built 24 Oct, feel check pending | ½ day |
 | G5 | Other pages: same bulb, car reference | | later |
 | G6 | Red accents on the site | | 2–3 h |
 
@@ -91,7 +91,7 @@ Details per step: [PLAN-guide-bulb-cases.md](PLAN-guide-bulb-cases.md#steps-in-d
 | # | Question | Decided | Why | Before |
 |---|---|---|---|---|
 | D1 | Click on text: drive, or keep text selection? | Click drives, drag selects | Both work | G1 |
-| D2 | Arrow keys before the visitor has driven? | Landing: arrows drive (as S3a). Below it: arrows scroll until the first drive. WASD always drives | Keyboard readers keep scrolling; approved landing beat kept | G1 |
+| D2 | Arrow keys before the visitor has driven? | Changed 24 Oct (Ahmed: "make the car move only through WASD and Mouse. Keep arrow for scrolling only"): arrows only scroll, everywhere. Car: WASD, mouse, taps | Keyboard readers keep scrolling | G1, G4 |
 | D3 | Bulb drawn in 3D or as the SVG twin on the home page? | 3D on the whole home page; SVG on other pages | One bulb by construction | G2 |
 | D4 | Bulb spots | Landing spots, headings, building sites, footer line | Guides to real content. Watch: long gaps on phones (covers could be spots) | G2 |
 | D5 | Lines when it hops ahead | Keep "Not again!", "Wait up!", "Hey! Come back!" as drafts | Ahmed rewrites later | G2 |

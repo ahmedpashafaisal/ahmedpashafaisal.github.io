@@ -124,6 +124,14 @@ export const sfx = {
     tone({ from: f, dur: 0.07, type: 'square', gain: 0.07 });
     tone({ from: f * 1.5, dur: 0.16, type: 'square', gain: 0.07, delay: 0.06 });
   },
+  // Toy car horn: two quick nasal beeps, two notes at once
+  honk() {
+    if (!ready()) return;
+    [0, 0.17].forEach((delay) => {
+      tone({ from: vary(415, 0.03), to: 400, dur: 0.13, type: 'square', gain: 0.09, delay });
+      tone({ from: vary(523, 0.03), to: 505, dur: 0.13, type: 'square', gain: 0.07, delay });
+    });
+  },
   // Counter tick
   tick() {
     if (!ready()) return;

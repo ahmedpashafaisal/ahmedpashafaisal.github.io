@@ -53,10 +53,17 @@ Core (never said on the site):
 - It only comes close when you stop chasing.
 
 ### Cast and voices
-| Who | Speaks how |
-|---|---|
-| Car = visitor | Short shouts ("Hey! Come back!", "So close!", "There you are!") plus the how-to-play line "Drive me to an idea" |
-| Runaway bulb | Mostly acts; a few cheeky lines |
+Decided 24 Oct (Ahmed): two sides of Ahmed. Never said on the site: subtle.
+
+| Who | Is | Acts | Speaks |
+|---|---|---|---|
+| Car | Ahmed's working side: productive, serious, always after the next idea. The visitor drives it | Drives with purpose, parks neatly, keeps up | One line only: "Drive me to an idea" |
+| Bulb | Ahmed's curious side: wanders, does things just for fun | Wanders, peeks, plays, teases the car | Short, cheeky, rare |
+
+- Ahmed's words: "one is always working and trying to find new ideas, being productive, in a way serious. The other one always curious, wanders around, do staff that is not necessary or just for fun."
+- The bulb teasing the car is Ahmed teasing himself ("What's wrong with me teasing myself?").
+- Building sites: the bulb plays there, it does not work ("Can play").
+- Was (22 Oct): car = visitor with short shouts; bulb mostly acts.
 
 ### How the bulb shows feeling
 | Channel | Means |
@@ -71,20 +78,20 @@ Core (never said on the site):
 ### Beats (1–2 s each, never block; bulb exits toward the next section)
 | Page | Beat |
 |---|---|
-| Landing | Catch the bulbs in any order; the last one left opens its eyes and dodges (car: "What the…!", "Hold still!", "Seriously?!"), then hops off toward the games ("Hey! Come back!"); 6 s later it hops back in ("There you are!") |
+| Landing | Catch the bulbs in any order; the last one left opens its eyes and dodges (wink, no words), then hops off toward the games; 6 s later it hops back in. Car lines cut 24 Oct (car says only "Drive me to an idea") |
 | Featured: Wildlings | Bulb blasted across the banner by recoil |
 | Featured: Magic Mineral | Bulb dims to hide in the dark cave shot; its glow gives it away |
 | Featured: Storm Alert | Quiet: sits by the lit window, soft glow, no gag |
-| Deck (shelves) | Step D3 decides. Was: one card wiggles; flip it: bulb pops out, "Nope, not a game yet.", hops into another card |
+| Deck (shelves) | Built in G3: building sites, perches, slides. Since 24 Oct it plays in the sites (trick hops: spin, flip, twirl, star jump); reached there: "Nope, not a game yet." |
 | Game pages (shared) | Bulb peeks at the screenshots, then ducks behind "Next" |
 | Storm Alert page | Quiet: bulb sits still, soft glow |
-| About | Bulb hovers over the avatar's head. Car: "There you are!" Rays flick, it hops off |
+| About | Bulb hovers over the avatar's head. Rays flick, it hops off (car line cut 24 Oct) |
 | About: thesis section | Quiet: no gag |
 | 404 | Bulb sits in the middle: "You found my hiding spot." |
 
 ### Rest when you rest (the end that isn't one)
 - Visitor still for ~4 s, any page: bulb stops, settles, slowly edges closer.
-- Visitor reaches for it: it hops away by a hair. Car: "So close!"
+- Visitor reaches for it: it hops away by a hair. Bulb (teasing): "So close!" (was the car's line until 24 Oct)
 - Works wherever anyone leaves.
 
 ### Return visits
