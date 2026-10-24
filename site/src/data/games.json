@@ -620,6 +620,47 @@
       ]
     },
     {
+      "slug": "trapped",
+      "title": "Trapped",
+      "rarity": "common",
+      "year": 2023,
+      "status": "Course project (MSc, Tallinn University)",
+      "genre": "Interactive fiction",
+      "platforms": [
+        "Web"
+      ],
+      "builtWith": [
+        "Twine"
+      ],
+      "role": "Writing and design",
+      "roleTags": [
+        "Writing",
+        "Narrative design",
+        "Branching story"
+      ],
+      "blurb": "A cave, a father who never lets you leave, and one question: how far will you go?",
+      "links": {
+        "itch": "https://pashafaisal.itch.io/trapped"
+      },
+      "media": {
+        "cover": "/img/cards/trapped.jpg",
+        "screenshots": 3,
+        "youtube": null,
+        "artNote": "card = 16:9 render of the itch banner art (art-src/card.html); 1-3 = game screenshots (24 Oct)",
+        "card": "/img/cards/trapped.jpg",
+        "shots": [
+          "/img/shots/trapped/1.jpg",
+          "/img/shots/trapped/2.jpg",
+          "/img/shots/trapped/3.jpg"
+        ],
+        "orientation": "landscape"
+      },
+      "categories": [
+        "gamification"
+      ],
+      "description": "You are Ti. You live in a cave with your father, Vigor, and you are never allowed to leave. How far will you go? A short interactive story with two endings, made with Twine for the Interactive Storytelling course in the Digital Learning Games programme at Tallinn University."
+    },
+    {
       "slug": "after-the-end",
       "title": "After the End",
       "rarity": "common",
