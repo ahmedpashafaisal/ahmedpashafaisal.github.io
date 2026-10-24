@@ -4,7 +4,7 @@ G2 + G3 committed, feel check pending. Ahmed resumes in a fresh session.
 
 ## Open
 - Feel check of G2 + G3 on http://localhost:5173 (`npm run dev`); then mark both ✅ DONE.
-- Repeat test runs of the final build were running when G3 was committed (first pass all green). Logs: `h2-*`, `h3-*` in `/private/tmp/claude-501/-Users-ahmedpashafaisal-Documents-Work-GameJob--DevPortfolio-ahmedpashafaisal-github-io/2e38467f-de2a-4772-92cf-19827cecdf2b/scratchpad/` (may be gone).
+- Final build tests all green (G3 60/60 × 3, g2 25/25 × 3, g1, S3a, S1 × 2). Logs `h*-*.log` in `/private/tmp/claude-501/-Users-ahmedpashafaisal-Documents-Work-GameJob--DevPortfolio-ahmedpashafaisal-github-io/2e38467f-de2a-4772-92cf-19827cecdf2b/scratchpad/` (may be gone).
 - `refs/` (87 MB Kie images) not committed: Ahmed decides (git or local).
 - Push `lively`: not asked.
 

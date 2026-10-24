@@ -179,6 +179,16 @@ Plan: [PLAN-guide-bulb.md](PLAN-guide-bulb.md).
 | Test hooks | `__landing.guideTo(el)` puts the guide on a site or cover; `__landing.backPlace()` (`?debug` only) |
 | Known | A tap far down the page: the car drives 6 s and can stop short (G4); tests tap again, as a visitor would |
 
+#### G3 round 3 tests (frozen build)
+| Suite | Result |
+|---|---|
+| `g3.mjs`: + end part (side exit, back fresh each time, different place and way in, never on text or links, parked car counts) | 60/60, 3 runs |
+| `g2.mjs` (phone tap: tap again when the car stops short) | 25/25, 3 runs |
+| `g1.mjs` | 45/45, 2 runs |
+| `s3a-g1.mjs` | 14/14, 2 runs |
+| `s1.mjs` without WebGL | 33/33, 2 runs (one more run lost to a browser page crash) |
+| Weight, 3D chunk gzip | 142.98 → 145.79 KB (all of G3) |
+
 #### G3 known (not fixed)
 - Perched on the last cover of the sliding shelf, the bulb's glow overlaps the shelf's arrow buttons (as S1); clicks still reach them.
 - Phone: a tap far down the page sends the car only 6 s, so it can stop above the screen (G4: car comes to you).
