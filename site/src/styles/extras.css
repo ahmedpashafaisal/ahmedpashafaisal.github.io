@@ -112,6 +112,12 @@
   background: var(--surface);
 }
 
+/* On the plain surface the text follows the theme; pressed, it turns lime
+   and keeps the dark text every lime button has (theme.css) */
+.gameover__no:not(.is-pressed) {
+  color: var(--ink);
+}
+
 /* Clickable name (js/namefx.js): letters hop one by one */
 .name__word {
   display: inline-block;
