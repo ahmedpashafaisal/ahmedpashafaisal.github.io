@@ -14,6 +14,48 @@
   text-decoration: none;
 }
 
+/* The red car (the landing's, js/hero3d.js) parked beside the back link,
+   nose toward "All games": the working side waits to drive you back */
+.detail__top {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.detail__car {
+  display: block;
+  width: 84px;
+  height: 56px;
+  margin: -12px 0;
+}
+
+.detail__car img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.detail__car:hover img {
+  animation: car-rev 0.42s ease-in-out;
+}
+
+@keyframes car-rev {
+  0%, 100% { transform: none; }
+  25% { transform: translateX(-2px) rotate(-2deg); }
+  75% { transform: translateX(2px) rotate(1deg); }
+}
+
+@media (max-width: 640px) {
+  .detail__car {
+    width: 66px;
+    height: 44px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .detail__car:hover img { animation: none; }
+}
+
 .page__label {
   margin: 0;
   font: 700 0.78rem/1 var(--font-body);
@@ -471,6 +513,7 @@
 @media (max-width: 560px) {
   .page__navrow {
     grid-template-columns: minmax(0, 1fr);
+    row-gap: 2.75rem; /* room for the bulb peeking over Next (js/pagebulb.js), clear of Previous */
   }
 }
 

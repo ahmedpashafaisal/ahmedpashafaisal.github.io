@@ -228,6 +228,24 @@ Plan: [PLAN-guide-bulb.md](PLAN-guide-bulb.md).
 - Car reference: pre-rendered picture or SVG (weight).
 - The ending: catch after all pages, or it comes to you. Talk first.
 
+#### G5 + 7 as built (24 Oct)
+Ahmed: "Go G5 + 7"; layout kept, beats only; car parked by "← All games".
+
+| Part | What |
+|---|---|
+| Bulb | SVG twin with eyes (`bulb.js`), 56 px (40 under 640 px). `src/js/pagebulb.js`, `src/styles/pagebulb.css`; init in `detail-main.js` |
+| Frame beat | Frame 60% in view, 0.9 s after load: rises from behind the frame's top edge (right 14%), looks about; next screenshot (auto or thumbnail): wide eyes and a small hop; ducks. No next screenshot in 4.2 s: ducks anyway. Scrolled away: ducks at once. Once per page view |
+| Next beat | Next card 90% in view: peeks over its top edge (right end), eyes toward the card. Reach (mouse path within 60 px, tap within 80 px): ducks, comes up at the other end, winks. Never caught |
+| Quiet | `storm-alert`: sits still on the frame, glow breathes (4 s), no Next, no reactions |
+| Edges | A clip at the edge hides the part behind the frame or card; clicks pass through |
+| Skips | Reduced motion or scrolled past the frame before the beat: straight to Next (reduced: still) |
+| One bulb | `rest.js` stands down while a `.pagebulb` is on screen (same check as the shelf bulb) |
+| Car | `public/img/car-parked.webp` (3.9 KB, 240×160): the landing's car rendered top-down, nose left, by dev-only `site/car-render-test.html`. In `game-template.html` beside the back link (link to All games, hidden from screen readers). Hover: revs. 84×56 px (66×44 under 640 px) |
+| Phone fix | Under 560 px the Previous / Next gap is 2.75 rem: the peek had sat 16 px over Previous and a tap opened the previous game |
+| `bulb.js` | New export `look(el, eyes, dir)`: eyes without a motion |
+
+Tests (`g5.js`, session scratchpad): 29/29 × 3. Frame beat, wide eyes, duck; car beside the back link; Next peek; mouse-path reach dodges; Next card still opens the next game, whose frame beat plays; Storm Alert quiet, still, no Next bulb; phone dark: 40 px, clear of the car and of Previous, tap on its visible part dodges without leaving the page; reduced motion; fast scroll; rest stays away while the bulb shows; 0 errors.
+
 ### G6: red accents
 - Small red touches on the site so the car belongs (Ahmed: yes). Picture first.
 

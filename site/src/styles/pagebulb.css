@@ -1,0 +1,40 @@
+/* The runaway idea on game pages (js/pagebulb.js). Each spot sits on top of
+   an element's top edge; the clip hides whatever of the bulb is below that
+   edge, so it rises from behind the frame or the Next card. */
+.page__media,
+.page__nav--next {
+  position: relative;
+}
+
+.pagebulb {
+  position: absolute;
+  bottom: 100%;
+  z-index: 1;
+  width: var(--w);
+  aspect-ratio: 100 / 110;
+  margin-bottom: -2px; /* the edge is the frame's or card's ink border */
+  clip-path: inset(-100% -100% 0 -100%);
+  pointer-events: none;
+}
+
+.pagebulb--frame { right: 14%; }
+.pagebulb--next[data-side="1"] { right: 2.6rem; }
+.pagebulb--next[data-side="-1"] { left: 2.6rem; }
+
+.pagebulb__lift { transform: translateY(100%); }
+
+.pagebulb .bulb { display: block; }
+
+/* Quiet pages: sits still, the glow breathes slowly */
+.pagebulb--quiet .bulb__idle,
+.pagebulb--quiet .bulb__sway { animation: none; }
+.pagebulb--quiet .bulb__glow { animation: pagebulb-glow 4s ease-in-out infinite alternate; }
+
+@keyframes pagebulb-glow {
+  from { opacity: 0.2; }
+  to { opacity: 0.34; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pagebulb--quiet .bulb__glow { animation: none; }
+}

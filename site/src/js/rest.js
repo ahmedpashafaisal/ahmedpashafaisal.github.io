@@ -48,13 +48,13 @@ window.addEventListener(
 
 export const stillFor = () => performance.now() - lastInput;
 
-// The shelves' own runaway (shelfbulb.js) is the one on screen: no second one
-const shelfHolds = () => {
-  const b = document.querySelector('.shelf-bulb');
-  if (!b) return false;
-  const r = b.getBoundingClientRect();
-  return r.bottom > 0 && r.top < innerHeight;
-};
+// The shelves' own runaway (shelfbulb.js) or a game page's (pagebulb.js) is
+// the one on screen: no second one
+const shelfHolds = () =>
+  [...document.querySelectorAll('.shelf-bulb, .pagebulb')].some((b) => {
+    const r = b.getBoundingClientRect();
+    return r.bottom > 0 && r.top < innerHeight;
+  });
 
 // The landing's runaway is on screen (any part of the landing showing): one
 // runaway at a time

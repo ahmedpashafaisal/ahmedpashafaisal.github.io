@@ -25,7 +25,10 @@
 
   <!-- Generated from site/game-template.html by scripts/gen-pages.mjs; do not edit by hand -->
   <main class="detail" data-slug="{{slug}}">
-    <a class="chip detail__back" href="/#games">← All games</a>
+    <div class="detail__top">
+      <a class="chip detail__back" href="/#games">← All games</a>
+      <a class="detail__car" href="/#games" tabindex="-1" aria-hidden="true"><img src="/img/car-parked.webp" alt="" width="84" height="56" /></a>
+    </div>
     <noscript><h1>{{title}}</h1><p>{{description}}</p></noscript>
   </main>
 

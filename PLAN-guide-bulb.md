@@ -14,7 +14,8 @@ Older decisions and story: [PLAYBOOK-runaway-idea.md](PLAYBOOK-runaway-idea.md).
 | G4 car comes to you | ✅ Done, `44fc6cd` (pushed) |
 | G6 red accents | ✅ Done, `c3e6b5d` (not pushed) |
 | Characters | Car = Ahmed's working side, one line; bulb = his curious side. [Playbook](PLAYBOOK-runaway-idea.md#cast-and-voices) |
-| Next | Ahmed picks: G5, 6c Featured beats, 7 game pages, or 8 About, footer, 404 |
+| G5 + 7 game pages | ✅ Done 24 Oct |
+| Next | 8 About, footer, 404 (rest of G5) or 6c |
 
 ## Ahmed's words (23 Oct, feedback on S3b)
 - "let the car drive over the elements in the landing page / home section as well"
@@ -81,7 +82,7 @@ Older decisions and story: [PLAYBOOK-runaway-idea.md](PLAYBOOK-runaway-idea.md).
 | G2 | One guide bulb on the home page | B4, part of B1 | ½–1 day |
 | G3 | Shelf beats moved onto the guide | B1, B2 | ½ day |
 | G4 | Car comes to you and parks (old S3c) | ✅ Done 24 Oct | ½ day |
-| G5 | Other pages: same bulb, car reference | | later |
+| G5 | Other pages: same bulb, car reference | Game pages built 24 Oct (with step 7) | ½ day |
 | G6 | Red accents on the site | ✅ Done 24 Oct (set B) | 2–3 h |
 
 Details per step: [PLAN-guide-bulb-cases.md](PLAN-guide-bulb-cases.md#steps-in-detail).

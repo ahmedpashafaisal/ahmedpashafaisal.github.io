@@ -14,6 +14,7 @@ import './styles/scrollcar.css';
 import './styles/extras.css';
 import './styles/theme.css';
 import './styles/rest.css';
+import './styles/pagebulb.css';
 
 import { initDotGrid } from './js/dotgrid.js';
 import { initAchievements } from './js/achievements.js';
@@ -31,6 +32,7 @@ import { initJuicyButton } from './js/button.js';
 import { initSoundToggle } from './js/sound-toggle.js';
 import { initDetail } from './js/detail.js';
 import { growIn } from './js/grow.js';
+import { initPageBulb } from './js/pagebulb.js';
 
 initDotGrid(document.querySelector('.dot-grid'));
 initAchievements();
@@ -43,6 +45,7 @@ initTheme();
 initTabTitle();
 initLevelUp(document.querySelector('.site-foot'));
 initDetail(document.querySelector('.detail'));
+initPageBulb(document.querySelector('.detail'));
 growIn();
 document.querySelectorAll('.juicy-btn').forEach(initJuicyButton);
 initSoundToggle(document.querySelector('.sound-toggle'));

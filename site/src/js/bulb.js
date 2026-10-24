@@ -125,6 +125,9 @@ function setFace(el, eyes, look) {
   el.style.setProperty('--look', look);
 }
 
+// Eyes without a motion (a reaction between motions): open, wink, wide...
+export const look = (el, eyes, dir = 0) => setFace(el, eyes, dir);
+
 // Runs the motion's eye timeline. Instant: jump to its last eyes (reduced motion).
 function face(el, motion, dir, instant) {
   if (!el.classList.contains('bulb--runaway')) return;
