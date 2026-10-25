@@ -61,7 +61,7 @@ function hero(g) {
 }
 
 // Each screenshot's small copy for the strip (scripts/make-thumbs.py):
-// /img/shots/<game>/<n>.jpg -> /img/shots/<game>/thumbs/<n>.webp
+// /img/shots/<game>/<n>.webp -> /img/shots/<game>/thumbs/<n>.webp
 const thumb = (src) => src.replace(/\/([^/]+)\.\w+$/, '/thumbs/$1.webp');
 
 // Screenshot slider: big view + thumbnails. Falls back to the cover, then to a placeholder.

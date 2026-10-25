@@ -56,14 +56,14 @@
         "youtube": "Jvot8iuNIIM",
         "card": "/img/cards/wildling.jpg",
         "shots": [
-          "/img/shots/wildling/1.jpg",
-          "/img/shots/wildling/2.jpg",
-          "/img/shots/wildling/3.jpg",
-          "/img/shots/wildling/4.jpg",
-          "/img/shots/wildling/5.jpg",
-          "/img/shots/wildling/6.jpg",
-          "/img/shots/wildling/7.jpg",
-          "/img/shots/wildling/8.jpg"
+          "/img/shots/wildling/1.webp",
+          "/img/shots/wildling/2.webp",
+          "/img/shots/wildling/3.webp",
+          "/img/shots/wildling/4.webp",
+          "/img/shots/wildling/5.webp",
+          "/img/shots/wildling/6.webp",
+          "/img/shots/wildling/7.webp",
+          "/img/shots/wildling/8.webp"
         ],
         "orientation": "landscape"
       },
@@ -136,14 +136,14 @@
         "youtube": null,
         "card": "/img/cards/ant-march-adventure.jpg",
         "shots": [
-          "/img/shots/ant-march-adventure/1.jpg",
-          "/img/shots/ant-march-adventure/2.jpg",
-          "/img/shots/ant-march-adventure/3.jpg",
-          "/img/shots/ant-march-adventure/4.jpg",
-          "/img/shots/ant-march-adventure/5.jpg",
-          "/img/shots/ant-march-adventure/6.jpg",
-          "/img/shots/ant-march-adventure/7.jpg",
-          "/img/shots/ant-march-adventure/8.jpg"
+          "/img/shots/ant-march-adventure/1.webp",
+          "/img/shots/ant-march-adventure/2.webp",
+          "/img/shots/ant-march-adventure/3.webp",
+          "/img/shots/ant-march-adventure/4.webp",
+          "/img/shots/ant-march-adventure/5.webp",
+          "/img/shots/ant-march-adventure/6.webp",
+          "/img/shots/ant-march-adventure/7.webp",
+          "/img/shots/ant-march-adventure/8.webp"
         ],
         "orientation": "portrait",
         "video": {
@@ -221,14 +221,14 @@
         "storeVideo": "none found on Play Store or App Store listing (checked 20 Oct)",
         "card": "/img/cards/road-rush-puzzle.jpg",
         "shots": [
-          "/img/shots/road-rush-puzzle/1.jpg",
-          "/img/shots/road-rush-puzzle/2.jpg",
-          "/img/shots/road-rush-puzzle/3.jpg",
-          "/img/shots/road-rush-puzzle/4.jpg",
-          "/img/shots/road-rush-puzzle/5.jpg",
-          "/img/shots/road-rush-puzzle/6.jpg",
-          "/img/shots/road-rush-puzzle/7.jpg",
-          "/img/shots/road-rush-puzzle/8.jpg"
+          "/img/shots/road-rush-puzzle/1.webp",
+          "/img/shots/road-rush-puzzle/2.webp",
+          "/img/shots/road-rush-puzzle/3.webp",
+          "/img/shots/road-rush-puzzle/4.webp",
+          "/img/shots/road-rush-puzzle/5.webp",
+          "/img/shots/road-rush-puzzle/6.webp",
+          "/img/shots/road-rush-puzzle/7.webp",
+          "/img/shots/road-rush-puzzle/8.webp"
         ],
         "orientation": "portrait"
       },
@@ -300,13 +300,13 @@
         "youtube": null,
         "card": "/img/cards/zen-merge-puzzle.jpg",
         "shots": [
-          "/img/shots/zen-merge-puzzle/1.jpg",
-          "/img/shots/zen-merge-puzzle/2.jpg",
-          "/img/shots/zen-merge-puzzle/3.jpg",
-          "/img/shots/zen-merge-puzzle/4.jpg",
-          "/img/shots/zen-merge-puzzle/5.jpg",
-          "/img/shots/zen-merge-puzzle/6.jpg",
-          "/img/shots/zen-merge-puzzle/7.jpg"
+          "/img/shots/zen-merge-puzzle/1.webp",
+          "/img/shots/zen-merge-puzzle/2.webp",
+          "/img/shots/zen-merge-puzzle/3.webp",
+          "/img/shots/zen-merge-puzzle/4.webp",
+          "/img/shots/zen-merge-puzzle/5.webp",
+          "/img/shots/zen-merge-puzzle/6.webp",
+          "/img/shots/zen-merge-puzzle/7.webp"
         ],
         "orientation": "portrait",
         "video": {
@@ -379,14 +379,14 @@
         "youtube": null,
         "card": "/img/cards/sweet-shot.jpg",
         "shots": [
-          "/img/shots/sweet-shot/1.jpg",
-          "/img/shots/sweet-shot/2.jpg",
-          "/img/shots/sweet-shot/3.jpg",
-          "/img/shots/sweet-shot/4.jpg",
-          "/img/shots/sweet-shot/5.jpg",
-          "/img/shots/sweet-shot/6.jpg",
-          "/img/shots/sweet-shot/7.jpg",
-          "/img/shots/sweet-shot/8.jpg"
+          "/img/shots/sweet-shot/1.webp",
+          "/img/shots/sweet-shot/2.webp",
+          "/img/shots/sweet-shot/3.webp",
+          "/img/shots/sweet-shot/4.webp",
+          "/img/shots/sweet-shot/5.webp",
+          "/img/shots/sweet-shot/6.webp",
+          "/img/shots/sweet-shot/7.webp",
+          "/img/shots/sweet-shot/8.webp"
         ],
         "orientation": "portrait"
       },
@@ -446,15 +446,15 @@
         "artNote": "1 = key art illustration; 2-9 = gameplay screenshots from Ahmed (21 Oct)",
         "card": "/img/cards/storm-alert.jpg",
         "shots": [
-          "/img/shots/storm-alert/1.jpg",
-          "/img/shots/storm-alert/2.jpg",
-          "/img/shots/storm-alert/3.jpg",
-          "/img/shots/storm-alert/4.jpg",
-          "/img/shots/storm-alert/5.jpg",
-          "/img/shots/storm-alert/6.jpg",
-          "/img/shots/storm-alert/7.jpg",
-          "/img/shots/storm-alert/8.jpg",
-          "/img/shots/storm-alert/9.jpg"
+          "/img/shots/storm-alert/1.webp",
+          "/img/shots/storm-alert/2.webp",
+          "/img/shots/storm-alert/3.webp",
+          "/img/shots/storm-alert/4.webp",
+          "/img/shots/storm-alert/5.webp",
+          "/img/shots/storm-alert/6.webp",
+          "/img/shots/storm-alert/7.webp",
+          "/img/shots/storm-alert/8.webp",
+          "/img/shots/storm-alert/9.webp"
         ],
         "orientation": "landscape",
         "focus": "72% 50%"
@@ -494,13 +494,13 @@
         "youtube": "tGL_LLIlFmg",
         "card": "/img/cards/magic-mineral.jpg",
         "shots": [
-          "/img/shots/magic-mineral/1.jpg",
-          "/img/shots/magic-mineral/2.jpg",
-          "/img/shots/magic-mineral/3.jpg",
-          "/img/shots/magic-mineral/4.jpg",
-          "/img/shots/magic-mineral/5.jpg",
-          "/img/shots/magic-mineral/6.jpg",
-          "/img/shots/magic-mineral/7.jpg"
+          "/img/shots/magic-mineral/1.webp",
+          "/img/shots/magic-mineral/2.webp",
+          "/img/shots/magic-mineral/3.webp",
+          "/img/shots/magic-mineral/4.webp",
+          "/img/shots/magic-mineral/5.webp",
+          "/img/shots/magic-mineral/6.webp",
+          "/img/shots/magic-mineral/7.webp"
         ],
         "orientation": "landscape"
       },
@@ -574,13 +574,13 @@
         "youtube": null,
         "card": "/img/cards/the-unwanted.jpg",
         "shots": [
-          "/img/shots/the-unwanted/1.jpg",
-          "/img/shots/the-unwanted/2.jpg",
-          "/img/shots/the-unwanted/3.jpg",
-          "/img/shots/the-unwanted/4.jpg",
-          "/img/shots/the-unwanted/5.jpg",
-          "/img/shots/the-unwanted/6.jpg",
-          "/img/shots/the-unwanted/7.jpg"
+          "/img/shots/the-unwanted/1.webp",
+          "/img/shots/the-unwanted/2.webp",
+          "/img/shots/the-unwanted/3.webp",
+          "/img/shots/the-unwanted/4.webp",
+          "/img/shots/the-unwanted/5.webp",
+          "/img/shots/the-unwanted/6.webp",
+          "/img/shots/the-unwanted/7.webp"
         ],
         "orientation": "landscape"
       },
@@ -649,9 +649,9 @@
         "artNote": "card = 16:9 render of the itch banner art (art-src/card.html); 1-3 = game screenshots (24 Oct)",
         "card": "/img/cards/trapped.jpg",
         "shots": [
-          "/img/shots/trapped/1.jpg",
-          "/img/shots/trapped/2.jpg",
-          "/img/shots/trapped/3.jpg"
+          "/img/shots/trapped/1.webp",
+          "/img/shots/trapped/2.webp",
+          "/img/shots/trapped/3.webp"
         ],
         "orientation": "landscape"
       },
@@ -689,12 +689,12 @@
         "youtube": null,
         "card": "/img/cards/after-the-end.jpg",
         "shots": [
-          "/img/shots/after-the-end/1.jpg",
-          "/img/shots/after-the-end/2.jpg",
-          "/img/shots/after-the-end/3.jpg",
-          "/img/shots/after-the-end/4.jpg",
-          "/img/shots/after-the-end/5.jpg",
-          "/img/shots/after-the-end/6.jpg"
+          "/img/shots/after-the-end/1.webp",
+          "/img/shots/after-the-end/2.webp",
+          "/img/shots/after-the-end/3.webp",
+          "/img/shots/after-the-end/4.webp",
+          "/img/shots/after-the-end/5.webp",
+          "/img/shots/after-the-end/6.webp"
         ],
         "orientation": "landscape"
       },
@@ -731,13 +731,13 @@
         "youtube": null,
         "card": "/img/cards/the-return.jpg",
         "shots": [
-          "/img/shots/the-return/1.jpg",
-          "/img/shots/the-return/2.jpg",
-          "/img/shots/the-return/3.jpg",
-          "/img/shots/the-return/4.jpg",
-          "/img/shots/the-return/5.jpg",
-          "/img/shots/the-return/6.jpg",
-          "/img/shots/the-return/7.jpg"
+          "/img/shots/the-return/1.webp",
+          "/img/shots/the-return/2.webp",
+          "/img/shots/the-return/3.webp",
+          "/img/shots/the-return/4.webp",
+          "/img/shots/the-return/5.webp",
+          "/img/shots/the-return/6.webp",
+          "/img/shots/the-return/7.webp"
         ],
         "orientation": "landscape"
       },
@@ -777,11 +777,11 @@
         "youtube": null,
         "card": "/img/cards/eat-the-rich.jpg",
         "shots": [
-          "/img/shots/eat-the-rich/1.jpg",
-          "/img/shots/eat-the-rich/2.jpg",
-          "/img/shots/eat-the-rich/3.jpg",
-          "/img/shots/eat-the-rich/4.jpg",
-          "/img/shots/eat-the-rich/5.jpg"
+          "/img/shots/eat-the-rich/1.webp",
+          "/img/shots/eat-the-rich/2.webp",
+          "/img/shots/eat-the-rich/3.webp",
+          "/img/shots/eat-the-rich/4.webp",
+          "/img/shots/eat-the-rich/5.webp"
         ],
         "orientation": "landscape"
       },
@@ -820,14 +820,14 @@
         "youtube": "Ty-LMJ0NZ8k",
         "card": "/img/cards/space-cricket.jpg",
         "shots": [
-          "/img/shots/space-cricket/1.jpg",
-          "/img/shots/space-cricket/2.jpg",
-          "/img/shots/space-cricket/3.jpg",
-          "/img/shots/space-cricket/4.jpg",
-          "/img/shots/space-cricket/5.jpg",
-          "/img/shots/space-cricket/6.jpg",
-          "/img/shots/space-cricket/7.jpg",
-          "/img/shots/space-cricket/8.jpg"
+          "/img/shots/space-cricket/1.webp",
+          "/img/shots/space-cricket/2.webp",
+          "/img/shots/space-cricket/3.webp",
+          "/img/shots/space-cricket/4.webp",
+          "/img/shots/space-cricket/5.webp",
+          "/img/shots/space-cricket/6.webp",
+          "/img/shots/space-cricket/7.webp",
+          "/img/shots/space-cricket/8.webp"
         ],
         "orientation": "portrait"
       },
@@ -890,13 +890,13 @@
         "youtube": "eeg_SbRyyJk",
         "card": "/img/cards/toony-car.jpg",
         "shots": [
-          "/img/shots/toony-car/1.jpg",
-          "/img/shots/toony-car/2.jpg",
-          "/img/shots/toony-car/3.jpg",
-          "/img/shots/toony-car/4.jpg",
-          "/img/shots/toony-car/5.jpg",
-          "/img/shots/toony-car/6.jpg",
-          "/img/shots/toony-car/7.jpg"
+          "/img/shots/toony-car/1.webp",
+          "/img/shots/toony-car/2.webp",
+          "/img/shots/toony-car/3.webp",
+          "/img/shots/toony-car/4.webp",
+          "/img/shots/toony-car/5.webp",
+          "/img/shots/toony-car/6.webp",
+          "/img/shots/toony-car/7.webp"
         ],
         "orientation": "landscape"
       },

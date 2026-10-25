@@ -1,7 +1,7 @@
 # Small WebP thumbnails for the game pages' screenshot strip (js/detail.js).
 # The strip shows them 72 px wide (42 px for phone games), so each screenshot
 # gets a copy that fits 240 x 240 px: sharp on 3x screens, a few KB each.
-#   /img/shots/<game>/<n>.jpg  ->  /img/shots/<game>/thumbs/<n>.webp
+#   /img/shots/<game>/<n>.webp  ->  /img/shots/<game>/thumbs/<n>.webp
 # Run after adding screenshots (needs Pillow): python3 scripts/make-thumbs.py
 import json
 from pathlib import Path
