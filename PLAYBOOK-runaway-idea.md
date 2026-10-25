@@ -79,9 +79,9 @@ Decided 24 Oct (Ahmed): two sides of Ahmed. Never said on the site: subtle.
 | Page | Beat |
 |---|---|
 | Landing | Catch the bulbs in any order; the last one left opens its eyes and dodges (wink, no words), then hops off toward the games; 6 s later it hops back in. Car lines cut 24 Oct (car says only "Drive me to an idea") |
-| Featured: Wildlings | Bulb blasted across the banner by recoil |
-| Featured: Magic Mineral | Bulb dims to hide in the dark cave shot; its glow gives it away |
-| Featured: Storm Alert | Quiet: sits by the lit window, soft glow, no gag |
+| Featured: Wildlings | Bulb blasted across the banner by recoil. As built (25 Oct): the 3D guide, a thump from the picture, spins over the picture to its far side, lands dizzy; on its own, once per visit |
+| Featured: Magic Mineral | Bulb dims to hide in the dark cave shot; its glow gives it away. As built: waits for a cave shot, hops onto the picture, goes dark with light eyes and a faint pulsing glow; reached: lights up, hops on |
+| Featured: Storm Alert | Quiet: soft breathing glow, no gag. As built: beside the title (Ahmed, 25 Oct; the lit window shows in 1 of 9 shots); no tease, no lines, no creeping; reached: hops on without a sound |
 | Deck (shelves) | Built in G3: building sites, perches, slides. Since 24 Oct it plays in the sites (trick hops: spin, flip, twirl, star jump); reached there: "Nope, not a game yet." |
 | Game pages (shared) | Bulb peeks at the screenshots, then ducks behind "Next" |
 | Storm Alert page | Quiet: bulb sits still, soft glow |

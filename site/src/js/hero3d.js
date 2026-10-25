@@ -58,6 +58,14 @@
 // runaway sneaks up on the parked car (or the pointer), closer than a chase
 // ever gets it; reaching for it sets it off only at the last moment, and it
 // teases: "So close!".
+// The Featured banners (6c): the first time this visit the guide stands in a
+// banner on the screen with the scroll at rest, it plays that game's beat.
+// Wildlings: a thump from the picture blasts it spinning across the banner;
+// it lands dizzy. Magic Mineral: once a dark cave shot shows, it hops onto
+// the picture and goes dark, only its eyes and a faint pulse of glow giving
+// it away; reach for it and it lights up and hops on. Storm Alert: quiet, a
+// soft breathing glow, no teasing, no lines, no creeping up; reached for, it
+// hops on without a sound.
 // The ending (js/idea.js): once the visitor has seen every page it stops
 // running. On the page that completes the set a bulb of the round wakes up
 // at once ("Okay. You got me."); after that, the last one left. The car (or
@@ -71,7 +79,7 @@
 // Touch works the same: tap, or tap and drag.
 // Reduced motion: slower car, no shake, squash, marks or particles.
 import {
-  BackSide, BoxGeometry, CircleGeometry, ConeGeometry, CylinderGeometry, DataTexture, DirectionalLight, Group, HemisphereLight, MathUtils, Mesh, MeshBasicMaterial, MeshToonMaterial, NearestFilter, PerspectiveCamera, Plane, Raycaster, RedFormat, Scene, SphereGeometry, TorusGeometry, Vector2, Vector3, WebGLRenderer,
+  BackSide, BoxGeometry, CircleGeometry, Color, ConeGeometry, CylinderGeometry, DataTexture, DirectionalLight, Group, HemisphereLight, MathUtils, Mesh, MeshBasicMaterial, MeshToonMaterial, NearestFilter, PerspectiveCamera, Plane, Raycaster, RedFormat, Scene, SphereGeometry, TorusGeometry, Vector2, Vector3, WebGLRenderer,
 } from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { act, readStats } from './achievements.js';
@@ -153,6 +161,12 @@ const CREEP_GAP = 110; // resting: the runaway sneaks up to this far from the pa
 const CREEP_STEP = 30; // ...in hops this long...
 const CREEP_MS = 800; // ...this far apart
 const NEAR_R = 85; // crept up: hops off only when the moving car comes this close
+const BEATS = 'apf-beat-banners'; // sessionStorage: Featured banners whose beat played this visit (6c)
+const BLAST_WAIT_MS = 450; // in the Wildlings banner: a moment, then the blast...
+const BLAST_MS = 900; // ...across the banner
+const DIZZY_MS = 900;
+const DARK_SHOTS = { 'magic-mineral': 2 }; // screenshots from this index on are the dark cave ones
+const CAVE = 0x0d1016; // hidden in the cave: its glass and base darken toward this
 const MARK_LIFE = 1.6; // s, tyre marks fade out
 const SMOKE_LIFE = 0.7; // s
 
@@ -613,7 +627,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   // point (spot null)
   function hopTo(it, spot, x, y, now, ms, lift) {
     it.hop = { x0: it.x, y0: it.y, x1: x, y1: y, t0: now, ms, lift };
-    Object.assign(it, { spot, hx: x, hy: y, vx: 0, vy: 0, winkUntil: now + 700, inAt: now, trick: null });
+    Object.assign(it, { spot, hx: x, hy: y, vx: 0, vy: 0, winkUntil: now + 700, inAt: now, trick: null, hide: null, blast: null, beat: null });
     // On a sliding shelf (a cover or its building site): where the slide
     // stood when it arrived
     const row = spot?.el?.closest('.shelf--rail .shelf__row');
@@ -800,7 +814,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   function spotPos(s) {
     if (!s.el) return spots().sort((p, q) => p[1] - q[1])[s.k] || null;
     const cr = canvas.getBoundingClientRect();
-    return s.slot ? slotSpot(s.el, cr) : s.perch ? perchSpot(s.el, cr) : textSpot(s.el, cr, s.side, s.dx);
+    return s.pic ? picSpot(s.el, cr, s.pic) : s.slot ? slotSpot(s.el, cr) : s.perch ? perchSpot(s.el, cr) : textSpot(s.el, cr, s.side, s.dx);
   }
 
   // Who it runs from: the car if it moved in the last CHASER_MS and is on the
@@ -858,7 +872,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   // it is gone from view (near the end of the page: the last spot below it
   // on the screen). Nothing below (the end of the page): it hops off the side
   // of the screen, away from the chaser, at the same height.
-  function ahead(it, now, c, line) {
+  function ahead(it, now, c, line, hush = false) {
     const list = guideSpots(it).filter((s) => s.y - it.y > 40 && Math.hypot(s.x - c.x, s.y - c.y) > c.r + 40 && Math.hypot(s.x - car.x, s.y - car.y) > dodgeR + 40);
     const next = list.find((s) => hidden(s.y)) || list.at(-1);
     if (next) {
@@ -874,7 +888,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     it.crept = false;
     it.nextDodge = now + DODGE_MS * 2;
     if (line) bulbSay(line, now); // the near miss after a creep: it teases
-    sfx.thump();
+    if (!hush) sfx.thump();
   }
 
   // Where it comes back to (fresh each time, never predictable): a random
@@ -997,6 +1011,8 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
 
   // Reached for: the shelf beats, else one hop ahead
   function reached(it, now, c) {
+    if (it.hide) it.flickAt = now; // found in the cave: it lights up as it goes
+    if (it.quiet) return ahead(it, now, c, null, true);
     if (it.spot?.slot) return reachSite(it, now, c);
     if (it.spot?.perch && !c.car) return alongShelf(it, now, c);
     ahead(it, now, c);
@@ -1089,6 +1105,168 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     sayUntil = now + SAY_MS;
   }
 
+  /* the Featured banners (6c): each plays its beat once per visit */
+
+  const beatsDone = new Set();
+  try {
+    JSON.parse(sessionStorage.getItem(BEATS) || '[]').forEach((g) => beatsDone.add(g));
+  } catch {}
+  const doneBeat = (slug) => {
+    beatsDone.add(slug);
+    try {
+      sessionStorage.setItem(BEATS, JSON.stringify([...beatsDone]));
+    } catch {}
+  };
+  // The banner whose rows it stands in (its middle between the banner's top
+  // and bottom), with its game
+  function bannerAt(it) {
+    const y = canvas.getBoundingClientRect().top + it.y;
+    for (const el of document.querySelectorAll('.banner')) {
+      const r = el.getBoundingClientRect();
+      if (y > r.top && y < r.bottom) return { el, r, slug: el.querySelector('.banner__title')?.id.replace('banner-', '') };
+    }
+    return null;
+  }
+  // Low on a banner's picture: share fx across, its feet near the bottom edge
+  function picSpot(el, cr, fx) {
+    const r = el.getBoundingClientRect();
+    return [r.left - cr.left + r.width * fx, r.bottom - cr.top - FEET - 14];
+  }
+  // A banner's picture, and what is busy beside it (its text part): the
+  // beats may stand or land on the picture (on phones the banner has no
+  // other room). Its screenshots pan and lean, so their boxes stick out of
+  // the frame: the text part is measured, not the whole banner.
+  function offPicture(b, cr) {
+    const m = b.el.querySelector('.banner__media').getBoundingClientRect();
+    return { box: { l: m.left - cr.left, t: m.top - cr.top, r: m.right - cr.left, b: m.bottom - cr.top }, rects: busyIn(b.el.querySelector('.banner__text'), cr) };
+  }
+  // A dark cave shot shows (reduced motion: the pictures do not change, so any)
+  const darkShot = (b) => !juicy() || [...b.el.querySelectorAll('.banner__shot')].findIndex((sh) => sh.classList.contains('is-active')) >= DARK_SHOTS[b.slug];
+  function bannerBeat(it, b, now) {
+    if (b.slug === 'wildling') it.beat = { at: now + BLAST_WAIT_MS };
+    else if (b.slug in DARK_SHOTS && darkShot(b)) hideIn(it, b, now);
+  }
+  // A banner with a beat still to play that fills most of the screen (the
+  // visitor is looking at it), or null
+  function bannerShown() {
+    for (const el of document.querySelectorAll('.banner')) {
+      const slug = el.querySelector('.banner__title')?.id.replace('banner-', '');
+      if (beatsDone.has(slug) || !(slug === 'wildling' || slug in DARK_SHOTS)) continue;
+      const r = el.getBoundingClientRect();
+      const seen = Math.min(r.bottom, innerHeight) - Math.max(r.top, 0);
+      if (seen > Math.min(r.height, innerHeight) * 0.6) return { el, r, slug };
+    }
+    return null;
+  }
+  // Elsewhere on the screen: it hops over to the banner's title (straight
+  // onto a dark cave picture), where the beat plays; the car parked there
+  // (or no room beside it, on phones): the free place in the banner nearest
+  // the title, away from the car, the picture included
+  function toBanner(it, b, now) {
+    if (juicy() && b.slug in DARK_SHOTS && darkShot(b)) return hideIn(it, b, now);
+    const cr = canvas.getBoundingClientRect();
+    const title = b.el.querySelector('.banner__title');
+    const away = (x, y) => onScreen(x, y) && Math.hypot(x - car.x, y - car.y) > dodgeR + 40;
+    const h = headSpot(title, cr, busyIn(b.el, cr));
+    const { rects } = offPicture(b, cr);
+    let to = h && away(h.x, h.y) ? { spot: { el: title, side: h.side, dx: h.dx }, x: h.x, y: h.y } : null;
+    if (!to) {
+      const t = title.getBoundingClientRect();
+      const [tx, ty] = [t.left + t.width / 2 - cr.left, t.top + t.height / 2 - cr.top];
+      for (let y = b.r.top - cr.top + RAYS_UP; y <= b.r.bottom - cr.top - FEET; y += 40) {
+        for (let x = area.l + 40; x <= area.r - 40; x += 40) {
+          if (away(x, y) && boxFree(x, y, rects) && (!to || Math.hypot(x - tx, y - ty) < Math.hypot(to.x - tx, to.y - ty))) to = { spot: null, x, y };
+        }
+      }
+    }
+    if (!to) return;
+    hopTo(it, to.spot, to.x, to.y, now, farHop(to.y - it.y), 120);
+    it.why = 'banner';
+    it.nextDodge = now + DODGE_MS * 2;
+    sfx.boing();
+  }
+  // Wildlings: a thump from the picture blasts it over to the far side of
+  // the picture (onto it, when nothing is free beyond it), spinning, eyes
+  // wide; it lands dizzy. Nowhere to go: dizzy where it is.
+  function blast(it, b, now) {
+    it.beat = null;
+    doneBeat(b.slug);
+    if (!juicy()) return;
+    const cr = canvas.getBoundingClientRect();
+    const { box, rects } = offPicture(b, cr);
+    const mx = (box.l + box.r) / 2;
+    const side = it.x < mx ? 1 : -1;
+    let best = null;
+    for (let y = b.r.top - cr.top + RAYS_UP; y <= b.r.bottom - cr.top - FEET; y += 40) {
+      for (let x = area.l + 40; x <= area.r - 40; x += 40) {
+        if ((x - mx) * side > 0 && onScreen(x, y) && boxFree(x, y, rects) && (!best || Math.abs(x - it.x) > Math.abs(best[0] - it.x))) best = [x, y];
+      }
+    }
+    sfx.hit();
+    const [sx, sy] = project(it.x, it.y);
+    sendShock(sx, sy, 1.2);
+    shakeStart = now;
+    shakeAmp = 0.05;
+    for (let i = 0; i < 5; i++) puff(it.x, it.y + FEET * 0.5, -side * (60 + Math.random() * 80), (Math.random() - 0.5) * 60, 8);
+    openEyes(it, now);
+    it.wideUntil = now + BLAST_MS;
+    if (!best) {
+      it.dizzyAt = now;
+      return;
+    }
+    hopTo(it, null, best[0], best[1], now, BLAST_MS, Math.min(200, 60 + Math.abs(best[0] - it.x) * 0.35)); // a short blast stays low
+    it.blast = { dir: side };
+    it.why = 'blast';
+    it.nextDodge = now + BLAST_MS + DODGE_MS;
+  }
+  // Magic Mineral: onto the dark cave picture, low down, on the half nearer
+  // to it, where it goes dark (shade). Reduced motion: dark where it is.
+  function hideIn(it, b, now) {
+    doneBeat(b.slug);
+    if (juicy()) {
+      const media = b.el.querySelector('.banner__media');
+      const cr = canvas.getBoundingClientRect();
+      const m = media.getBoundingClientRect();
+      const fx = it.x < m.left + m.width / 2 - cr.left ? 0.25 : 0.75;
+      const p = picSpot(media, cr, fx);
+      hopTo(it, { el: media, pic: fx }, p[0], p[1], now, 700, 60);
+      it.nextDodge = now + 700 + DODGE_MS;
+      sfx.boing();
+    }
+    it.hide = { t0: now };
+    it.why = 'hide';
+  }
+
+  // The guide's own copies of its glass, base, shine and glow materials (made
+  // the first time it needs them), so it alone dims in the cave or breathes
+  // by Storm Alert. Hidden: glass and base dark, rays gone, eyes light, the
+  // glow a faint pulse.
+  const eyeLit = new MeshBasicMaterial({ color: 0xf2ede2 });
+  const cave = new Color(CAVE);
+  function shade(it, now, j, dt) {
+    const goal = it.hide && !it.hop ? 1 : 0;
+    it.dim = j ? MathUtils.lerp(it.dim || 0, goal, 1 - Math.exp(-(goal ? 3 : 10) * dt)) : goal;
+    if (!it.own) {
+      if (it.dim < 0.01 && !it.quiet) return;
+      it.own = [];
+      it.g.traverse((m) => {
+        if (!m.isMesh || m.material === outlineMat || m.material === inkFlat || m.material === rayMat) return;
+        const base = m.material;
+        m.material = base.clone();
+        it.own.push({ m, base: base.color.clone(), glow: base === glowMat });
+      });
+    }
+    const pulse = j ? 0.5 + 0.5 * Math.sin(now / 380) : 0.5;
+    const breathe = j ? 0.5 + 0.5 * Math.sin(now / 900) : 0.5;
+    for (const o of it.own) {
+      if (!o.glow) o.m.material.color.copy(o.base).lerp(cave, Math.min(1, it.dim * 1.2)); // all the way dark (the lights brighten it)
+      else if (it.quiet && it.dim < 0.01) o.m.material.opacity = 0.16 + 0.14 * breathe;
+      else o.m.material.opacity = 0.2 * (1 - it.dim) + it.dim * (0.05 + 0.12 * pulse);
+    }
+    for (const r of it.g.userData.rays) r.visible = it.dim < 0.5;
+    if (it.eyes) for (const e of it.eyes) e.material = it.dim > 0.5 ? eyeLit : inkFlat;
+  }
+
   // Per frame: waits on its spot, hops ahead when chased, back in after a
   // scroll away, creeps closer while the visitor rests
   function guideStep(it, now) {
@@ -1103,7 +1281,13 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
       const k = Math.min(1, (now - it.hop.t0) / it.hop.ms);
       it.x = MathUtils.lerp(it.hop.x0, it.hop.x1, k);
       it.y = MathUtils.lerp(it.hop.y0, it.hop.y1, k);
-      if (k >= 1) it.hop = null;
+      if (k >= 1) {
+        it.hop = null;
+        if (it.blast) {
+          it.blast = null;
+          it.dizzyAt = now; // landed from the Wildlings blast
+        }
+      }
       return;
     }
     it.x = it.hx;
@@ -1115,7 +1299,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     // The car has just parked: after a wide-eyed moment it hops further away
     if (it.tease && now >= it.tease) {
       it.tease = 0;
-      return teaseHop(it, now);
+      if (!it.beat && !it.quiet && !it.hide) return teaseHop(it, now); // not in a Featured beat (6c)
     }
     // Playing in its building site: a trick hop per TRICK_PX of page scroll,
     // up or down, while it is on the screen (scroll during a trick counts
@@ -1124,6 +1308,18 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     else if (siteScroll >= TRICK_PX && !it.trick) {
       siteScroll = Math.min(siteScroll - TRICK_PX, TRICK_PX);
       if (juicy() && it.y > 0 && it.y < H) trick(it, now);
+    }
+    // The Featured banners (6c): its beat, the first time this visit it stands
+    // in one on the screen with the scroll at rest; by Storm Alert it is quiet
+    const b = it.y > 0 && it.y < H ? bannerAt(it) : null;
+    it.quiet = b?.slug === 'storm-alert';
+    if (it.beat) {
+      if (b?.slug !== 'wildling') it.beat = null; // gone on before the blast: it plays another time
+      else if (now >= it.beat.at) return blast(it, b, now);
+    } else if (!it.hide && it.y > 0 && it.y < H && now - scrollAt > SETTLE_MS) {
+      const shown = bannerShown();
+      if (b && !beatsDone.has(b.slug)) bannerBeat(it, b, now);
+      else if (shown && shown.el !== b?.el) return toBanner(it, shown, now);
     }
     const c = chaser(now);
     const d = c ? Math.hypot(c.x - it.x, c.y - it.y) : Infinity;
@@ -1157,7 +1353,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
       clearTimeout(backT);
       backT = setTimeout(wake, at - now + 60);
     }
-    if (!above && !below && !aside) creep(it, now);
+    if (!above && !below && !aside && !it.quiet && !it.hide && !it.beat) creep(it, now);
   }
 
   /* the car comes to the visitor: left behind by a scroll, it drives in and
@@ -1248,7 +1444,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     if (!coming || selfDrive()) return;
     coming = false;
     const it = runaway;
-    if (ideaMode() !== 'chase' || !grab.auto || held.size || !it?.guide || it.gone || it.hop || it.laugh || !carOnScreen() || !(it.x > 0 && it.x < W && it.y > 0 && it.y < H)) return;
+    if (ideaMode() !== 'chase' || it?.quiet || it?.hide || it?.beat || !grab.auto || held.size || !it?.guide || it.gone || it.hop || it.laugh || !carOnScreen() || !(it.x > 0 && it.x < W && it.y > 0 && it.y < H)) return;
     it.wideUntil = now + WIDE_MS;
     it.tease = now + WIDE_MS * 0.5;
   }
@@ -1973,6 +2169,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
       lift = s * it.hop.lift;
       sx = 1 - s * 0.12 + (ground ? 0.12 : 0);
       sy = 1 + s * 0.16 - (ground ? 0.14 : 0);
+      if (it.blast) spin = k * Math.PI * 4 * -it.blast.dir; // two turns over the banner
     } else if (it.trick && j && now - it.trick.t0 < TRICK_MS) {
       // Trick hop: the trick in the air (80% of the time), then down onto a
       // squash with dust
@@ -2015,6 +2212,12 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
       flick = 1 + Math.max(0, g) * 0.55;
       it.g.rotation.z += Math.sin(k * Math.PI * 10) * 0.08 * (1 - k);
     }
+    // Landed from the Wildlings blast: a dizzy wobble
+    if (it.dizzyAt) {
+      const k = (now - it.dizzyAt) / DIZZY_MS;
+      if (k >= 1 || !j) it.dizzyAt = 0;
+      else it.g.rotation.z += Math.sin(k * Math.PI * 7) * 0.22 * (1 - k);
+    }
     // Teasing the parked car: a quick flick of its rays once it has hopped away
     if (it.flickAt && now >= it.flickAt) {
       const k = (now - it.flickAt) / 500;
@@ -2030,10 +2233,11 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     it.g.position.copy(wp);
     const base = bs * it.size * Math.max(it.pop, 0);
     it.g.scale.set(base * sx, base * sy, base);
+    shade(it, now, j, dt);
     if (!it.eyes) return;
     const open = j ? elasticOut(Math.min(1, (now - it.wokeAt) / 450)) : 1;
     if (now > it.blinkAt + 130) it.blinkAt = now + 2600 + Math.random() * 2400;
-    const blink = it.laugh ? 0.3 : j && now > it.blinkAt ? 0.12 : 1; // laughing: eyes squeezed
+    const blink = it.laugh || it.dizzyAt ? 0.3 : j && now > it.blinkAt ? 0.12 : 1; // laughing or dizzy: eyes squeezed
     const wide = now < it.wideUntil ? 1.45 : 1; // the car just parked
     // Keeps an eye on the car: both eyes shift toward it
     const lx = car.x - it.x;
@@ -2187,7 +2391,7 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
 
   // Test hook: ?debug exposes the game state (headless tests only)
   if (new URLSearchParams(location.search).has('debug')) {
-    window.__landing = { car, ideas: () => ideas, walls: () => walls, area: () => area, canvas, fxCounts: () => [marks[0].length + marks[1].length, puffs.length, rings.length], goal: () => dragGoal(), runaway: () => runaway, firstRound: () => firstRound, howTo: () => howTo, caught: () => caught, off: () => off, land: () => land, layer, grab, played: () => played, asleep: () => !raf, spots: () => guideSpots(runaway), said: () => (sayUntil ? sayEl.textContent : ''), guideTo: (el) => runaway?.guide && hopOnto(runaway, el, performance.now()) && (runaway.why = 'test'), backPlace: () => backPlace(runaway, performance.now()), scrollRest: () => ({ scrollAt, scrollDir, raf }), dodgeR, parkPlace: (top) => parkPlace(top), coming: () => coming, lastPark: () => lastPark, onCar: (x, y) => onCar(x, y), carLen: () => carLen };
+    window.__landing = { car, ideas: () => ideas, walls: () => walls, area: () => area, canvas, fxCounts: () => [marks[0].length + marks[1].length, puffs.length, rings.length], goal: () => dragGoal(), runaway: () => runaway, firstRound: () => firstRound, howTo: () => howTo, caught: () => caught, off: () => off, land: () => land, layer, grab, played: () => played, asleep: () => !raf, spots: () => guideSpots(runaway), said: () => (sayUntil ? sayEl.textContent : ''), guideTo: (el) => runaway?.guide && hopOnto(runaway, el, performance.now()) && (runaway.why = 'test'), backPlace: () => backPlace(runaway, performance.now()), scrollRest: () => ({ scrollAt, scrollDir, raf }), dodgeR, parkPlace: (top) => parkPlace(top), coming: () => coming, lastPark: () => lastPark, onCar: (x, y) => onCar(x, y), carLen: () => carLen, beat: () => runaway && { why: runaway.why, hide: !!runaway.hide, quiet: !!runaway.quiet, dim: runaway.dim || 0, blast: !!runaway.blast, dizzy: !!runaway.dizzyAt, waiting: !!runaway.beat, done: [...beatsDone], glow: runaway.own?.find((o) => o.glow)?.m.material.opacity ?? 0.2 } };
   }
 
   return {

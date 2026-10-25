@@ -16,8 +16,9 @@ Older decisions and story: [PLAYBOOK-runaway-idea.md](PLAYBOOK-runaway-idea.md).
 | Characters | Car = Ahmed's working side, one line; bulb = his curious side. [Playbook](PLAYBOOK-runaway-idea.md#cast-and-voices) |
 | G5 + 7 game pages | ✅ Done 24 Oct, `7bc3340` |
 | 8a About, 404, "So Close" | ✅ Done 24 Oct, `a19276a` |
-| 8b the ending | Built 24 Oct, not committed; waiting for Ahmed's look |
-| Next | 6c or 9 |
+| 8b the ending | ✅ Done 25 Oct ("it looks good"), `8907382` (not pushed) |
+| 6c Featured beats | ✅ Done 25 Oct ("yeah looks good"), not committed |
+| Next | 9 final check |
 
 ## Ahmed's words (23 Oct, feedback on S3b)
 - "let the car drive over the elements in the landing page / home section as well"

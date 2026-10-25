@@ -263,6 +263,24 @@ Ahmed: "step 8", then "8a then 8b"; ending = catch after all pages (8b); 404 car
 Tests (`g8a.js`, session scratchpad): 30/30. About: car beside "← Home"; bulb centred on the avatar, base in the photo top; gone after the hop; no beat on reload; thesis quiet 6.5 s with no resting bulb; a resting bulb outside the thesis, a real mouse path reaches it: "So Close" unlocked, count shows 23. 404: bulb centred between title and text, line shown, flipped car loaded, reach and phone tap: hops off with "So close!", "So Close" unlocked. Reduced motion: no head beat; 404 bulb shows. 0 errors.
 Seen: phone head beat's rays touch the bottom of "← Home" for about 3 s. 404 "No" button text is invisible in dark mode (there before 8a).
 
+#### 6c as built (25 Oct)
+Ahmed: "6c"; answers "Once per visit", "On its own", "Beside the title"; "go".
+
+| Part | What |
+|---|---|
+| Where | `hero3d.js` only: the guide (one bulb on home) |
+| Trigger | Guide on the screen, scroll at rest, in a banner's rows: that game's beat, once per visit (`sessionStorage` `apf-beat-banners`) |
+| Leads you there | An unplayed banner fills most of the screen and the guide stands elsewhere on it: it hops to the banner's title (straight onto a dark cave picture). Car parked there, or no room beside the title (phones): the free place in the banner nearest the title, the picture included |
+| Wildlings | 0.45 s after it arrives: thump (`sfx.hit`), dot grid shock, smoke, small shake; spins two turns in an arc over the picture to its far side, eyes wide; lands dizzy (wobble, squeezed eyes). Arc height scales with the distance (phones stay low). No room: dizzy in place |
+| Magic Mineral | Waits for a cave shot (3 to 7 of 7); hops low onto the picture, the half nearer to it; goes dark (glass and base to the cave colour, rays off, light eyes, glow a faint pulse). Reached: lights up (rays flick) and hops on |
+| Storm Alert | Quiet while in its banner: breathing glow, no tease when the car parks, no lines, no creeping up. Reached: hops on without a sound |
+| Kept safe | A pending blast is not cancelled by the car's tease or the resting creep. Calm mode (8b): it can still be caught during any beat |
+| Reduced motion | No blast (counted as played); Magic Mineral dims where it is, with no shot wait (the pictures do not change) |
+| Weight | three.js chunk +1.7 KB gzip (lazy); nothing on the first screen |
+
+Tests (`g6c.js`, 8b scratchpad): 27/27, three runs in a row. 1440 light and 390 dark phone: guide out on the page by a skim; Wildlings blast (spinning hop) across the picture, lands dizzy inside the banner; Magic Mineral hides on the picture during a cave shot, dark, glow pulsing; mouse reach → lights up and hops on (1440); Storm Alert quiet (steady), breathing glow over 3.6 s, no creep over 6.5 s of rest (page position), mouse reach → hops on, no line (1440); back to Wildlings: no second blast; 0 errors. Reduced motion: Wildlings counted, no blast; Magic Mineral dims in place. Regression `g8b.js` 56/56.
+Found while testing: the guide sat above the banner (Featured heading still on screen) so no beat played: it now hops into a banner that fills the screen. Banner pictures pan and lean, so their boxes stick out of the frame: only the text part is measured for room.
+
 #### 8b as built (24 Oct)
 Ahmed's answers: dim the page; "open the mail app or gmail or outlook"; later visits "simply catch it and the bulb will fly towards the mail icon"; card "When I first reach for it. And the mail button at the bottom should do the same."; "unlock a 24th". Then "Go".
 
