@@ -62,14 +62,40 @@
   text-align: center;
 }
 
-/* Blank: a game that does not exist yet */
+/* Blank: a game that does not exist yet, with one mark in it */
 .idea-card__blank {
+  display: grid;
+  place-items: center;
   width: 100%;
   aspect-ratio: 16 / 9;
   border: 2px dashed var(--line);
   border-color: color-mix(in srgb, var(--ink) 30%, transparent);
   border-radius: 12px;
   background: var(--bg);
+}
+
+/* The mark: a lime "?" badge, like an unlocked achievement's; it floats gently */
+.idea-mark {
+  display: grid;
+  place-items: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 4px 0 var(--ink);
+  color: var(--on-accent);
+  font: 800 2.6rem/1 var(--font-display);
+  animation: idea-float 2.4s ease-in-out infinite alternate;
+}
+
+@keyframes idea-float {
+  from { translate: 0 2px; }
+  to { translate: 0 -5px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .idea-mark { animation: none; }
 }
 
 .idea-card__title {

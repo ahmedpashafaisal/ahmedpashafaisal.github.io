@@ -18,7 +18,8 @@ Older decisions and story: [PLAYBOOK-runaway-idea.md](PLAYBOOK-runaway-idea.md).
 | 8a About, 404, "So Close" | ✅ Done 24 Oct, `a19276a` |
 | 8b the ending | ✅ Done 25 Oct ("it looks good"), `8907382` (not pushed) |
 | 6c Featured beats | ✅ Done 25 Oct ("yeah looks good"), not committed |
-| Next | 9 final check |
+| 9 final check | ✅ Done 25 Oct; site LIVE 25 Oct (`604c73c`) |
+| Next | Ahmed decides |
 
 ## Ahmed's words (23 Oct, feedback on S3b)
 - "let the car drive over the elements in the landing page / home section as well"

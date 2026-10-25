@@ -401,7 +401,9 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
   let runaway = null; // the bulb that will not be caught (an entry of ideas)
   let firstRound = false; // the round with a runaway in it
   let runawayDone = false; // left the landing (the guide now): later rounds are normal
-  let howTo = true; // "Drive me to an idea" until the first catch or the runaway's first move
+  // "Drive me to an idea" until the first catch or the runaway's first move;
+  // a visitor who has caught an idea before (any visit) never sees it again
+  let howTo = !(readStats().ideas > 0);
   let caught = 0;
   // The layer sits off px down the page (the scroll, or less at the very
   // bottom); canvas px = screen px give or take that difference
@@ -1949,12 +1951,13 @@ export function initHero(canvas, { onCollect, onWave } = {}) {
     }
 
     // "Drive me to an idea" (until the first catch) hides while the car rolls
-    // and comes back once it has rested a moment
+    // and comes back once it has rested a moment, on the landing only: it is
+    // the landing game's hint, not something to say wherever the car parks
     if (vNow > 20 && !selfDrive()) car.movedAt = now;
     if (vNow > 15) {
       car.restAt = now;
       bubble?.classList.remove('is-on');
-    } else if (bubble && entered && howTo && now - car.restAt > BUBBLE_REST_MS) bubble.classList.add('is-on');
+    } else bubble?.classList.toggle('is-on', entered && howTo && now - car.restAt > BUBBLE_REST_MS && car.y < land.b);
 
     // Collisions: the edges of the page (keep in)
     const r = carR();

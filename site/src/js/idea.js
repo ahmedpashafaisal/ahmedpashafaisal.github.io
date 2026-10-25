@@ -152,6 +152,10 @@ export async function caughtIdea(x, y, w = 56) {
 let dlg = null;
 let pending = false; // the ending's achievement, unlocked once its card closes
 
+// What fills the card's empty frame: a question mark (Ahmed's pick over an
+// envelope, 25 Oct)
+const MARK = '<span class="idea-mark">?</span>';
+
 // mail.js imports this module too: EMAIL is read here, never at load
 function makeCard() {
   const gmail = `https://mail.google.com/mail/?view=cm&fs=1&to=${EMAIL}`;
@@ -162,7 +166,7 @@ function makeCard() {
   dlg.tabIndex = -1; // focus lands on the card itself (openCard), Tab goes to "Email me": no ring on a mouse open
   dlg.innerHTML = `
     <div class="idea-card__face">
-      <div class="idea-card__blank" aria-hidden="true"></div>
+      <div class="idea-card__blank" aria-hidden="true">${MARK}</div>
       <h2 class="idea-card__title" id="idea-card-title"></h2>
       <a class="juicy-btn idea-card__mail" href="mailto:${EMAIL}">Email me</a>
       <p class="idea-card__more">
