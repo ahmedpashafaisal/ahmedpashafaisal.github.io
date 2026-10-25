@@ -2,9 +2,14 @@
 .detail {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
+  align-content: start;
   gap: clamp(2.5rem, 5vw, 4rem);
   width: 100%;
   max-width: 1120px;
+  /* A game page's content is built by script after the first paint: a
+     screen tall from the start, so the footer waits below the fold instead
+     of jumping down (layout shift) */
+  min-height: 100vh;
   margin: 0 auto;
   padding: 1.5rem 16px 7rem;
 }

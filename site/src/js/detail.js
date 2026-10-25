@@ -60,6 +60,10 @@ function hero(g) {
   </header>`;
 }
 
+// Each screenshot's small copy for the strip (scripts/make-thumbs.py):
+// /img/shots/<game>/<n>.jpg -> /img/shots/<game>/thumbs/<n>.webp
+const thumb = (src) => src.replace(/\/([^/]+)\.\w+$/, '/thumbs/$1.webp');
+
 // Screenshot slider: big view + thumbnails. Falls back to the cover, then to a placeholder.
 function slider(g) {
   const shots = g.media.shots || [];
@@ -73,12 +77,12 @@ function slider(g) {
   return `
     <div class="page__media${tall ? ' page__media--phone' : ''}" ${tall ? `style="--backdrop: url('${esc(g.media.card)}')"` : ''}>
       <button class="page__screen" type="button" aria-label="Open screenshots">
-        ${shots.map((s, i) => `<img class="banner__shot${i === 0 ? ' is-active' : ''}" src="${esc(s)}" alt="${esc(g.title)} screenshot ${i + 1}" ${i ? 'loading="lazy"' : ''} decoding="async" />`).join('')}
+        ${shots.map((s, i) => `<img class="banner__shot${i === 0 ? ' is-active' : ''}" ${i ? 'data-src' : 'src'}="${esc(s)}" alt="${esc(g.title)} screenshot ${i + 1}" decoding="async" />`).join('')}
       </button>
       ${
         shots.length > 1
           ? `<div class="page__thumbs" role="tablist" aria-label="Screenshots">${shots
-              .map((s, i) => `<button class="page__thumb${i === 0 ? ' is-active' : ''}" type="button" role="tab" aria-selected="${i === 0}" data-i="${i}" aria-label="Screenshot ${i + 1}"><img src="${esc(s)}" alt="" loading="lazy" /></button>`)
+              .map((s, i) => `<button class="page__thumb${i === 0 ? ' is-active' : ''}" type="button" role="tab" aria-selected="${i === 0}" data-i="${i}" aria-label="Screenshot ${i + 1}"><img src="${esc(thumb(s))}" alt="" loading="lazy" /></button>`)
               .join('')}</div>`
           : ''
       }
@@ -107,12 +111,12 @@ function did(g) {
       ${b.bullets?.length ? `<ul class="card__tags">${b.bullets.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}`;
     if (!b.text) return `<article class="page__did"><div class="tile__face">${front}</div></article>`;
     return `
-      <article class="page__did tile--flip" tabindex="0" role="button" aria-pressed="false" aria-label="${esc(b.title)}: press to flip for notes">
+      <div class="page__did tile--flip" tabindex="0" role="button" aria-pressed="false" aria-label="${esc(b.title)}: press to flip for notes">
         <div class="tile__inner">
           <div class="tile__face">${front}<span class="tile__hint" aria-hidden="true">↻ flip</span></div>
           <div class="tile__face tile__back"><h3 class="page__h3">${esc(b.title)}</h3><p>${esc(b.text)}</p></div>
         </div>
-      </article>`;
+      </div>`;
   };
   return `
   <section class="page__section page__part" aria-labelledby="did-title">
@@ -243,7 +247,10 @@ export function initDetail(root) {
   if (!g) return;
   root.insertAdjacentHTML('beforeend', hero(g) + role(g) + did(g) + video(g) + nav(g));
 
-  // Slider: auto-advance with a punch, thumbnails jump, big view opens the lightbox
+  // Slider: auto-advance with a punch, thumbnails jump, big view opens the lightbox.
+  // The screenshots are stacked in the frame, so the browser would fetch them
+  // all at once: only the first has its src; each other one gets it when it
+  // is next in line (the first one loaded) or jumped to.
   const shots = g.media.shots || [];
   const screen = root.querySelector('.page__screen:not(.page__screen--static)');
   if (screen && shots.length) {
@@ -252,11 +259,21 @@ export function initDetail(root) {
     const open = lightbox(shots, g.title);
     let i = 0;
     let timer = 0;
+    const fetchShot = (k) => {
+      const im = imgs[k % imgs.length];
+      if (!im?.dataset.src) return;
+      im.src = im.dataset.src;
+      delete im.dataset.src;
+    };
+    if (imgs[0].complete) fetchShot(1);
+    else imgs[0].addEventListener('load', () => fetchShot(1), { once: true });
     const go = (k, punch = true) => {
       imgs[i].classList.remove('is-active');
       thumbs[i]?.classList.remove('is-active');
       thumbs[i]?.setAttribute('aria-selected', 'false');
       i = (k + imgs.length) % imgs.length;
+      fetchShot(i);
+      fetchShot(i + 1);
       imgs[i].classList.add('is-active');
       thumbs[i]?.classList.add('is-active');
       thumbs[i]?.setAttribute('aria-selected', 'true');
