@@ -12,7 +12,7 @@
 // The runaway bulb (shelfbulb.js) loads once the shelves come near, unless
 // the 3D guide (hero3d.js) does its beats here (html.has-guide).
 import data from '../data/games.json';
-import { byCategory, primaryCat } from './order.js';
+import { byCategory } from './order.js';
 import { juicy } from './motion.js';
 import { sfx } from './sound.js';
 import { act } from './achievements.js';
@@ -229,7 +229,7 @@ export function initShelves(root) {
   const preview = new URLSearchParams(location.search).has('preview');
   const games = byCategory(data.games.filter((g) => preview || !g.hidden));
   const cats = data.categories
-    .map((c) => ({ ...c, games: games.filter((g) => primaryCat(g) === c.id) }))
+    .map((c) => ({ ...c, games: games.filter((g) => g.categories.includes(c.id)) }))
     .filter((c) => c.games.length);
 
   slots = 0;

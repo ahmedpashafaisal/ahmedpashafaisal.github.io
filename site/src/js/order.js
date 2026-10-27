@@ -3,7 +3,8 @@
 // games, then grouped by category in the order of games.json "categories"
 // (PC / Steam, Gamification, Mobile, Jams, Web games), newest first inside
 // each group. The deck's All tab and the next/previous links on game pages
-// both use it. Each game has exactly one category; it sets its colour tint.
+// both use it. A game's first category is its own: it sets its colour tint and
+// its place here. A second category only puts it on that shelf as well.
 import data from '../data/games.json';
 
 const rank = new Map(data.categories.map((c, i) => [c.id, i]));

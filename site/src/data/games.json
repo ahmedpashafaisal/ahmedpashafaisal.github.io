@@ -589,7 +589,8 @@
         "orientation": "landscape"
       },
       "categories": [
-        "web-games"
+        "web-games",
+        "jams"
       ],
       "description": "Can you take the helpless ghost back to the forest and pass all the challenges on the way? A point-and-click adventure made as a project for the Advanced Game Development course in the Digital Learning Games programme at Tallinn University.",
       "contributions": [
