@@ -128,7 +128,8 @@
       ],
       "blurb": "Lead a growing ant colony through 10 randomised levels. Every run, every choice, a different colony.",
       "links": {
-        "googlePlay": "https://play.google.com/store/apps/details?id=tech.atm.antmarchadventure&hl=en"
+        "googlePlay": "https://play.google.com/store/apps/details?id=tech.atm.antmarchadventure&hl=en",
+        "appStore": "https://apps.apple.com/cz/app/ant-march-adventure-roguelike/id6745928475"
       },
       "media": {
         "cover": "Images/Portfolio/ant-march-adventure.png",
@@ -212,7 +213,8 @@
       ],
       "blurb": "Lay road tiles fast enough to keep a speeding car alive. Quick thinking, spatial puzzles, a ticking clock.",
       "links": {
-        "googlePlay": "https://play.google.com/store/apps/details?id=tech.atm.roadrushpuzzle&hl=en"
+        "googlePlay": "https://play.google.com/store/apps/details?id=tech.atm.roadrushpuzzle&hl=en",
+        "appStore": "https://apps.apple.com/cz/app/road-rush-puzzle/id6745928507"
       },
       "media": {
         "cover": "Images/Portfolio/road-rush-puzzle.png",
@@ -292,7 +294,8 @@
       ],
       "blurb": "Two orbs, Yin and Yang, move as mirror images with every swipe. Guide both past spikes and traps until they meet.",
       "links": {
-        "googlePlay": "https://play.google.com/store/apps/details?id=tech.atm.zenmergepuzzle"
+        "googlePlay": "https://play.google.com/store/apps/details?id=tech.atm.zenmergepuzzle",
+        "appStore": "https://apps.apple.com/cz/app/zen-merge-saga/id6745928396"
       },
       "media": {
         "cover": "Images/Portfolio/zen-merge-puzzle.png",
@@ -371,7 +374,8 @@
       ],
       "blurb": "Guide candies from the factory pipeline into the jar. Every level adds a new obstacle to time and outsmart.",
       "links": {
-        "googlePlay": "https://play.google.com/store/apps/details?id=tech.atm.sweetshot&hl=en"
+        "googlePlay": "https://play.google.com/store/apps/details?id=tech.atm.sweetshot&hl=en",
+        "appStore": "https://apps.apple.com/cz/app/sweet-shot-ball-saga/id6505140548"
       },
       "media": {
         "cover": "Images/Portfolio/sweet-shot.jpg",
