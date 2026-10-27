@@ -8,6 +8,7 @@ import { juicy } from './motion.js';
 import { sfx } from './sound.js';
 import { sendShock } from './dotgrid.js';
 import { act } from './achievements.js';
+import { STORE_ICONS } from './storeicons.js';
 
 const LINKS = {
   steam: 'Steam',
@@ -37,13 +38,16 @@ const ordered = () => byCategory(data.games.filter((g) => !g.hidden));
 function hero(g) {
   // linkLabels in games.json overrides a button label (e.g. a physical game: "View on itch.io")
   const label = (k) => esc(g.linkLabels?.[k] || LINKS[k]);
+  // The first link is the big button. Phone stores are equals (a visitor picks
+  // by the phone they own), so every store link gets the big button too.
   const links = Object.entries(g.links)
     .filter(([k, v]) => v && LINKS[k])
-    .map(([k, v], i) =>
-      i === 0
-        ? `<a class="juicy-btn page__cta" href="${esc(v)}" target="_blank" rel="noopener">${label(k)} ↗</a>`
-        : `<a class="card__link" href="${esc(v)}" target="_blank" rel="noopener">${label(k)}</a>`,
-    )
+    .map(([k, v], i) => {
+      const icon = STORE_ICONS[k] || '';
+      return i === 0 || icon
+        ? `<a class="juicy-btn page__cta${icon ? ' store-link' : ''}" href="${esc(v)}" target="_blank" rel="noopener">${icon}${label(k)} ↗</a>`
+        : `<a class="card__link" href="${esc(v)}" target="_blank" rel="noopener">${label(k)}</a>`;
+    })
     .join('');
   // A paper prototype reads as itself, not "Built with Paper prototype"
   const built = g.builtWith?.length ? (/prototype/i.test(g.builtWith[0]) ? g.builtWith.join(', ') : `Built with ${g.builtWith.join(', ')}`) : '';

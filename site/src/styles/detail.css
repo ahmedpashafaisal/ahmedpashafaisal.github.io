@@ -107,6 +107,20 @@
     background-color var(--t-hover) ease;
 }
 
+/* Phone store buttons lead with the store's icon (js/storeicons.js) */
+.store-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+}
+
+.store-icon {
+  flex: none;
+  width: auto;
+  height: 1.1em;
+  fill: currentColor;
+}
+
 .page__facts {
   display: flex;
   flex-wrap: wrap;
@@ -519,6 +533,14 @@
   .page__navrow {
     grid-template-columns: minmax(0, 1fr);
     row-gap: 2.75rem; /* room for the bulb peeking over Next (js/pagebulb.js), clear of Previous */
+  }
+
+  /* Two store buttons share one row; too narrow for that, each takes the full width */
+  .page__cta.store-link {
+    flex: 1 1 auto;
+    justify-content: center;
+    padding-inline: 0.9rem;
+    white-space: nowrap;
   }
 }
 
